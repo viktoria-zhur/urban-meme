@@ -6,6 +6,7 @@
     <title>BlueClinik | Элитная косметология Новосибирск</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
     <style>
         * {
             margin: 0;
@@ -547,6 +548,7 @@
                     <div class="phone-number">8 383 299-00-23</div>
                     <div class="callback-link" id="callbackBtn">заказать звонок</div>
                 </div>
+                <div id="authLinksContainer" class="auth-links" style="display: flex; gap: 12px; align-items: center;"></div>
                 <button class="btn btn-primary" id="appointmentBtn">Записаться онлайн</button>
                 <div class="messengers">
                     <a href="#" class="messenger"><img src="https://img.icons8.com/ios-glyphs/30/0A1C2F/telegram.png" width="18" alt="tg"></a>
@@ -763,8 +765,37 @@
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU"></script>
+<script src="auth.js"></script>
 <script>
-    // Инициализация карты с точными координатами (54.991759, 82.914312)
+    // Обновляем навигацию в зависимости от авторизации
+    function updateAuthUI() {
+        const user = getCurrentUser();
+        const authContainer = document.getElementById('authLinksContainer');
+        
+        if (authContainer) {
+            if (user) {
+                authContainer.innerHTML = `
+                    <a href="dashboard.html" class="btn btn-outline" style="padding: 8px 20px;">
+                        <i class="fas fa-user"></i> Личный кабинет
+                    </a>
+                    <button onclick="logout()" class="btn btn-outline" style="padding: 8px 20px;">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
+                `;
+            } else {
+                authContainer.innerHTML = `
+                    <a href="login.html" class="btn btn-outline" style="padding: 8px 20px;">
+                        <i class="fas fa-sign-in-alt"></i> Вход
+                    </a>
+                    <a href="register.html" class="btn btn-primary" style="padding: 8px 20px;">
+                        <i class="fas fa-user-plus"></i> Регистрация
+                    </a>
+                `;
+            }
+        }
+    }
+
+    // Функция для карты
     function initMap() {
         var myMap = new ymaps.Map("map", {
             center: [54.991759, 82.914312],
@@ -782,15 +813,22 @@
         myMap.geoObjects.add(placemark);
     }
 
-    if (typeof ymaps !== 'undefined') {
-        ymaps.ready(initMap);
-    } else {
-        document.getElementById('map').innerHTML = '<div style="background:#E8E3DC; height:100%; display:flex; align-items:center; justify-content:center; text-align:center;">🗺️ Карта временно недоступна.<br>Адрес: ул. Немировича-Данченко 158, Новосибирск</div>';
-    }
-
-    // Все скрипты после загрузки DOM
+    // ВСЕ СКРИПТЫ В ОДНОМ МЕСТЕ - ЖДЁМ ЗАГРУЗКИ СТРАНИЦЫ
     document.addEventListener('DOMContentLoaded', function() {
-        // Слайдер специалистов
+        // 1. Обновляем кнопки входа/регистрации
+        updateAuthUI();
+        
+        // 2. Карта
+        if (typeof ymaps !== 'undefined') {
+            ymaps.ready(initMap);
+        } else {
+            const mapElement = document.getElementById('map');
+            if (mapElement) {
+                mapElement.innerHTML = '<div style="background:#E8E3DC; height:100%; display:flex; align-items:center; justify-content:center; text-align:center;">🗺️ Карта временно недоступна.<br>Адрес: ул. Немировича-Данченко 158, Новосибирск</div>';
+            }
+        }
+        
+        // 3. Слайдер специалистов
         if (document.querySelector('.specialists-swiper')) {
             new Swiper('.specialists-swiper', {
                 slidesPerView: 1,
@@ -799,7 +837,8 @@
                 breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
             });
         }
-        // Слайдер отзывов
+        
+        // 4. Слайдер отзывов
         if (document.querySelector('.reviews-swiper')) {
             new Swiper('.reviews-swiper', {
                 slidesPerView: 1,
@@ -810,7 +849,7 @@
             });
         }
 
-        // Табы
+        // 5. Табы
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
                 const tabId = btn.dataset.tab;
@@ -821,7 +860,7 @@
             });
         });
 
-        // Калькулятор
+        // 6. Калькулятор
         const procSelect = document.getElementById('calcProcedure');
         const quantInput = document.getElementById('calcQuantity');
         const totalSpan = document.getElementById('calcTotal');
@@ -836,24 +875,41 @@
             updateCalc();
         }
 
-        // FAQ аккордеон
+        // 7. FAQ аккордеон
         document.querySelectorAll('.faq-item').forEach(item => {
             item.addEventListener('click', () => {
                 item.classList.toggle('active');
             });
         });
 
-        // Модальные окна
+        // 8. Модальные окна
         const modal = document.getElementById('modalConsultation');
         const appointmentBtn = document.getElementById('appointmentBtn');
         const callbackBtn = document.getElementById('callbackBtn');
         const closeModal = document.querySelector('.close-modal');
-        if (appointmentBtn) appointmentBtn.addEventListener('click', () => modal.style.display = 'flex');
-        if (callbackBtn) callbackBtn.addEventListener('click', () => modal.style.display = 'flex');
-        if (closeModal) closeModal.addEventListener('click', () => modal.style.display = 'none');
-        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+        
+        if (appointmentBtn) {
+            appointmentBtn.addEventListener('click', () => {
+                if (modal) modal.style.display = 'flex';
+            });
+        }
+        if (callbackBtn) {
+            callbackBtn.addEventListener('click', () => {
+                if (modal) modal.style.display = 'flex';
+            });
+        }
+        if (closeModal) {
+            closeModal.addEventListener('click', () => {
+                if (modal) modal.style.display = 'none';
+            });
+        }
+        if (modal) {
+            window.addEventListener('click', (e) => { 
+                if (e.target === modal) modal.style.display = 'none'; 
+            });
+        }
 
-        // Формы
+        // 9. Формы
         document.querySelectorAll('form').forEach(form => {
             form.addEventListener('submit', (e) => {
                 e.preventDefault();
@@ -863,14 +919,17 @@
             });
         });
 
-        // Мобильное меню
+        // 10. Мобильное меню
         const mobileBtn = document.getElementById('mobileMenuBtn');
         const navMenu = document.querySelector('.menu');
         if (mobileBtn && navMenu) {
             mobileBtn.addEventListener('click', () => {
-                if (navMenu.style.display === 'flex') navMenu.style.display = 'none';
-                else navMenu.style.display = 'flex';
-                if (window.innerWidth <= 768) navMenu.style.flexDirection = 'column';
+                if (navMenu.style.display === 'flex') {
+                    navMenu.style.display = 'none';
+                } else {
+                    navMenu.style.display = 'flex';
+                    if (window.innerWidth <= 768) navMenu.style.flexDirection = 'column';
+                }
             });
             window.addEventListener('resize', () => {
                 if (window.innerWidth > 768) navMenu.style.display = '';

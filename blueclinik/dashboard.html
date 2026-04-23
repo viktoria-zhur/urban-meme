@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Личный кабинет | BlueClinik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-page: #F4F2EF;
+            --card-bg: #FFFFFF;
+            --primary-dark: #0A1C2F;
+            --primary-medium: #1F3E5C;
+            --accent: #C89F9F;
+            --accent-light: #F1E6E6;
+            --text-dark: #1A2C3A;
+            --text-medium: #5D6F7F;
+            --shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 32px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+        }
+
+        .dashboard-header {
+            background: var(--card-bg);
+            box-shadow: var(--shadow);
+            padding: 16px 0;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .dashboard-nav {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--primary-dark);
+        }
+
+        .logo span {
+            color: var(--accent);
+        }
+
+        .dashboard-user {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+
+        .user-welcome {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 500;
+        }
+
+        .user-welcome i {
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            border-radius: 60px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-medium);
+        }
+
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary-dark);
+            color: var(--primary-dark);
+        }
+
+        .btn-outline:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .dashboard-main {
+            padding: 48px 0;
+        }
+
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 32px;
+        }
+
+        .dashboard-sidebar {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 32px;
+            text-align: center;
+            box-shadow: var(--shadow);
+            height: fit-content;
+        }
+
+        .user-avatar {
+            width: 100px;
+            height: 100px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            font-weight: 600;
+            color: var(--accent);
+            margin: 0 auto 20px;
+        }
+
+        .dashboard-sidebar h3 {
+            margin-bottom: 8px;
+        }
+
+        .dashboard-sidebar p {
+            color: var(--text-medium);
+            margin: 4px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .dashboard-sidebar p i {
+            width: 20px;
+            color: var(--accent);
+        }
+
+        .dashboard-content {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .dashboard-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+
+        .dashboard-card h3 {
+            margin-bottom: 16px;
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .dashboard-card h3 i {
+            color: var(--accent);
+            font-size: 24px;
+        }
+
+        .dashboard-card p {
+            color: var(--text-medium);
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .promo-code {
+            background: var(--accent-light);
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-weight: 700;
+            color: var(--accent);
+            letter-spacing: 1px;
+            display: inline-block;
+            font-family: monospace;
+            font-size: 16px;
+        }
+
+        .promo-code i {
+            margin-right: 8px;
+        }
+
+        .appointments-list {
+            margin-top: 16px;
+            margin-bottom: 20px;
+        }
+
+        .appointment-item {
+            padding: 16px;
+            border-bottom: 1px solid #E8E3DC;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .appointment-item:last-child {
+            border-bottom: none;
+        }
+
+        .appointment-info {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .appointment-info i {
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .contact-item i {
+            width: 24px;
+            color: var(--accent);
+            font-size: 18px;
+        }
+
+        @media (max-width: 768px) {
+            .dashboard-grid {
+                grid-template-columns: 1fr;
+            }
+            .container {
+                padding: 0 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header class="dashboard-header">
+        <div class="container">
+            <div class="dashboard-nav">
+                <a href="index.html" class="logo">Blue<span>Clinik</span></a>
+                <div class="dashboard-user">
+                    <span class="user-welcome"><i class="fas fa-user-circle"></i> <span id="userNameDisplay"></span></span>
+                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <main class="dashboard-main">
+        <div class="container">
+            <div class="dashboard-grid">
+                <div class="dashboard-sidebar" id="userInfo">
+                    <div class="user-avatar" id="userAvatar"></div>
+                    <h3 id="userFullname"></h3>
+                    <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
+                    <p><i class="fas fa-phone"></i> <span id="userPhone"></span></p>
+                    <p><i class="fas fa-calendar-alt"></i> Дата регистрации: <span id="userDate"></span></p>
+                </div>
+                <div class="dashboard-content">
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-calendar-check"></i> Мои записи</h3>
+                        <div id="appointmentsList" class="appointments-list">
+                            <p style="text-align: center; padding: 20px;"><i class="fas fa-inbox"></i> У вас пока нет записей.</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="window.location.href='index.html#services'"><i class="fas fa-plus-circle"></i> Записаться на процедуру</button>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-gift"></i> Персональные предложения</h3>
+                        <p>Специальная скидка 10% на первую процедуру для новых клиентов!</p>
+                        <div class="promo-code"><i class="fas fa-tag"></i> BLUE10</div>
+                    </div>
+                    <div class="dashboard-card">
+                        <h3><i class="fas fa-phone-alt"></i> Связаться с клиникой</h3>
+                        <div class="contact-info">
+                            <div class="contact-item"><i class="fas fa-phone"></i> <span>8 383 299-00-23</span></div>
+                            <div class="contact-item"><i class="fas fa-envelope"></i> <span>info@blueclinik.ru</span></div>
+                            <div class="contact-item"><i class="fas fa-map-marker-alt"></i> <span>Новосибирск, ул. Немировича-Данченко 158</span></div>
+                            <div class="contact-item"><i class="far fa-clock"></i> <span>пн–вс 09:00–21:00</span></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="auth.js"></script>
+    <script>
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            window.location.href = 'login.html';
+        }
+        
+        document.getElementById('userAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
+        document.getElementById('userFullname').textContent = currentUser.fullname;
+        document.getElementById('userEmail').textContent = currentUser.email;
+        document.getElementById('userPhone').textContent = currentUser.phone;
+        document.getElementById('userNameDisplay').textContent = currentUser.fullname;
+        
+        if (currentUser.createdAt) {
+            const date = new Date(currentUser.createdAt);
+            document.getElementById('userDate').textContent = date.toLocaleDateString('ru-RU');
+        } else {
+            document.getElementById('userDate').textContent = 'сегодня';
+        }
+        
+        function loadAppointments() {
+            const appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
+            const container = document.getElementById('appointmentsList');
+            
+            if (appointments.length === 0) {
+                container.innerHTML = '<p style="text-align: center; padding: 20px;"><i class="fas fa-inbox"></i> У вас пока нет записей.</p>';
+                return;
+            }
+            
+            container.innerHTML = appointments.map(apt => `
+                <div class="appointment-item">
+                    <div class="appointment-info">
+                        <i class="fas fa-spa"></i>
+                        <div>
+                            <strong>${apt.service}</strong><br>
+                            <small><i class="far fa-calendar-alt"></i> ${apt.date} в ${apt.time}</small>
+                        </div>
+                    </div>
+                    <button class="btn btn-outline" style="padding: 6px 16px; font-size: 12px;" onclick="cancelAppointment(${apt.id})">
+                        <i class="fas fa-times"></i> Отменить
+                    </button>
+                </div>
+            `).join('');
+        }
+        
+        function cancelAppointment(id) {
+            let appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
+            appointments = appointments.filter(apt => apt.id !== id);
+            localStorage.setItem(`appointments_${currentUser.id}`, JSON.stringify(appointments));
+            loadAppointments();
+        }
+        
+        loadAppointments();
+    </script>
+</body>
+</html>

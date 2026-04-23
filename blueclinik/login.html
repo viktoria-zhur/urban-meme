@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Вход | BlueClinik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-page: #F4F2EF;
+            --card-bg: #FFFFFF;
+            --primary-dark: #0A1C2F;
+            --primary-medium: #1F3E5C;
+            --accent: #C89F9F;
+            --accent-light: #F1E6E6;
+            --text-dark: #1A2C3A;
+            --text-medium: #5D6F7F;
+            --shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 32px -12px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            min-height: 100vh;
+        }
+
+        .auth-container {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .auth-card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 48px 40px;
+            max-width: 480px;
+            width: 100%;
+            box-shadow: var(--shadow-hover);
+            text-align: center;
+        }
+
+        .auth-logo {
+            font-size: 32px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--primary-dark);
+            display: inline-block;
+            margin-bottom: 32px;
+        }
+
+        .auth-logo span {
+            color: var(--accent);
+        }
+
+        .auth-card h2 {
+            font-size: 28px;
+            margin-bottom: 12px;
+        }
+
+        .auth-subtitle {
+            color: var(--text-medium);
+            margin-bottom: 32px;
+        }
+
+        .auth-form .form-group {
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .auth-form label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            font-size: 14px;
+        }
+
+        .auth-form input {
+            width: 100%;
+            padding: 14px 20px;
+            border: 1.5px solid #E8E3DC;
+            border-radius: 60px;
+            font-family: inherit;
+            font-size: 15px;
+            transition: all 0.3s;
+        }
+
+        .auth-form input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 14px 28px;
+            font-weight: 500;
+            border-radius: 60px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-dark);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: var(--primary-medium);
+            transform: translateY(-2px);
+        }
+
+        .btn-full {
+            width: 100%;
+            margin-top: 12px;
+        }
+
+        .auth-footer {
+            margin-top: 28px;
+            color: var(--text-medium);
+        }
+
+        .auth-footer a {
+            color: var(--accent);
+            text-decoration: none;
+            font-weight: 500;
+        }
+
+        .error-message {
+            margin-bottom: 24px;
+            background: #FEF3F2;
+            border-radius: 16px;
+            padding: 12px;
+            color: #D32F2F;
+            font-size: 14px;
+            display: none;
+        }
+
+        .error-message.show {
+            display: block;
+        }
+        .form-group {
+            position: relative;
+        }
+        .form-group i {
+            position: absolute;
+            left: 20px;
+            top: 42px;
+            color: var(--text-light);
+        }
+        .form-group input {
+            padding-left: 45px;
+        }
+    </style>
+</head>
+<body>
+    <div class="auth-container">
+        <div class="auth-card">
+            <a href="index.html" class="auth-logo">Blue<span>Clinik</span></a>
+            <h2><i class="fas fa-key"></i> Добро пожаловать</h2>
+            <p class="auth-subtitle">Войдите в личный кабинет</p>
+            
+            <div id="errorMessage" class="error-message"></div>
+            
+            <form id="loginForm" class="auth-form">
+                <div class="form-group">
+                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <input type="email" id="email" placeholder="ivan@example.com" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock"></i> Пароль</label>
+                    <input type="password" id="password" placeholder="••••••" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-sign-in-alt"></i> Войти
+                </button>
+            </form>
+            <p class="auth-footer">
+                <i class="fas fa-user-plus"></i> Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+            </p>
+        </div>
+    </div>
+
+    <script src="auth.js"></script>
+    <script>
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value;
+            const errorDiv = document.getElementById('errorMessage');
+            errorDiv.classList.remove('show');
+            
+            if (!email || !password) {
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Пожалуйста, заполните все поля';
+                errorDiv.classList.add('show');
+                return;
+            }
+            
+            const result = login(email, password);
+            
+            if (result.success) {
+                window.location.href = 'dashboard.html';
+            } else {
+                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + result.error;
+                errorDiv.classList.add('show');
+            }
+        });
+    </script>
+</body>
+</html>
