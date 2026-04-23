@@ -1,909 +1,882 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>BlueClinik — Клиника косметологии в Новосибирске</title>
-    <meta name="description" content="BlueClinik — профессиональная косметология: инъекции, аппаратные методики, уход за кожей. Высокое качество, премиальный сервис."/>
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;600;700&display=swap" rel="stylesheet">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>BlueClinik | Элитная косметология Новосибирск</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --bg-page: #F4F2EF;
+            --card-bg: #FFFFFF;
+            --primary-dark: #0A1C2F;
+            --primary-medium: #1F3E5C;
+            --accent: #C89F9F;
+            --accent-light: #F1E6E6;
+            --text-dark: #1A2C3A;
+            --text-medium: #5D6F7F;
+            --text-light: #919EAB;
+            --shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 32px -12px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
+            --border-radius-card: 28px;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: var(--bg-page);
+            color: var(--text-dark);
+            line-height: 1.5;
+            scroll-behavior: smooth;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 40px;
+        }
+
+        .section-title {
+            font-size: 38px;
+            font-weight: 600;
+            margin-bottom: 48px;
+            text-align: center;
+            color: var(--primary-dark);
+            letter-spacing: -0.01em;
+        }
+        .section-title span {
+            color: var(--accent);
+            font-weight: 400;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            padding: 12px 28px;
+            font-weight: 500;
+            border-radius: 60px;
+            transition: var(--transition);
+            cursor: pointer;
+            border: none;
+            font-size: 15px;
+        }
+        .btn-primary {
+            background: var(--primary-dark);
+            color: white;
+            box-shadow: var(--shadow);
+        }
+        .btn-primary:hover {
+            background: var(--primary-medium);
+            transform: translateY(-2px);
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary-dark);
+            color: var(--primary-dark);
+        }
+        .btn-outline:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: var(--primary-dark);
+        }
+        .btn-accent:hover {
+            background: #B88888;
+            transform: translateY(-2px);
+        }
+
+        /* Header */
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            background: var(--card-bg);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
+        }
+        .ticker {
+            background: var(--accent-light);
+            overflow: hidden;
+            white-space: nowrap;
+            padding: 10px 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--primary-dark);
+        }
+        .ticker-content {
+            display: inline-block;
+            animation: ticker 35s linear infinite;
+        }
+        .ticker-content span {
+            display: inline;
+            margin: 0;
+            padding: 0;
+        }
+        .ticker-content span:not(:last-child)::after {
+            content: " ✦ ";
+            margin: 0 2px 0 4px;
+            color: var(--accent);
+        }
+        @keyframes ticker {
+            0% { transform: translateX(0); }
+            100% { transform: translateX(-50%); }
+        }
+
+        .header-main {
+            padding: 16px 0;
+            border-bottom: 1px solid #E8E3DC;
+        }
+        .header-top {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            color: var(--primary-dark);
+            text-decoration: none;
+        }
+        .logo span {
+            color: var(--accent);
+            font-weight: 400;
+        }
+        .address {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: #F2EFEB;
+            padding: 8px 20px;
+            border-radius: 60px;
+            font-size: 14px;
+            font-weight: 500;
+        }
+        .phone-number {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .callback-link {
+            font-size: 12px;
+            color: var(--accent);
+            cursor: pointer;
+            border-bottom: 1px dashed;
+        }
+        .messengers {
+            display: flex;
+            gap: 10px;
+        }
+        .messenger {
+            width: 38px;
+            height: 38px;
+            background: #F2EFEB;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        .nav {
+            background: var(--card-bg);
+        }
+        .nav .container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .menu {
+            display: flex;
+            list-style: none;
+            gap: 36px;
+        }
+        .menu a {
+            text-decoration: none;
+            color: var(--text-dark);
+            font-weight: 500;
+            transition: var(--transition);
+        }
+        .menu a:hover {
+            color: var(--accent);
+        }
+        .dropbtn {
+            position: relative;
+        }
+        .submenu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: white;
+            min-width: 200px;
+            border-radius: 20px;
+            box-shadow: var(--shadow-hover);
+            padding: 12px 0;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.2s;
+            list-style: none;
+            z-index: 100;
+        }
+        .dropbtn:hover .submenu {
+            opacity: 1;
+            visibility: visible;
+        }
+        .submenu li a {
+            padding: 8px 24px;
+            display: block;
+        }
+        .mobile-toggle {
+            display: none;
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+        }
+        main {
+            margin-top: 160px;
+        }
+
+        .offers-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 40px 0;
+        }
+        .offer-card {
+            background: var(--card-bg);
+            border-radius: var(--border-radius-card);
+            overflow: hidden;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .offer-card:hover {
+            transform: translateY(-6px);
+            box-shadow: var(--shadow-hover);
+        }
+        .offer-img {
+            height: 230px;
+            overflow: hidden;
+        }
+        .offer-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.4s;
+        }
+        .offer-card:hover .offer-img img {
+            transform: scale(1.04);
+        }
+        .offer-content {
+            padding: 20px;
+        }
+        .offer-title {
+            font-weight: 700;
+            font-size: 18px;
+        }
+        .price {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            margin: 12px 0;
+        }
+        .old-price {
+            font-size: 14px;
+            text-decoration: line-through;
+            color: var(--text-light);
+            margin-left: 8px;
+        }
+
+        .owner-banner {
+            background: linear-gradient(115deg, #0F253B 0%, #1C3F5C 100%);
+            border-radius: 32px;
+            padding: 56px 48px;
+            margin: 60px 0;
+            text-align: center;
+            color: white;
+        }
+        .owner-banner h3 {
+            font-size: 28px;
+            color: white;
+        }
+
+        .specialist-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            text-align: center;
+            padding: 28px 16px;
+            transition: var(--transition);
+            box-shadow: var(--shadow);
+        }
+        .specialist-card img {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 24px;
+        }
+        .service-item-card {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+        }
+        .service-price {
+            font-weight: 700;
+            color: var(--accent);
+        }
+        .tabs-container {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 32px;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+        }
+        .tabs-header {
+            display: flex;
+            gap: 12px;
+            border-bottom: 1px solid #E8E3DC;
+            padding-bottom: 12px;
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 40px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .tab-btn.active {
+            background: var(--primary-dark);
+            color: white;
+        }
+        .tab-pane {
+            display: none;
+        }
+        .tab-pane.active {
+            display: block;
+            animation: fade 0.25s;
+        }
+        @keyframes fade {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .calculator-box {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 36px;
+            margin: 48px 0;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        .calc-row {
+            display: flex;
+            gap: 16px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        .calc-select {
+            padding: 12px 24px;
+            border-radius: 60px;
+            border: 1px solid #E0D8D0;
+            background: var(--bg-page);
+            font-family: inherit;
+        }
+        .calc-result {
+            margin-top: 24px;
+            font-size: 20px;
+        }
+
+        .review-card {
+            background: var(--card-bg);
+            border-radius: 28px;
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+        .review-author {
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .faq-item {
+            background: var(--card-bg);
+            border-radius: 24px;
+            padding: 20px 24px;
+            margin-bottom: 16px;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+        .faq-question {
+            display: flex;
+            justify-content: space-between;
+            font-weight: 600;
+        }
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: 0.3s;
+            color: var(--text-medium);
+        }
+        .faq-item.active .faq-answer {
+            max-height: 150px;
+            margin-top: 16px;
+        }
+
+        .map-container {
+            margin: 50px 0;
+            border-radius: 32px;
+            overflow: hidden;
+            box-shadow: var(--shadow-hover);
+            height: 400px;
+        }
+        #map {
+            width: 100%;
+            height: 100%;
+        }
+
+        .contact-section {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 48px;
+            text-align: center;
+            margin: 40px 0;
+            box-shadow: var(--shadow);
+        }
+        .form-group input, .form-group textarea {
+            width: 100%;
+            max-width: 480px;
+            padding: 14px 24px;
+            border-radius: 60px;
+            border: 1px solid #E0D8D0;
+            background: var(--bg-page);
+            font-family: inherit;
+        }
+
+        .footer {
+            background: var(--primary-dark);
+            color: #E8E3DC;
+            padding: 56px 0 32px;
+            margin-top: 60px;
+        }
+        .footer a {
+            color: #B9C7D4;
+            text-decoration: none;
+        }
+        .footer a:hover {
+            color: var(--accent);
+        }
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 30px;
+        }
+
+        @media (max-width: 992px) {
+            .offers-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .services-grid {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 768px) {
+            .container {
+                padding: 0 20px;
+            }
+            .menu {
+                display: none;
+            }
+            .mobile-toggle {
+                display: block;
+            }
+            .offers-grid, .services-grid {
+                grid-template-columns: 1fr;
+            }
+            main {
+                margin-top: 140px;
+            }
+            .tabs-header {
+                flex-direction: column;
+            }
+            .owner-banner {
+                padding: 32px 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Cookie Banner -->
-    <div class="cookie-banner" id="cookieBanner">
-        <div class="cookie-content">
-            <p>Этот сайт использует файлы cookie для улучшения вашего пользовательского опыта. Продолжая использование сайта, вы соглашаетесь на использование файлов cookie в соответствии с нашей политикой обработки персональных данных.</p>
-            <button class="btn btn-gold" id="acceptCookies">Принять и закрыть</button>
+
+<header class="header">
+    <div class="ticker">
+        <div class="ticker-content">
+            <span>Курс пилингов (3 пр.) — 13 990₽</span><span>Body Fx тест-драйв — 50%</span><span>SMAS-лифтинг Ultraformer — 50 990₽</span><span>REVI 1мл — 15 990₽ / 2мл — 21 990₽</span><span>Лечение гипергидроза — 35 490₽</span><span>RF-лифтинг лица — 6 900₽</span><span>Лазерная шлифовка — 14 900₽</span><span>Контурная пластика губ — 23 900₽</span><span>Мезотерапия лица — 7 500₽</span>
         </div>
     </div>
-
-    <!-- Header -->
-    <header class="header" id="header">
-        <div class="container header__inner">
-            <a href="/" class="logo">
-                <span class="logo__blue">Blue</span><span class="logo__gold">Clinik</span>
-            </a>
-            <nav class="nav" id="nav">
-                <ul class="nav__list">
-                    <li><a href="#services" class="nav__link">Услуги</a></li>
-                    <li><a href="#specialists" class="nav__link">Специалисты</a></li>
-                    <li><a href="#prices" class="nav__link">Цены</a></li>
-                    <li><a href="#reviews" class="nav__link">Отзывы</a></li>
-                    <li><a href="#contacts" class="nav__link">Контакты</a></li>
-                </ul>
-            </nav>
-            <div class="header__actions">
-                <a href="tel:+73830000000" class="header__phone">+7 (383) 000-00-00</a>
-                <button class="btn btn-blue" data-modal="consultation">Записаться</button>
-                <button class="burger" id="burger" aria-label="Меню">
-                    <span></span><span></span><span></span>
-                </button>
+    <div class="header-main">
+        <div class="container">
+            <div class="header-top">
+                <a href="/" class="logo">Blue<span>Clinik</span></a>
+                <div class="address">📍 Новосибирск, ул. Немировича-Данченко 158</div>
+                <div class="phone">
+                    <div class="phone-number">8 383 299-00-23</div>
+                    <div class="callback-link" id="callbackBtn">заказать звонок</div>
+                </div>
+                <button class="btn btn-primary" id="appointmentBtn">Записаться онлайн</button>
+                <div class="messengers">
+                    <a href="#" class="messenger"><img src="https://img.icons8.com/ios-glyphs/30/0A1C2F/telegram.png" width="18" alt="tg"></a>
+                    <a href="#" class="messenger"><img src="https://img.icons8.com/ios-glyphs/30/0A1C2F/whatsapp.png" width="18" alt="wa"></a>
+                </div>
+                <button class="mobile-toggle" id="mobileMenuBtn">☰</button>
             </div>
         </div>
-    </header>
-
-    <!-- Mobile Menu -->
-    <div class="mobile-menu" id="mobileMenu">
-        <button class="mobile-menu__close" id="mobileMenuClose">&times;</button>
-        <nav class="mobile-nav">
-            <a href="#services">Услуги</a>
-            <a href="#specialists">Специалисты</a>
-            <a href="#prices">Цены</a>
-            <a href="#reviews">Отзывы</a>
-            <a href="#contacts">Контакты</a>
-        </nav>
     </div>
-
-    <!-- Hero / News Banner -->
-    <section class="hero">
+    <div class="nav">
         <div class="container">
-            <div class="hero__badge">🏆 Важные новости</div>
-            <h1 class="hero__title">Мы в числе лучших!</h1>
-            <p class="hero__text">
-                Благодарим каждого пациента за теплые отзывы и доверие. Каждый день мы становимся лучше, чтобы вы получали безупречный результат и сервис.
-            </p>
-            <p class="hero__subtitle">Спасибо, что выбираете нас!</p>
-            <div class="hero__buttons">
-                <button class="btn btn-gold" data-modal="consultation">Записаться</button>
-                <a href="#special-offers" class="btn btn-outline">Подробнее</a>
-            </div>
+            <ul class="menu">
+                <li><a href="#">Услуги</a></li><li><a href="#">Цены</a></li><li><a href="#">Специалисты</a></li><li><a href="#">Акции</a></li>
+                <li class="dropbtn"><a href="#">О клинике ▾</a><ul class="submenu"><li><a href="#">Отзывы</a></li><li><a href="#">До/После</a></li><li><a href="#">Оборудование</a></li><li><a href="#">Лицензии</a></li></ul></li>
+                <li><a href="#">Пациентам</a></li><li><a href="#">Контакты</a></li>
+            </ul>
+            <div>🔍</div>
         </div>
-    </section>
+    </div>
+</header>
 
-    <!-- Special Offers -->
-    <section class="offers" id="special-offers">
-        <div class="container">
-            <h2 class="section-title">Специальные предложения</h2>
-            <div class="offers__grid">
-                <!-- Offer Card 1 -->
-                <article class="offer-card">
-                    <span class="offer-card__label">special offer</span>
-                    <h3 class="offer-card__title">Комплекс "СИЯНИЕ КОЖИ"</h3>
-                    <div class="offer-card__price">
-                        <span class="price-new">13 990 ₽</span>
-                        <span class="price-old">15 570 ₽</span>
+<main>
+    <div class="container">
+        <!-- Спецпредложения -->
+        <section>
+            <h2 class="section-title">Специальные <span>предложения</span></h2>
+            <div class="offers-grid">
+                <div class="offer-card">
+                    <div class="offer-img"><img src="https://images.pexels.com/photos/3757953/pexels-photo-3757953.jpeg?auto=compress&cs=tinysrgb&w=600" alt="пилинг"></div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">Комплекс "Сияние"</h3>
+                        <p>3 пилинга + биоревитализация</p>
+                        <div class="price">13 990 ₽ <span class="old-price">21 500 ₽</span></div>
+                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
                     </div>
-                    <p class="offer-card__desc">
-                        Это инновационные двухфазные пилинги-биоревитализанты. В отличие от классических пилингов прошлого поколения, они не «сжигают» верхний слой кожи. Вместо этого активные компоненты проникают в глубокие слои, работая изнутри.
-                    </p>
-                    <div class="offer-card__actions">
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться</button>
-                        <a href="#" class="btn btn-link">Подробнее</a>
-                    </div>
-                </article>
-
-                <!-- Offer Card 2 -->
-                <article class="offer-card">
-                    <span class="offer-card__label">special offer</span>
-                    <h3 class="offer-card__title">Комфорт 24/7: Полный контроль над влагой</h3>
-                    <div class="offer-card__price">
-                        <span class="price-new">35 490 ₽</span>
-                        <span class="price-old">42 490 ₽</span>
-                    </div>
-                    <p class="offer-card__desc">
-                        Это быстрая и безопасная инъекционная методика, которая временно блокирует работу потовых желез в зоне подмышек, ладоней или стоп. «Релатокс» — мощный ботулотоксин, который начинает действовать уже через несколько дней.
-                    </p>
-                    <div class="offer-card__actions">
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться</button>
-                        <a href="#" class="btn btn-link">Подробнее</a>
-                    </div>
-                </article>
-
-                <!-- Offer Card 3 -->
-                <article class="offer-card">
-                    <span class="offer-card__label">special offer</span>
-                    <h3 class="offer-card__title">Лифтинг без реабилитации к лету</h3>
-                    <div class="offer-card__price">
-                        <span class="price-new">50 990 ₽</span>
-                        <span class="price-old">67 500 ₽</span>
-                    </div>
-                    <p class="offer-card__desc">
-                        Забудьте о брылях и потере тонуса. Ultraformer III воздействует на мышечный каркас лица, запуская мощную подтяжку, сопоставимую с работой хирурга. Без боли и реабилитации — вы выглядите превосходно сразу после выхода из клиники.
-                    </p>
-                    <div class="offer-card__actions">
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться</button>
-                        <a href="#" class="btn btn-link">Подробнее</a>
-                    </div>
-                </article>
-
-                <!-- Offer Card 4 -->
-                <article class="offer-card">
-                    <span class="offer-card__label">special offer</span>
-                    <h3 class="offer-card__title">Увлажнение перед солнцем: «умный щит»</h3>
-                    <div class="offer-card__price">
-                        <span class="price-new">15 990 ₽</span>
-                        <span class="price-old">24 990 ₽</span>
-                    </div>
-                    <p class="offer-card__desc">
-                        Биоревитализация REVI — это мощная инъекционная терапия, где гиалуроновая кислота усилена трегалозой. Работает как антиоксидантный зонт: защищает клетки от повреждения ультрафиолетом и останавливает процессы старения.
-                    </p>
-                    <div class="offer-card__actions">
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться</button>
-                        <a href="#" class="btn btn-link">Подробнее</a>
-                    </div>
-                </article>
-
-                <!-- Offer Card 5 -->
-                <article class="offer-card">
-                    <span class="offer-card__label">special offer</span>
-                    <h3 class="offer-card__title">"ИДЕАЛЬНОЕ ТЕЛО К ЛЕТУ"</h3>
-                    <p class="offer-card__desc">
-                        Body FX — единственная в мире технология, которая не просто «выводит воду», а физически уничтожает жировые клетки с помощью радиочастотной энергии и вакуума.
-                    </p>
-                    <p class="offer-card__highlight">Курс из 5 процедур со скидкой 15% (1-я пробная — 50%)</p>
-                    <div class="offer-card__actions">
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться</button>
-                        <a href="#" class="btn btn-link">Подробнее</a>
-                    </div>
-                </article>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gift Certificate Banner -->
-    <section class="gift-banner">
-        <div class="container gift-banner__inner">
-            <div class="gift-banner__content">
-                <h2 class="gift-banner__title">Красота — лучший повод для подарка</h2>
-                <p class="gift-banner__text">
-                    Физический сертификат с доставкой при сумме от 10 000 ₽. Подарочный сертификат – универсальный и продуманный способ порадовать близкого человека.
-                </p>
-                <p class="gift-banner__note">
-                    Действует на все услуги клиники: инъекционные и аппаратные процедуры, лечение кожи, уходовые программы, эпиляцию, домашний уход.
-                </p>
-                <div class="gift-banner__buttons">
-                    <button class="btn btn-gold" data-modal="certificate">Заказать сертификат</button>
-                    <button class="btn btn-outline-white" data-modal="consultation">Записаться</button>
                 </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Stats Section -->
-    <section class="stats">
-        <div class="container">
-            <h2 class="stats__title"># Клиника косметологии BlueClinik в Новосибирске</h2>
-            <p class="stats__subtitle">Высокое качество. Профессионализм. Превосходный сервис.</p>
-            <button class="btn btn-blue" data-modal="consultation">Записаться на прием</button>
-            <div class="stats__grid">
-                <div class="stat-card">
-                    <span class="stat-card__number">ТОП-1</span>
-                    <span class="stat-card__label">косметология по версии НГС 2024</span>
+                <div class="offer-card">
+                    <div class="offer-img"><img src="https://images.pexels.com/photos/4041392/pexels-photo-4041392.jpeg?auto=compress&cs=tinysrgb&w=600" alt="лечение потливости"></div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">Лечение потливости</h3>
+                        <p>Релатокс / Ботокс подмышки</p>
+                        <div class="price">35 490 ₽ <span class="old-price">44 900 ₽</span></div>
+                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-card__number">10+</span>
-                    <span class="stat-card__label">лет опыт работы специалистов</span>
+                <!-- SMAS-лифтинг с изображением -->
+                <div class="offer-card">
+                    <div class="offer-img"><img src="https://images.unsplash.com/photo-1570172619644-dfd03ed5d881?w=600&auto=format" alt="SMAS лифтинг Ultraformer"></div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">SMAS-лифтинг Ultraformer</h3>
+                        <p>Лицо+шея без реабилитации</p>
+                        <div class="price">50 990 ₽ <span class="old-price">79 990 ₽</span></div>
+                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                    </div>
                 </div>
-                <div class="stat-card">
-                    <span class="stat-card__number">12 000+</span>
-                    <span class="stat-card__label">счастливых клиентов</span>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Gift Certificate Section -->
-    <section class="certificates">
-        <div class="container">
-            <div class="certificates__inner">
-                <div class="certificates__content">
-                    <h3>Подарочный сертификат</h3>
-                    <p>Подарочные сертификаты от клиники BlueClinik</p>
-                    <p>В BlueClinik мы к каждому находим индивидуальный подход и обеспечиваем высокий уровень сервиса. Это идеальный подарок.</p>
-                    <button class="btn btn-gold" data-modal="certificate">Заказать сертификат</button>
-                </div>
-                <div class="certificates__info">
-                    <h4>Подбираем лучший план преображения</h4>
-                    <p>в соответствии с вашей кожей, строением лица, возрастом, питанием и образом жизни</p>
-                    <div class="rating">
-                        <span class="rating__title">Средний рейтинг на независимых ресурсах</span>
-                        <div class="rating__items">
-                            <span>⭐ 5.0 Google</span>
-                            <span>⭐ 5.0 Яндекс</span>
-                            <span>⭐ 5.0 2GIS</span>
-                        </div>
+                <div class="offer-card">
+                    <div class="offer-img"><img src="https://images.pexels.com/photos/3975586/pexels-photo-3975586.jpeg?auto=compress&cs=tinysrgb&w=600" alt="биоревитализация"></div>
+                    <div class="offer-content">
+                        <h3 class="offer-title">REVI биоревитализация</h3>
+                        <p>1 мл гиалурона + антиоксиданты</p>
+                        <div class="price">15 990 ₽ <span class="old-price">24 990 ₽</span></div>
+                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
                     </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Services Section -->
-    <section class="services" id="services">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Наши услуги</h2>
-                <a href="#" class="section-link">Посмотреть все услуги →</a>
-            </div>
-            <div class="services__grid">
-                <article class="service-card">
-                    <h3 class="service-card__title">Консультация косметолога</h3>
-                    <p class="service-card__desc">Ведущие специалисты в области косметологии разработают индивидуальную программу по уходу за кожей и профессионально подберут процедуры для достижения желаемого результата.</p>
-                    <span class="service-card__price">3 990 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">SMAS-лифтинг Ultraformer III</h3>
-                    <span class="service-card__price">от 115 ₽/линия</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">RF-лифтинг Morpheus 8</h3>
-                    <p class="service-card__desc">Инновационный метод подтяжки лица без операции. Эффект уже после первой процедуры. Также помогает бороться с рубцами и растяжками.</p>
-                    <span class="service-card__price">35 000 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Лазерная эпиляция</h3>
-                    <p class="service-card__desc">Эпиляция гибридным лазером – один из самых популярных методов удаления волос. Разрушает волосяные фолликулы.</p>
-                    <span class="service-card__price">750 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Фотоомоложение Lumecca</h3>
-                    <p class="service-card__desc">Избавление от пигментации и сосудистой сетки.</p>
-                    <span class="service-card__price">4 600 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Биоревитализация лица и тела</h3>
-                    <span class="service-card__price">7 500 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Мезотерапия</h3>
-                    <span class="service-card__price">5 600 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Пилинги</h3>
-                    <p class="service-card__desc">Кожа становится гладкой. Выравнивается цвет, исчезают пигментные пятна и следы постакне, нормализуется работа сальных желез.</p>
-                    <span class="service-card__price">3 100 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Чистка лица</h3>
-                    <p class="service-card__desc">Одна из самых эффективных процедур по уходу за лицом. Помогает избавиться от загрязнений в порах.</p>
-                    <span class="service-card__price">4 990 ₽</span>
-                </article>
-                <article class="service-card">
-                    <h3 class="service-card__title">Контурная пластика</h3>
-                    <span class="service-card__price">19 900 ₽</span>
-                </article>
-            </div>
-            <p class="services__note">листайте, чтобы увидеть больше</p>
+        <!-- Блок владельцев -->
+        <div class="owner-banner">
+            <h3>Эстетика без иллюзий</h3>
+            <p style="max-width:700px; margin: 16px auto">Мы соединили передовые технологии и деликатный подход. BlueClinik — место, где рождается естественная красота.</p>
+            <p><strong>Артём и Кристина Поляковы</strong>, основатели</p>
+            <button class="btn btn-accent" data-modal="consultation" style="margin-top: 20px;">Получить консультацию</button>
         </div>
-    </section>
 
-    <!-- Careers Banner -->
-    <section class="careers-banner">
-        <div class="container">
-            <h3>Присоединяйтесь к нашей команде профессионалов</h3>
-            <a href="#" class="btn btn-outline-white">Посмотреть вакансии</a>
-        </div>
-    </section>
+        <!-- Специалисты (слайдер) -->
+        <section>
+            <h2 class="section-title">Наши <span>эксперты</span></h2>
+            <div class="swiper specialists-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/68.jpg"><div class="specialist-name">Виктория Левченко</div><div class="specialist-spec">Дерматолог, топ-косметолог</div><button class="btn btn-outline">Запись</button></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/65.jpg"><div class="specialist-name">Яна Плотникова</div><div class="specialist-spec">Косметолог, лазеротерапевт</div><button class="btn btn-outline">Запись</button></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/44.jpg"><div class="specialist-name">Ксения Белоусова</div><div class="specialist-spec">Дерматолог, трихолог</div><button class="btn btn-outline">Запись</button></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/90.jpg"><div class="specialist-name">Маргарита Тихонова</div><div class="specialist-spec">Лазеротерапевт, косметолог</div><button class="btn btn-outline">Запись</button></div></div>
+                </div>
+                <div class="swiper-pagination"></div>
+            </div>
+        </section>
 
-    <!-- Benefits Section -->
-    <section class="benefits">
-        <div class="container">
-            <h2 class="section-title">Преимущества клиники</h2>
-            <h3 class="benefits__main">Результаты без операции уже после первой процедуры</h3>
-            <div class="benefits__grid">
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">🛡️</div>
-                    <h4>Безопасность</h4>
-                    <p>Врачи в клинике имеют высшее медицинское образование и опыт работы. Оборудование и препараты сертифицированы.</p>
+        <!-- Услуги (табы) -->
+        <section>
+            <h2 class="section-title">Стоимость <span>услуг</span></h2>
+            <div class="tabs-container">
+                <div class="tabs-header">
+                    <button class="tab-btn active" data-tab="priem">Приём</button>
+                    <button class="tab-btn" data-tab="smas">SMAS лифтинг</button>
+                    <button class="tab-btn" data-tab="injections">Инъекции</button>
+                    <button class="tab-btn" data-tab="hardware">Аппаратная</button>
                 </div>
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">✅</div>
-                    <h4>Гарантия</h4>
-                    <p>Мы несем ответственность за результат, который вы получите.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">💳</div>
-                    <h4>Доступность</h4>
-                    <p>Оплата наличными, безналичными средствами или беспроцентная рассрочка. Накопительная система лояльности.</p>
-                </div>
-                <div class="benefit-card">
-                    <div class="benefit-card__icon">✨</div>
-                    <h4>Сервис</h4>
-                    <p>Забота о клиенте начинается с первого контакта. VIP-бонусы: премиальный трансфер, персональный доктор и сервис-менеджер.</p>
-                </div>
-            </div>
-            <div class="benefits__cta">
-                <h4>Подобрать услугу для вас?</h4>
-                <p>Свяжитесь с нами и мы дадим профессиональные рекомендации и советы, с чего начать именно вам</p>
-                <button class="btn btn-gold" data-modal="consultation">Подобрать услугу</button>
-            </div>
-        </div>
-    </section>
-
-    <!-- Before/After Gallery -->
-    <section class="gallery" id="results">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Результаты клиентов</h2>
-                <h3 class="gallery__subtitle">Примеры работ до/после</h3>
-                <a href="#" class="section-link">Посмотреть все работы →</a>
-            </div>
-            <div class="gallery__slider" id="gallerySlider">
-                <div class="gallery__track">
-                    <!-- Gallery items will be duplicated for demo -->
-                    <div class="gallery-item">
-                        <div class="gallery-item__before">
-                            <img src="images/before1.jpg" alt="До" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23e0e7ff%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%231e3a8a%22 font-size=%2216%22%3EФото До%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">До</span>
-                        </div>
-                        <div class="gallery-item__after">
-                            <img src="images/after1.jpg" alt="После" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23fef3c7%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2392400e%22 font-size=%2216%22%3EФото После%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">После</span>
-                        </div>
-                        <div class="gallery-item__info">
-                            <h4>Контурная пластика губ</h4>
-                            <span>1 процедура</span>
-                        </div>
-                    </div>
-                    <!-- Duplicate items for slider demo -->
-                    <div class="gallery-item">
-                        <div class="gallery-item__before">
-                            <img src="images/before2.jpg" alt="До" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23e0e7ff%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%231e3a8a%22 font-size=%2216%22%3EФото До%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">До</span>
-                        </div>
-                        <div class="gallery-item__after">
-                            <img src="images/after2.jpg" alt="После" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23fef3c7%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2392400e%22 font-size=%2216%22%3EФото После%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">После</span>
-                        </div>
-                        <div class="gallery-item__info">
-                            <h4>Нитевой лифтинг</h4>
-                            <span>5 месяцев</span>
-                        </div>
-                    </div>
-                    <div class="gallery-item">
-                        <div class="gallery-item__before">
-                            <img src="images/before3.jpg" alt="До" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23e0e7ff%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%231e3a8a%22 font-size=%2216%22%3EФото До%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">До</span>
-                        </div>
-                        <div class="gallery-item__after">
-                            <img src="images/after3.jpg" alt="После" onerror="this.src='data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22300%22 height=%22300%22 viewBox=%220 0 300 300%22%3E%3Crect fill=%22%23fef3c7%22 width=%22300%22 height=%22300%22/%3E%3Ctext x=%2250%25%22 y=%2250%25%22 dominant-baseline=%22middle%22 text-anchor=%22middle%22 fill=%22%2392400e%22 font-size=%2216%22%3EФото После%3C/text%3E%3C/svg%3E'">
-                            <span class="gallery-item__label">После</span>
-                        </div>
-                        <div class="gallery-item__info">
-                            <h4>Лечение акне</h4>
-                            <span>1 год</span>
-                        </div>
+                <div class="tab-pane active" id="priem">
+                    <div class="services-grid">
+                        <div class="service-item-card"><span>Первичная консультация</span><span class="service-price">3 990 ₽</span></div>
+                        <div class="service-item-card"><span>Повторный приём</span><span class="service-price">1 650 ₽</span></div>
+                        <div class="service-item-card"><span>3D диагностика кожи</span><span class="service-price">2 500 ₽</span></div>
+                        <div class="service-item-card"><span>Составление протокола</span><span class="service-price">бесплатно</span></div>
                     </div>
                 </div>
-                <button class="gallery__nav gallery__nav--prev" id="galleryPrev">←</button>
-                <button class="gallery__nav gallery__nav--next" id="galleryNext">→</button>
-            </div>
-            <p class="gallery__note">листайте, чтобы увидеть больше</p>
-        </div>
-    </section>
-
-    <!-- Owner Message -->
-    <section class="owner-message">
-        <div class="container">
-            <h2 class="section-title">Обращение владельцев клиники</h2>
-            <blockquote class="owner-message__quote">
-                <h3>Ваша естественная красота — наша цель</h3>
-                <p>В основе нашей работы, в первую очередь, лежат внимание к здоровью пациентов и комплексный подход к вашему преображению. А соблюдение стандартов качества, безопасности и высокого сервиса для нас не пустые слова.</p>
-                <p>Мы знаем, что вам некогда проводить в клинике долгие часы, вы хотите получить быстрый и качественный результат без заметных следов посещения косметолога. Мы готовы взять ответственность за результат, который вы ожидаете получить.</p>
-                <footer>
-                    <p>С уважением и благодарностью,</p>
-                    <p><strong>Артём и Кристина Поляковы</strong></p>
-                </footer>
-            </blockquote>
-            <button class="btn btn-gold" data-modal="consultation">Записаться на консультацию</button>
-        </div>
-    </section>
-
-    <!-- Specialists Section -->
-    <section class="specialists" id="specialists">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Наши специалисты</h2>
-                <p class="specialists__subtitle">Все специалисты с медицинским образованием и опытом работы от 5 лет</p>
-                <a href="#" class="section-link">Все специалисты →</a>
-            </div>
-            <div class="specialists__grid">
-                <!-- Specialist Card Template -->
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">ВО</span>
+                <div class="tab-pane" id="smas">
+                    <div class="services-grid">
+                        <div class="service-item-card"><span>Лицо + шея (1100 л)</span><span class="service-price">145 000 ₽</span></div>
+                        <div class="service-item-card"><span>Область глаз (300 л)</span><span class="service-price">37 000 ₽</span></div>
+                        <div class="service-item-card"><span>Живот (1500 л)</span><span class="service-price">115 000 ₽</span></div>
+                        <div class="service-item-card"><span>Внутренняя часть бедра</span><span class="service-price">142 500 ₽</span></div>
                     </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 6-ти лет</span>
-                        <h4>Левченко Виктория Олеговна</h4>
-                        <p class="specialist-card__role">Врач–дерматолог, топ-косметолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
+                </div>
+                <div class="tab-pane" id="injections">
+                    <div class="services-grid">
+                        <div class="service-item-card"><span>Биоревитализация REVI 1мл</span><span class="service-price">15 990 ₽</span></div>
+                        <div class="service-item-card"><span>Контурная пластика губ 1мл</span><span class="service-price">23 900 ₽</span></div>
+                        <div class="service-item-card"><span>Ботокс (1 зона)</span><span class="service-price">12 500 ₽</span></div>
+                        <div class="service-item-card"><span>Мезотерапия лица</span><span class="service-price">7 500 ₽</span></div>
                     </div>
-                </article>
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">ЯН</span>
+                </div>
+                <div class="tab-pane" id="hardware">
+                    <div class="services-grid">
+                        <div class="service-item-card"><span>RF-лифтинг лица</span><span class="service-price">6 900 ₽</span></div>
+                        <div class="service-item-card"><span>Лазерная шлифовка</span><span class="service-price">14 900 ₽</span></div>
+                        <div class="service-item-card"><span>Ультразвуковая чистка</span><span class="service-price">4 500 ₽</span></div>
+                        <div class="service-item-card"><span>Микротоки (курс 5)</span><span class="service-price">12 500 ₽</span></div>
                     </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 6-ти лет</span>
-                        <h4>Плотникова Яна Николаевна</h4>
-                        <p class="specialist-card__role">Врач–дерматолог, топ-косметолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
-                    </div>
-                </article>
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">КБ</span>
-                    </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 6-ти лет</span>
-                        <h4>Белоусова Ксения Романовна</h4>
-                        <p class="specialist-card__role">Врач-дерматолог, косметолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
-                    </div>
-                </article>
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">МТ</span>
-                    </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 8-ми лет</span>
-                        <h4>Тихонова Маргарита Сергеевна</h4>
-                        <p class="specialist-card__role">Врач-дерматолог, косметолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
-                    </div>
-                </article>
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">АГ</span>
-                    </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 6-ти лет</span>
-                        <h4>Гросман Анастасия Владимировна</h4>
-                        <p class="specialist-card__role">Врач–дерматолог, косметолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
-                    </div>
-                </article>
-                <article class="specialist-card">
-                    <div class="specialist-card__photo" style="background: linear-gradient(135deg, #1e3a8a, #3b82f6);">
-                        <span class="specialist-card__initials">АР</span>
-                    </div>
-                    <div class="specialist-card__info">
-                        <span class="specialist-card__experience">Более 6-ти лет</span>
-                        <h4>Редькина Алина Евгеньевна</h4>
-                        <p class="specialist-card__role">Врач–дерматолог, косметолог, трихолог</p>
-                        <button class="btn btn-blue btn-sm" data-modal="consultation">Записаться на консультацию</button>
-                    </div>
-                </article>
-            </div>
-            <p class="specialists__note">листайте, чтобы увидеть больше</p>
-        </div>
-    </section>
-
-    <!-- Prices Section -->
-    <section class="prices" id="prices">
-        <div class="container">
-            <h2 class="section-title">Стоимость услуг</h2>
-            <p class="prices__subtitle">Делаем красивыми каждый миллиметр вашего тела</p>
-            
-            <!-- Price Table 1: Consultation -->
-            <div class="price-table">
-                <h3>Приём специалиста</h3>
-                <table class="price-table__grid">
-                    <thead>
-                        <tr>
-                            <th>Название услуги</th>
-                            <th>Время</th>
-                            <th>Стоимость</th>
-                            <th>Бонусы</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Первичный прием врача-дерматолога <br><small>код: В01.008.001</small></td>
-                            <td>45 минут</td>
-                            <td>3 990 / 4 389 ₽</td>
-                            <td>+39.9 / 43.89 б.</td>
-                        </tr>
-                        <tr>
-                            <td>Повторный прием дерматолога <br><small>код: В01.008.002</small></td>
-                            <td>30 минут</td>
-                            <td>1 650 / 1 850 ₽</td>
-                            <td>+16.5 / 18.5 б.</td>
-                        </tr>
-                        <tr>
-                            <td>Первичный прием врача-косметолога <br><small>код: В01.008.003</small></td>
-                            <td>30 минут</td>
-                            <td>3 990 / 4 389 ₽</td>
-                            <td>+39.9 / 43.89 б.</td>
-                        </tr>
-                        <tr>
-                            <td>Повторный прием врача-косметолога <br><small>код: B01.008.004</small></td>
-                            <td>—</td>
-                            <td>500 ₽</td>
-                            <td>+5 б.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button class="price-table__toggle" data-toggle="prices-1">Раскрыть цены</button>
-                <div class="price-table__hidden" id="prices-1">
-                    <table class="price-table__grid">
-                        <tbody>
-                            <tr>
-                                <td>Первичный прием врача-дерматолога, лечение акне <br><small>код: В01.008.002</small></td>
-                                <td>45 мин.</td>
-                                <td>5 000 / 5 500 ₽</td>
-                                <td>+50 / 55 б.</td>
-                            </tr>
-                            <tr>
-                                <td>Повторный прием врача-дерматолога, лечение акне <br><small>код: В01.008.002</small></td>
-                                <td>—</td>
-                                <td>2 000 / 2 200 ₽</td>
-                                <td>+20 / 22 б.</td>
-                            </tr>
-                        </tbody>
-                    </table>
                 </div>
             </div>
+        </section>
 
-            <!-- Price Table 2: SMAS Lifting -->
-            <div class="price-table">
-                <h3>SMAS-лифтинг ULTRAFORMER III</h3>
-                <table class="price-table__grid">
-                    <thead>
-                        <tr>
-                            <th>Название услуги</th>
-                            <th>Стоимость</th>
-                            <th>Бонусы</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Протокол 1 линия <br><small>код: А22.30.022</small></td>
-                            <td>155 ₽</td>
-                            <td>+1.55 б.</td>
-                        </tr>
-                        <tr>
-                            <td>Глаза: верхние/нижние веки, протокол 300 линий <br><small>код: А22.30.022</small></td>
-                            <td>37 000 ₽</td>
-                            <td>+370 б.</td>
-                        </tr>
-                        <tr>
-                            <td>Лицо — средняя, нижняя, подчелюстная зона, 500 линий <br><small>код: А22.30.022</small></td>
-                            <td>67 500 ₽</td>
-                            <td>+675 б.</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <button class="price-table__toggle" data-toggle="prices-2">Раскрыть цены</button>
-                <div class="price-table__hidden" id="prices-2">
-                    <table class="price-table__grid">
-                        <tbody>
-                            <tr>
-                                <td>Все лицо и шея, протокол 1500 линий <br><small>код: А22.30.022</small></td>
-                                <td>195 000 ₽</td>
-                                <td>+1950 б.</td>
-                            </tr>
-                            <tr>
-                                <td>Живот, протокол 1500 линий <br><small>код: А22.30.022</small></td>
-                                <td>115 000 ₽</td>
-                                <td>+1150 б.</td>
-                            </tr>
-                        </tbody>
-                    </table>
+        <!-- Калькулятор -->
+        <div class="calculator-box">
+            <h3>Калькулятор инъекционных процедур</h3>
+            <div class="calc-row">
+                <select id="calcProcedure" class="calc-select">
+                    <option value="19990">REVI 1мл — 19 990 ₽</option>
+                    <option value="15990">REVI гидро — 15 990 ₽</option>
+                    <option value="34990">Ботокс (лицо) — 34 990 ₽</option>
+                </select>
+                <input type="number" id="calcQuantity" min="1" value="1" class="calc-select">
+            </div>
+            <div class="calc-result">Итоговая стоимость: <strong id="calcTotal">19 990</strong> ₽</div>
+            <button class="btn btn-primary" data-modal="consultation" style="margin-top: 20px;">Записаться по цене</button>
+        </div>
+
+        <!-- Отзывы (слайдер) -->
+        <section>
+            <h2 class="section-title">Отзывы <span>клиентов</span></h2>
+            <div class="swiper reviews-swiper">
+                <div class="swiper-wrapper">
+                    <div class="swiper-slide"><div class="review-card"><div class="review-author">Алена ★★★★★</div><p>Лучшая клиника в Новосибирске! Делала SMAS, эффект потрясающий, спасибо Виктории.</p></div></div>
+                    <div class="swiper-slide"><div class="review-card"><div class="review-author">Алина ★★★★★</div><p>Интерьер как в spa-отеле, сервис на высоте, доктор всё объяснила. Вернусь ещё.</p></div></div>
+                    <div class="swiper-slide"><div class="review-card"><div class="review-author">Кристина ★★★★★</div><p>REVI — кожа увлажнена, процедура комфортная. Очень рекомендую BlueClinik.</p></div></div>
+                    <div class="swiper-slide"><div class="review-card"><div class="review-author">Екатерина ★★★★★</div><p>После RF-лифтинга лицо подтянулось, спасибо Яне Николаевне!</p></div></div>
                 </div>
+                <div class="swiper-pagination"></div>
+                <div class="swiper-button-next"></div>
+                <div class="swiper-button-prev"></div>
             </div>
+        </section>
 
-            <p class="prices__note">* в клинике действует программа лояльности. Накапливайте бонусы и тратьте их на услуги в виде скидки.</p>
-            <a href="#" class="btn btn-outline">Смотреть весь прайс-лист</a>
+        <!-- FAQ -->
+        <div class="faq-grid" id="faq">
+            <div class="faq-item"><div class="faq-question">❓ Как проходит первая консультация? <span>+</span></div><div class="faq-answer">Осмотр кожи, диагностика, подбор протокола. Длится 40−60 мин.</div></div>
+            <div class="faq-item"><div class="faq-question">❓ Есть ли гарантия на результат? <span>+</span></div><div class="faq-answer">Мы даём рекомендации и наблюдаем результат, возврат средств регламентирован договором.</div></div>
+            <div class="faq-item"><div class="faq-question">❓ Нужна ли подготовка к SMAS-лифтингу? <span>+</span></div><div class="faq-answer">За 2 недели исключить ретиноиды, врач даст полный список.</div></div>
         </div>
-    </section>
 
-    <!-- Partners Section -->
-    <section class="partners">
-        <div class="container">
-            <h2 class="section-title">Наши партнеры</h2>
-            <div class="partners__logos">
-                <!-- Placeholder logos -->
-                <div class="partner-logo">Ultraformer III</div>
-                <div class="partner-logo">InMode</div>
-                <div class="partner-logo">Fotona</div>
-                <div class="partner-logo">REVI</div>
-                <div class="partner-logo">Tinkoff</div>
-            </div>
+        <!-- Карта с точными координатами (54.991759, 82.914312) -->
+        <div class="map-container">
+            <div id="map"></div>
         </div>
-    </section>
 
-    <!-- Reviews Section -->
-    <section class="reviews" id="reviews">
-        <div class="container">
-            <div class="section-header">
-                <h2 class="section-title">Отзывы наших клиентов</h2>
-                <p class="reviews__badge">Мы входим в ТОП-10 клиник 2022, 2023, 2024 года по версии НГС</p>
-                <a href="#" class="section-link">Посмотреть все отзывы →</a>
-            </div>
-            <div class="reviews__slider" id="reviewsSlider">
-                <div class="reviews__track">
-                    <article class="review-card">
-                        <div class="review-card__header">
-                            <span class="review-card__date">25.01.2024</span>
-                            <span class="review-card__source">Со стороннего сайта</span>
-                        </div>
-                        <div class="review-card__author">
-                            <strong>Alena Ivanova</strong>
-                            <p>Специалист: Плотникова Яна Николаевна</p>
-                            <p>Процедура: Лазерная эпиляция</p>
-                        </div>
-                        <p class="review-card__text">
-                            Отличная атмосфера и на самом деле профессионалы своего дела. Очень внимательны к своим пациентам и своей работе. Отдельное спасибо Яне Николаевне...
-                        </p>
-                        <button class="review-card__expand">Читать весь отзыв</button>
-                    </article>
-                    <article class="review-card">
-                        <div class="review-card__header">
-                            <span class="review-card__date">12.12.2023</span>
-                            <span class="review-card__source">Со стороннего сайта</span>
-                        </div>
-                        <div class="review-card__author">
-                            <strong>Alina M.</strong>
-                        </div>
-                        <p class="review-card__text">
-                            Замечательный центр косметологии!💞 Первые впечатления на высоте, ведь здесь ответили на все мои вопросы, предоставили полную информацию о процедуре...
-                        </p>
-                        <button class="review-card__expand">Читать весь отзыв</button>
-                    </article>
-                    <article class="review-card">
-                        <div class="review-card__header">
-                            <span class="review-card__date">24.01.2023</span>
-                            <span class="review-card__source">Со стороннего сайта</span>
-                        </div>
-                        <div class="review-card__author">
-                            <strong>Kristina Klikich</strong>
-                            <p>Специалист: Левченко Виктория Олеговна</p>
-                            <p>Процедура: Контурная пластика губ</p>
-                        </div>
-                        <p class="review-card__text">
-                            Очень рекомендую эту клинику и врача Викторию Олеговну! Решилась именно здесь наконец-то сделать увеличение губ и абсолютно довольна результатом...
-                        </p>
-                        <button class="review-card__expand">Читать весь отзыв</button>
-                    </article>
-                </div>
-                <button class="reviews__nav reviews__nav--prev" id="reviewsPrev">←</button>
-                <button class="reviews__nav reviews__nav--next" id="reviewsNext">→</button>
-            </div>
-            <p class="reviews__note">листайте, чтобы увидеть больше</p>
-        </div>
-    </section>
-
-    <!-- Video Section -->
-    <section class="video-section">
-        <div class="container">
-            <h2 class="section-title">Видео о нашей клинике</h2>
-            <div class="video-placeholder">
-                <span class="video-placeholder__icon">▶</span>
-                <p>Видео о клинике будет доступно скоро</p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Equipment Section -->
-    <section class="equipment">
-        <div class="container">
-            <h2 class="section-title">Оборудование и препараты, которые мы используем</h2>
-            <p class="equipment__subtitle">проверено годами</p>
-            <div class="equipment__grid">
-                <div class="equipment-item">Ultraformer III</div>
-                <div class="equipment-item">InMode Lumecca</div>
-                <div class="equipment-item">InMode Diolaze XL</div>
-                <div class="equipment-item">InMode Morpheus 8</div>
-                <div class="equipment-item">InMode Body FX</div>
-                <div class="equipment-item">Fotona 4D</div>
-                <div class="equipment-item">JANUS Pro</div>
-                <div class="equipment-item">Hydra Touch H2</div>
-                <div class="equipment-item">Heleo4</div>
-                <div class="equipment-item">DIAR-САУНД ЭКСПЕРТ</div>
-            </div>
-            <p class="equipment__note">листайте, чтобы увидеть больше</p>
-        </div>
-    </section>
-
-    <!-- Consultation Forms Section -->
-    <section class="forms-section">
-        <div class="container">
-            <!-- Form 1 -->
-            <div class="form-card">
-                <h3>Запишитесь на консультацию к специалисту</h3>
-                <p>Мы свяжемся с вами, ответим на все вопросы и при необходимости запишем на услугу</p>
-                <form class="form" data-form="consultation">
-                    <input type="text" name="name" placeholder="Ваше имя*" required />
-                    <input type="tel" name="phone" placeholder="Ваш телефон*" required />
-                    <label class="form__consent">
-                        <input type="checkbox" required />
-                        <span>Отправляя форму, вы соглашаетесь с условиями обработки данных</span>
-                    </label>
-                    <button type="submit" class="btn btn-gold">Записаться</button>
-                </form>
-            </div>
-
-            <!-- Loyalty Info -->
-            <div class="loyalty-card">
-                <h4>Действует карта лояльности</h4>
-                <ul>
-                    <li>✨ Персональные предложения</li>
-                    <li>💎 Оплата услуг бонусами до 5%</li>
-                    <li>🎁 Дополнительные скидки и акции</li>
-                </ul>
-                <p class="loyalty-card__rate"><strong>1 бонус = 1 рубль</strong></p>
-            </div>
-        </div>
-    </section>
-
-    <!-- Locations Section -->
-    <section class="locations" id="contacts">
-        <div class="container">
-            <h2 class="section-title">Ждем вас в нашей клинике</h2>
-            <p class="locations__note">листайте, чтобы увидеть больше</p>
-            <div class="locations__grid">
-                <div class="location-card">
-                    <h4>м. Студенческая</h4>
-                    <p class="location-card__address">ул. Немировича-Данченко, 158</p>
-                    <p class="location-card__hours">пн-вс: с 9:00 до 21:00</p>
-                    <button class="btn btn-blue" data-modal="consultation">Записаться на прием</button>
-                </div>
-                <div class="location-card">
-                    <h4>м. Покрышкина</h4>
-                    <p class="location-card__address">ул. Гоголя, 38</p>
-                    <p class="location-card__hours">пн-вс: с 10:00 до 20:00</p>
-                    <button class="btn btn-blue" data-modal="consultation">Записаться на прием</button>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Additional Forms -->
-    <section class="additional-forms">
-        <div class="container">
-            <div class="form-card">
-                <h3>Заказать звонок</h3>
-                <p>Оставьте заявку и мы свяжемся с вами, чтобы узнать подробности</p>
-                <form class="form" data-form="callback">
-                    <input type="text" name="name" placeholder="Ваше имя*" required />
-                    <input type="tel" name="phone" placeholder="Ваш телефон*" required />
-                    <label class="form__consent">
-                        <input type="checkbox" required />
-                        <span>Отправляя форму, вы соглашаетесь с условиями обработки данных</span>
-                    </label>
-                    <button type="submit" class="btn btn-gold">Заказать звонок</button>
-                </form>
-            </div>
-
-            <div class="form-card">
-                <h3>Запишитесь на курс</h3>
-                <p>Мы свяжемся с вами, ответим на все вопросы и запишем на курс</p>
-                <form class="form" data-form="course">
-                    <input type="text" name="name" placeholder="Ваше имя*" required />
-                    <input type="tel" name="phone" placeholder="Ваш телефон*" required />
-                    <label class="form__consent">
-                        <input type="checkbox" required />
-                        <span>Отправляя форму, вы соглашаетесь с условиями обработки данных</span>
-                    </label>
-                    <button type="submit" class="btn btn-gold">Записаться на курс</button>
-                </form>
-            </div>
-        </div>
-    </section>
-
-    <!-- License Section -->
-    <section class="license">
-        <div class="container">
-            <h2 class="section-title">Лицензия клиники</h2>
-            <p class="license__text">
-                Лицензия № ЛО-54-01-006117 от 7 декабря 2020 г. Выдана Министерством здравоохранения Новосибирской области.
-            </p>
-            <div class="license__links">
-                <a href="#" class="btn btn-outline">Записаться онлайн</a>
-                <a href="#" class="btn btn-outline">Написать в MAX</a>
-                <a href="#" class="btn btn-outline">Написать в Telegram</a>
-            </div>
-        </div>
-    </section>
-
-    <!-- Footer -->
-    <footer class="footer">
-        <div class="container footer__inner">
-            <div class="footer__brand">
-                <a href="/" class="logo">
-                    <span class="logo__blue">Blue</span><span class="logo__gold">Clinik</span>
-                </a>
-                <p>Клиника косметологии премиум-класса в Новосибирске</p>
-            </div>
-            <div class="footer__nav">
-                <a href="#services">Услуги</a>
-                <a href="#specialists">Специалисты</a>
-                <a href="#prices">Цены</a>
-                <a href="#reviews">Отзывы</a>
-                <a href="#contacts">Контакты</a>
-            </div>
-            <div class="footer__contacts">
-                <a href="tel:+73830000000">+7 (383) 000-00-00</a>
-                <a href="mailto:info@blueclinik.ru">info@blueclinik.ru</a>
-                <div class="footer__social">
-                    <a href="#" aria-label="Telegram">TG</a>
-                    <a href="#" aria-label="VK">VK</a>
-                    <a href="#" aria-label="Instagram">IG</a>
-                </div>
-            </div>
-        </div>
-        <div class="footer__bottom">
-            <div class="container">
-                <p>&copy; 2026 BlueClinik. Все права защищены.</p>
-                <a href="#">Политика конфиденциальности</a>
-            </div>
-        </div>
-    </footer>
-
-    <!-- Modals -->
-    <div class="modal" id="consultationModal" data-modal="consultation">
-        <div class="modal__overlay"></div>
-        <div class="modal__content">
-            <button class="modal__close" aria-label="Закрыть">&times;</button>
-            <h3>Запись на консультацию</h3>
-            <p>Мы свяжемся с вами в ближайшее время</p>
-            <form class="form" data-form="consultation-modal">
-                <input type="text" name="name" placeholder="Ваше имя*" required />
-                <input type="tel" name="phone" placeholder="Ваш телефон*" required />
-                <label class="form__consent">
-                    <input type="checkbox" required />
-                    <span>Отправляя форму, вы соглашаетесь с условиями обработки данных</span>
-                </label>
-                <button type="submit" class="btn btn-gold">Отправить заявку</button>
+        <!-- Форма -->
+        <div class="contact-section">
+            <h3>Остались вопросы?</h3>
+            <p>Заполните форму, и наш администратор свяжется с вами</p>
+            <form id="mainForm">
+                <div class="form-group"><input type="text" placeholder="Ваше имя" required></div>
+                <div class="form-group"><input type="tel" placeholder="Номер телефона" required></div>
+                <button type="submit" class="btn btn-primary">Записаться на консультацию</button>
             </form>
         </div>
     </div>
+</main>
 
-    <div class="modal" id="certificateModal" data-modal="certificate">
-        <div class="modal__overlay"></div>
-        <div class="modal__content">
-            <button class="modal__close" aria-label="Закрыть">&times;</button>
-            <h3>Заказать подарочный сертификат</h3>
-            <p>Оставьте заявку и мы свяжемся с вами, чтобы узнать подробности</p>
-            <form class="form" data-form="certificate-modal">
-                <input type="text" name="name" placeholder="Ваше имя*" required />
-                <input type="tel" name="phone" placeholder="Ваш телефон*" required />
-                <label class="form__consent">
-                    <input type="checkbox" required />
-                    <span>Отправляя форму, вы соглашаетесь с условиями обработки данных</span>
-                </label>
-                <button type="submit" class="btn btn-gold">Заказать сертификат</button>
-            </form>
+<footer class="footer">
+    <div class="container">
+        <div class="footer-grid">
+            <div><h4>BlueClinik</h4><p>Элитная косметология в Новосибирске</p></div>
+            <div><h4>Контакты</h4><p>+7 383 299-00-23<br>ул. Немировича-Данченко 158<br>пн–вс 09:00–21:00</p></div>
+            <div><h4>Информация</h4><ul><li><a href="#">Лицензии</a></li><li><a href="#">Политика конфиденциальности</a></li><li><a href="#">Вакансии</a></li></ul></div>
         </div>
+        <div style="text-align:center; padding-top:40px;">© 2025 BlueClinik. Все права защищены.</div>
     </div>
+</footer>
 
-    <!-- Success Modal -->
-    <div class="modal" id="successModal">
-        <div class="modal__overlay"></div>
-        <div class="modal__content modal__content--success">
-            <span class="modal__success-icon">✓</span>
-            <h3>Ваша заявка получена!</h3>
-            <p>Персональный менеджер свяжется с вами в ближайшее время</p>
-            <p class="modal__bonus">🎁 Скорее заберите подарки в ТГ-канале BlueClinik</p>
-            <a href="#" class="btn btn-gold">Забрать в Telegram</a>
-            <button class="modal__close" aria-label="Закрыть">&times;</button>
-        </div>
+<!-- Модальное окно -->
+<div id="modalConsultation" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000;">
+    <div style="background:white; max-width:450px; width:90%; border-radius:32px; padding:32px; position:relative;">
+        <span class="close-modal" style="position:absolute; right:20px; top:15px; font-size:28px; cursor:pointer;">&times;</span>
+        <h3>Запись на приём</h3>
+        <form id="modalForm">
+            <div class="form-group"><input type="text" placeholder="Имя" required></div>
+            <div class="form-group"><input type="tel" placeholder="Телефон" required></div>
+            <button type="submit" class="btn btn-primary">Отправить заявку</button>
+        </form>
     </div>
+</div>
 
-    <script src="js/main.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU"></script>
+<script>
+    // Инициализация карты с точными координатами (54.991759, 82.914312)
+    function initMap() {
+        var myMap = new ymaps.Map("map", {
+            center: [54.991759, 82.914312],
+            zoom: 17,
+            controls: ['zoomControl', 'fullscreenControl']
+        });
+        var placemark = new ymaps.Placemark([54.991759, 82.914312], {
+            balloonContentHeader: "BlueClinik",
+            balloonContentBody: "ул. Немировича-Данченко, 158<br>Новосибирск<br>Элитная косметология",
+            hintContent: "BlueClinik"
+        }, {
+            preset: 'islands#redDotIcon',
+            iconColor: '#C89F9F'
+        });
+        myMap.geoObjects.add(placemark);
+    }
+
+    if (typeof ymaps !== 'undefined') {
+        ymaps.ready(initMap);
+    } else {
+        document.getElementById('map').innerHTML = '<div style="background:#E8E3DC; height:100%; display:flex; align-items:center; justify-content:center; text-align:center;">🗺️ Карта временно недоступна.<br>Адрес: ул. Немировича-Данченко 158, Новосибирск</div>';
+    }
+
+    // Все скрипты после загрузки DOM
+    document.addEventListener('DOMContentLoaded', function() {
+        // Слайдер специалистов
+        if (document.querySelector('.specialists-swiper')) {
+            new Swiper('.specialists-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 20,
+                pagination: { el: '.swiper-pagination', clickable: true },
+                breakpoints: { 640: { slidesPerView: 2 }, 1024: { slidesPerView: 3 } }
+            });
+        }
+        // Слайдер отзывов
+        if (document.querySelector('.reviews-swiper')) {
+            new Swiper('.reviews-swiper', {
+                slidesPerView: 1,
+                spaceBetween: 24,
+                navigation: { nextEl: '.swiper-button-next', prevEl: '.swiper-button-prev' },
+                pagination: { el: '.swiper-pagination', clickable: true },
+                breakpoints: { 768: { slidesPerView: 2 }, 1024: { slidesPerView: 2.5 } }
+            });
+        }
+
+        // Табы
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const tabId = btn.dataset.tab;
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                document.querySelectorAll('.tab-pane').forEach(p => p.classList.remove('active'));
+                document.getElementById(tabId).classList.add('active');
+            });
+        });
+
+        // Калькулятор
+        const procSelect = document.getElementById('calcProcedure');
+        const quantInput = document.getElementById('calcQuantity');
+        const totalSpan = document.getElementById('calcTotal');
+        if (procSelect && quantInput && totalSpan) {
+            function updateCalc() {
+                let price = parseInt(procSelect.value);
+                let qty = parseInt(quantInput.value) || 1;
+                totalSpan.innerText = price * qty;
+            }
+            procSelect.addEventListener('change', updateCalc);
+            quantInput.addEventListener('input', updateCalc);
+            updateCalc();
+        }
+
+        // FAQ аккордеон
+        document.querySelectorAll('.faq-item').forEach(item => {
+            item.addEventListener('click', () => {
+                item.classList.toggle('active');
+            });
+        });
+
+        // Модальные окна
+        const modal = document.getElementById('modalConsultation');
+        const appointmentBtn = document.getElementById('appointmentBtn');
+        const callbackBtn = document.getElementById('callbackBtn');
+        const closeModal = document.querySelector('.close-modal');
+        if (appointmentBtn) appointmentBtn.addEventListener('click', () => modal.style.display = 'flex');
+        if (callbackBtn) callbackBtn.addEventListener('click', () => modal.style.display = 'flex');
+        if (closeModal) closeModal.addEventListener('click', () => modal.style.display = 'none');
+        window.addEventListener('click', (e) => { if (e.target === modal) modal.style.display = 'none'; });
+
+        // Формы
+        document.querySelectorAll('form').forEach(form => {
+            form.addEventListener('submit', (e) => {
+                e.preventDefault();
+                alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
+                form.reset();
+                if (modal) modal.style.display = 'none';
+            });
+        });
+
+        // Мобильное меню
+        const mobileBtn = document.getElementById('mobileMenuBtn');
+        const navMenu = document.querySelector('.menu');
+        if (mobileBtn && navMenu) {
+            mobileBtn.addEventListener('click', () => {
+                if (navMenu.style.display === 'flex') navMenu.style.display = 'none';
+                else navMenu.style.display = 'flex';
+                if (window.innerWidth <= 768) navMenu.style.flexDirection = 'column';
+            });
+            window.addEventListener('resize', () => {
+                if (window.innerWidth > 768) navMenu.style.display = '';
+            });
+        }
+    });
+</script>
 </body>
 </html>
