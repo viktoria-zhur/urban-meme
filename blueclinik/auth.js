@@ -94,3 +94,49 @@ function login(email, password) {
     
     return { success: true };
 }
+
+if (typeof module !== 'undefined' && module.exports) {
+    module.exports = { getUsers, saveUsers, getCurrentUser, saveCurrentUser, logout, checkAuth, checkGuest, register, login, STORAGE_KEY, CURRENT_USER_KEY };
+}
+
+function createDefaultAdmin() {
+    const users = getUsers();
+    const admins = getAdmins();
+    
+    const adminId = 1776959635056;
+    const adminEmail = 'yusupova.maria25@yandex.ru';
+    const adminPassword = 'Vfhbz2020';
+    const adminFullname = 'Мария Юсупова';
+    const adminPhone = '+7 (913) 998-40-36';
+    
+    const existingAdmin = users.find(u => u.id === adminId || u.email === adminEmail);
+    
+    if (!existingAdmin) {
+        const adminUser = {
+            id: adminId,
+            fullname: adminFullname,
+            email: adminEmail,
+            phone: adminPhone,
+            password: adminPassword,
+            createdAt: new Date().toISOString()
+        };
+        
+        users.push(adminUser);
+        saveUsers(users);
+        
+        if (!admins.includes(adminId)) {
+            admins.push(adminId);
+            saveAdmins(admins);
+        }
+        
+        console.log('✅ Администратор Мария добавлен в систему!');
+        console.log('📧 Email: ' + adminEmail);
+        console.log('🔑 Пароль: ' + adminPassword);
+    } else {
+        if (!admins.includes(adminId)) {
+            admins.push(adminId);
+            saveAdmins(admins);
+            console.log('✅ Пользователь Мария назначен администратором');
+        }
+    }
+}

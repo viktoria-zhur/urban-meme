@@ -279,6 +279,9 @@
                 <a href="index.html" class="logo">Blue<span>Clinik</span></a>
                 <div class="dashboard-user">
                     <span class="user-welcome"><i class="fas fa-user-circle"></i> <span id="userNameDisplay"></span></span>
+                    <a href="admin.html" id="adminLinkBtn" class="btn btn-primary" style="display: none; background: var(--accent);">
+                        <i class="fas fa-shield-alt"></i> Админ-панель
+                    </a>
                     <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
                 </div>
             </div>
@@ -375,6 +378,18 @@
         }
         
         loadAppointments();
+
+        function showAdminButtonIfNeeded() {
+            const admins = JSON.parse(localStorage.getItem('blueclinik_admins') || '[]');
+            const currentUser = getCurrentUser();
+            const adminBtn = document.getElementById('adminLinkBtn');
+            
+            if (currentUser && admins.includes(currentUser.id) && adminBtn) {
+                adminBtn.style.display = 'inline-flex';
+            }
+        }
+    
+        showAdminButtonIfNeeded();
     </script>
 </body>
 </html>
