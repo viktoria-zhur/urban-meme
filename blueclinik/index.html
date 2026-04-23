@@ -69,6 +69,7 @@
             cursor: pointer;
             border: none;
             font-size: 15px;
+            text-decoration: none;
         }
         .btn-primary {
             background: var(--primary-dark);
@@ -549,7 +550,8 @@
                     <div class="callback-link" id="callbackBtn">заказать звонок</div>
                 </div>
                 <div id="authLinksContainer" class="auth-links" style="display: flex; gap: 12px; align-items: center;"></div>
-                <button class="btn btn-primary" id="appointmentBtn">Записаться онлайн</button>
+                <!-- Кнопка "Записаться онлайн" теперь ведёт на booking.html -->
+                <a href="booking.html" class="btn btn-primary" id="appointmentBtn">Записаться онлайн</a>
                 <div class="messengers">
                     <a href="#" class="messenger"><img src="https://img.icons8.com/ios-glyphs/30/0A1C2F/telegram.png" width="18" alt="tg"></a>
                     <a href="#" class="messenger"><img src="https://img.icons8.com/ios-glyphs/30/0A1C2F/whatsapp.png" width="18" alt="wa"></a>
@@ -582,7 +584,8 @@
                         <h3 class="offer-title">Комплекс "Сияние"</h3>
                         <p>3 пилинга + биоревитализация</p>
                         <div class="price">13 990 ₽ <span class="old-price">21 500 ₽</span></div>
-                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                        <!-- Кнопка записи ведёт на booking.html -->
+                        <a href="booking.html" class="btn btn-outline">Записаться</a>
                     </div>
                 </div>
                 <div class="offer-card">
@@ -591,7 +594,7 @@
                         <h3 class="offer-title">Лечение потливости</h3>
                         <p>Релатокс / Ботокс подмышки</p>
                         <div class="price">35 490 ₽ <span class="old-price">44 900 ₽</span></div>
-                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                        <a href="booking.html" class="btn btn-outline">Записаться</a>
                     </div>
                 </div>
                 <!-- SMAS-лифтинг с изображением -->
@@ -601,7 +604,7 @@
                         <h3 class="offer-title">SMAS-лифтинг Ultraformer</h3>
                         <p>Лицо+шея без реабилитации</p>
                         <div class="price">50 990 ₽ <span class="old-price">79 990 ₽</span></div>
-                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                        <a href="booking.html" class="btn btn-outline">Записаться</a>
                     </div>
                 </div>
                 <div class="offer-card">
@@ -610,7 +613,7 @@
                         <h3 class="offer-title">REVI биоревитализация</h3>
                         <p>1 мл гиалурона + антиоксиданты</p>
                         <div class="price">15 990 ₽ <span class="old-price">24 990 ₽</span></div>
-                        <button class="btn btn-outline" data-modal="consultation">Записаться</button>
+                        <a href="booking.html" class="btn btn-outline">Записаться</a>
                     </div>
                 </div>
             </div>
@@ -621,7 +624,7 @@
             <h3>Эстетика без иллюзий</h3>
             <p style="max-width:700px; margin: 16px auto">Мы соединили передовые технологии и деликатный подход. BlueClinik — место, где рождается естественная красота.</p>
             <p><strong>Артём и Кристина Поляковы</strong>, основатели</p>
-            <button class="btn btn-accent" data-modal="consultation" style="margin-top: 20px;">Получить консультацию</button>
+            <a href="booking.html" class="btn btn-accent" style="margin-top: 20px;">Получить консультацию</a>
         </div>
 
         <!-- Специалисты (слайдер) -->
@@ -629,10 +632,10 @@
             <h2 class="section-title">Наши <span>эксперты</span></h2>
             <div class="swiper specialists-swiper">
                 <div class="swiper-wrapper">
-                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/68.jpg"><div class="specialist-name">Виктория Левченко</div><div class="specialist-spec">Дерматолог, топ-косметолог</div><button class="btn btn-outline">Запись</button></div></div>
-                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/65.jpg"><div class="specialist-name">Яна Плотникова</div><div class="specialist-spec">Косметолог, лазеротерапевт</div><button class="btn btn-outline">Запись</button></div></div>
-                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/44.jpg"><div class="specialist-name">Ксения Белоусова</div><div class="specialist-spec">Дерматолог, трихолог</div><button class="btn btn-outline">Запись</button></div></div>
-                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/90.jpg"><div class="specialist-name">Маргарита Тихонова</div><div class="specialist-spec">Лазеротерапевт, косметолог</div><button class="btn btn-outline">Запись</button></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/68.jpg"><div class="specialist-name">Виктория Левченко</div><div class="specialist-spec">Дерматолог, топ-косметолог</div><a href="booking.html" class="btn btn-outline">Запись</a></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/65.jpg"><div class="specialist-name">Яна Плотникова</div><div class="specialist-spec">Косметолог, лазеротерапевт</div><a href="booking.html" class="btn btn-outline">Запись</a></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/44.jpg"><div class="specialist-name">Ксения Белоусова</div><div class="specialist-spec">Дерматолог, трихолог</div><a href="booking.html" class="btn btn-outline">Запись</a></div></div>
+                    <div class="swiper-slide"><div class="specialist-card"><img src="https://randomuser.me/api/portraits/women/90.jpg"><div class="specialist-name">Маргарита Тихонова</div><div class="specialist-spec">Лазеротерапевт, косметолог</div><a href="booking.html" class="btn btn-outline">Запись</a></div></div>
                 </div>
                 <div class="swiper-pagination"></div>
             </div>
@@ -695,7 +698,7 @@
                 <input type="number" id="calcQuantity" min="1" value="1" class="calc-select">
             </div>
             <div class="calc-result">Итоговая стоимость: <strong id="calcTotal">19 990</strong> ₽</div>
-            <button class="btn btn-primary" data-modal="consultation" style="margin-top: 20px;">Записаться по цене</button>
+            <a href="booking.html" class="btn btn-primary" style="margin-top: 20px;">Записаться по цене</a>
         </div>
 
         <!-- Отзывы (слайдер) -->
@@ -719,7 +722,7 @@
         <div class="faq-grid" id="faq">
             <div class="faq-item"><div class="faq-question">❓ Как проходит первая консультация? <span>+</span></div><div class="faq-answer">Осмотр кожи, диагностика, подбор протокола. Длится 40−60 мин.</div></div>
             <div class="faq-item"><div class="faq-question">❓ Есть ли гарантия на результат? <span>+</span></div><div class="faq-answer">Мы даём рекомендации и наблюдаем результат, возврат средств регламентирован договором.</div></div>
-            <div class="faq-item"><div class="faq-question">❓ Нужна ли подготовка к SMAS-лифтингу? <span>+</span></div><div class="faq-answer">За 2 недели исключить ретиноиды, врач даст полный список.</div></div>
+            <div class="faq-item"><div class="faq-question">❓ Нужна ли подготовка к SMAS-лифтингу? <span>+</span></div><div class="faq-answer">За 2 недели исклютить ретиноиды, врач даст полный список.</div></div>
         </div>
 
         <!-- Карта с точными координатами (54.991759, 82.914312) -->
@@ -727,7 +730,7 @@
             <div id="map"></div>
         </div>
 
-        <!-- Форма -->
+        <!-- Форма обратной связи (оставляем как есть, она не перенаправляет) -->
         <div class="contact-section">
             <h3>Остались вопросы?</h3>
             <p>Заполните форму, и наш администратор свяжется с вами</p>
@@ -753,22 +756,6 @@
         <div style="text-align:center; padding-top:40px;">© 2026 BlueClinik. Все права защищены.</div>
     </div>
 </footer>
-
-<!-- Модальное окно -->
-<div id="modalConsultation" style="display:none; position:fixed; top:0; left:0; width:100%; height:100%; background:rgba(0,0,0,0.6); justify-content:center; align-items:center; z-index:2000;">
-    <div style="background:white; max-width:450px; width:90%; border-radius:32px; padding:32px; position:relative;">
-        <span class="close-modal" style="position:absolute; right:20px; top:15px; font-size:28px; cursor:pointer;">&times;</span>
-        <h3>Запись на приём</h3>
-        <br>
-        <form id="modalForm">
-            <div class="form-group"><input type="text" placeholder="Имя" required></div>
-            <br>
-            <div class="form-group"><input type="tel" placeholder="Телефон" required></div>
-            <br>
-            <button type="submit" class="btn btn-primary">Отправить заявку</button>
-        </form>
-    </div>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
 <script src="https://api-maps.yandex.ru/2.1/?apikey=ваш_api_ключ&lang=ru_RU"></script>
@@ -889,41 +876,19 @@
             });
         });
 
-        // 8. Модальные окна
-        const modal = document.getElementById('modalConsultation');
-        const appointmentBtn = document.getElementById('appointmentBtn');
+        // 8. Кнопка "заказать звонок" теперь тоже ведёт на booking.html
         const callbackBtn = document.getElementById('callbackBtn');
-        const closeModal = document.querySelector('.close-modal');
-        
-        if (appointmentBtn) {
-            appointmentBtn.addEventListener('click', () => {
-                if (modal) modal.style.display = 'flex';
-            });
-        }
         if (callbackBtn) {
             callbackBtn.addEventListener('click', () => {
-                if (modal) modal.style.display = 'flex';
-            });
-        }
-        if (closeModal) {
-            closeModal.addEventListener('click', () => {
-                if (modal) modal.style.display = 'none';
-            });
-        }
-        if (modal) {
-            window.addEventListener('click', (e) => { 
-                if (e.target === modal) modal.style.display = 'none'; 
+                window.location.href = 'booking.html';
             });
         }
 
-        // 9. Формы
-        document.querySelectorAll('form').forEach(form => {
-            form.addEventListener('submit', (e) => {
-                e.preventDefault();
-                alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
-                form.reset();
-                if (modal) modal.style.display = 'none';
-            });
+        // 9. Форма обратной связи (оставляем, просто alert)
+        document.getElementById('mainForm')?.addEventListener('submit', (e) => {
+            e.preventDefault();
+            alert('Спасибо! Мы свяжемся с вами в ближайшее время.');
+            e.target.reset();
         });
 
         // 10. Мобильное меню

@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Запись онлайн | BlueClinik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg-page: #F4F2EF; --card-bg: #FFFFFF; --primary-dark: #0A1C2F;
+            --primary-medium: #1F3E5C; --accent: #C89F9F; --accent-light: #F1E6E6;
+            --text-dark: #1A2C3A; --text-medium: #5D6F7F; --shadow: 0 8px 28px -6px rgba(0,0,0,0.06);
+            --shadow-hover: 0 20px 32px -12px rgba(0,0,0,0.12);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-page);
+            color: var(--text-dark);
+            padding: 40px 20px;
+        }
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+        }
+        .header {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 20px 32px;
+            margin-bottom: 40px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+            box-shadow: var(--shadow);
+        }
+        .logo {
+            font-size: 28px;
+            font-weight: 700;
+            text-decoration: none;
+            color: var(--primary-dark);
+        }
+        .logo span { color: var(--accent); }
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            font-weight: 500;
+            border-radius: 60px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            font-size: 14px;
+            text-decoration: none;
+        }
+        .btn-outline {
+            background: transparent;
+            border: 1.5px solid var(--primary-dark);
+            color: var(--primary-dark);
+        }
+        .btn-outline:hover {
+            background: var(--primary-dark);
+            color: white;
+        }
+        .booking-card {
+            background: var(--card-bg);
+            border-radius: 32px;
+            padding: 40px;
+            box-shadow: var(--shadow-hover);
+        }
+        .booking-title {
+            font-size: 32px;
+            margin-bottom: 32px;
+            text-align: center;
+        }
+        .booking-title i {
+            color: var(--accent);
+            margin-right: 12px;
+        }
+        .step {
+            margin-bottom: 40px;
+            border-bottom: 1px solid #E8E3DC;
+            padding-bottom: 28px;
+        }
+        .step h3 {
+            font-size: 22px;
+            margin-bottom: 24px;
+            color: var(--primary-dark);
+        }
+        .step h3 i {
+            color: var(--accent);
+            margin-right: 12px;
+        }
+        .services-grid, .doctors-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 24px;
+        }
+        /* Стили для услуг (ТОЛЬКО ИКОНКИ, без фото) */
+        .service-card {
+            background: var(--bg-page);
+            border-radius: 28px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            box-shadow: var(--shadow);
+            text-align: center;
+            padding: 28px 20px;
+        }
+        .service-card.selected {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: var(--shadow-hover);
+        }
+        .service-icon {
+            font-size: 48px;
+            color: var(--accent);
+            margin-bottom: 16px;
+        }
+        .service-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 8px;
+        }
+        .service-price {
+            color: var(--accent);
+            font-weight: 600;
+            font-size: 16px;
+        }
+        /* Стили для врачей (С ФОТО) */
+        .doctor-card {
+            background: var(--bg-page);
+            border-radius: 28px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .doctor-card.selected {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: var(--shadow-hover);
+        }
+        .doctor-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        .doctor-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .doctor-card:hover .doctor-img img {
+            transform: scale(1.03);
+        }
+        .doctor-info {
+            padding: 16px;
+            text-align: center;
+        }
+        .doctor-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .doctor-spec {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
+        .date-time-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+        }
+        .datepicker {
+            flex: 1;
+            min-width: 220px;
+        }
+        .time-slots {
+            flex: 2;
+        }
+        .time-slots-grid {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 12px;
+        }
+        .time-slot {
+            background: var(--bg-page);
+            padding: 10px 24px;
+            border-radius: 60px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 1px solid #E0D8D0;
+            font-weight: 500;
+        }
+        .time-slot.selected {
+            background: var(--primary-dark);
+            color: white;
+            border-color: var(--primary-dark);
+        }
+        input[type="date"] {
+            padding: 14px 20px;
+            border-radius: 60px;
+            border: 1px solid #E0D8D0;
+            font-family: inherit;
+            width: 100%;
+            font-size: 15px;
+        }
+        .btn-primary {
+            background: var(--primary-dark);
+            color: white;
+            padding: 14px 32px;
+            font-size: 16px;
+        }
+        .btn-primary:hover {
+            background: var(--primary-medium);
+            transform: translateY(-2px);
+        }
+        .btn-large {
+            width: 100%;
+            justify-content: center;
+            margin-top: 12px;
+        }
+        .alert {
+            background: #E8F5E9;
+            padding: 16px 20px;
+            border-radius: 60px;
+            margin-bottom: 28px;
+            display: none;
+            align-items: center;
+            gap: 12px;
+        }
+        .alert.show {
+            display: flex;
+        }
+        @media (max-width: 768px) {
+            .booking-card { padding: 24px; }
+            .services-grid, .doctors-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <div class="header">
+        <a href="index.html" class="logo">Blue<span>Clinik</span></a>
+        <div>
+            <a href="dashboard.html" class="btn btn-outline"><i class="fas fa-user"></i> Личный кабинет</a>
+        </div>
+    </div>
+
+    <div class="booking-card">
+        <div class="booking-title">
+            <i class="fas fa-calendar-check"></i> Онлайн-запись к косметологу
+        </div>
+
+        <div id="alertMessage" class="alert"></div>
+
+        <!-- Шаг 1: Услуги с ИКОНКАМИ (без фото) -->
+        <div class="step">
+            <h3><i class="fas fa-spa"></i> 1. Выберите процедуру</h3>
+            <div class="services-grid" id="servicesList"></div>
+        </div>
+
+        <!-- Шаг 2: Врачи с ФОТО -->
+        <div class="step">
+            <h3><i class="fas fa-user-md"></i> 2. Выберите специалиста</h3>
+            <div class="doctors-grid" id="doctorsList"></div>
+        </div>
+
+        <!-- Шаг 3: Дата и время -->
+        <div class="step">
+            <h3><i class="far fa-clock"></i> 3. Удобные дата и время</h3>
+            <div class="date-time-grid">
+                <div class="datepicker">
+                    <label>📅 Дата приема:</label>
+                    <input type="date" id="appointmentDate" min="">
+                </div>
+                <div class="time-slots">
+                    <label>⏰ Доступное время:</label>
+                    <div class="time-slots-grid" id="timeSlotsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <button class="btn btn-primary btn-large" id="submitBookingBtn">
+            <i class="fas fa-check-circle"></i> Подтвердить запись
+        </button>
+    </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+    // ----- УСЛУГИ ТОЛЬКО С ИКОНКАМИ (БЕЗ ФОТО) -----
+    const SERVICES = [
+        { id: 1, name: "Консультация косметолога", price: 3990, icon: "fas fa-stethoscope" },
+        { id: 2, name: "Чистка лица", price: 4500, icon: "fas fa-face-smile" },
+        { id: 3, name: "SMAS-лифтинг", price: 50990, icon: "fas fa-arrow-up" },
+        { id: 4, name: "Биоревитализация REVI", price: 15990, icon: "fas fa-droplet" },
+        { id: 5, name: "RF-лифтинг лица", price: 6900, icon: "fas fa-bolt" },
+        { id: 6, name: "Лазерная шлифовка", price: 14900, icon: "fas fa-lightbulb" },
+        { id: 7, name: "Ботокс / Релатокс", price: 12500, icon: "fas fa-syringe" }
+    ];
+
+    // ----- ВРАЧИ С ФОТО (оставляем как есть — красиво и профессионально) -----
+    const DOCTORS = [
+        { id: 1, name: "Виктория Левченко", spec: "Дерматолог, топ-косметолог", img: "https://randomuser.me/api/portraits/women/68.jpg" },
+        { id: 2, name: "Яна Плотникова", spec: "Косметолог, лазеротерапевт", img: "https://randomuser.me/api/portraits/women/65.jpg" },
+        { id: 3, name: "Ксения Белоусова", spec: "Дерматолог, трихолог", img: "https://randomuser.me/api/portraits/women/44.jpg" },
+        { id: 4, name: "Маргарита Тихонова", spec: "Лазеротерапевт, косметолог", img: "https://randomuser.me/api/portraits/women/90.jpg" }
+    ];
+
+    const TIME_SLOTS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
+
+    let selectedService = null;
+    let selectedDoctor = null;
+    let selectedTime = null;
+
+    // --- Отрисовка услуг с ИКОНКАМИ ---
+    function renderServices() {
+        const container = document.getElementById('servicesList');
+        container.innerHTML = SERVICES.map(service => `
+            <div class="service-card" data-id="${service.id}">
+                <div class="service-icon"><i class="${service.icon}"></i></div>
+                <div class="service-info">
+                    <div class="service-name">${service.name}</div>
+                    <div class="service-price">${service.price.toLocaleString()} ₽</div>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.service-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                const id = parseInt(card.dataset.id);
+                selectedService = SERVICES.find(s => s.id === id);
+            });
+        });
+    }
+
+    // --- Отрисовка врачей с ФОТО ---
+    function renderDoctors() {
+        const container = document.getElementById('doctorsList');
+        container.innerHTML = DOCTORS.map(doc => `
+            <div class="doctor-card" data-id="${doc.id}">
+                <div class="doctor-img"><img src="${doc.img}" alt="${doc.name}"></div>
+                <div class="doctor-info">
+                    <div class="doctor-name">${doc.name}</div>
+                    <div class="doctor-spec">${doc.spec}</div>
+                </div>
+            </div>
+        `).join('');
+        document.querySelectorAll('.doctor-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                const id = parseInt(card.dataset.id);
+                selectedDoctor = DOCTORS.find(d => d.id === id);
+            });
+        });
+    }
+
+    // --- Время ---
+    function renderTimeSlots() {
+        const container = document.getElementById('timeSlotsList');
+        container.innerHTML = TIME_SLOTS.map(time => `
+            <div class="time-slot" data-time="${time}">${time}</div>
+        `).join('');
+        document.querySelectorAll('.time-slot').forEach(slot => {
+            slot.addEventListener('click', () => {
+                document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
+                slot.classList.add('selected');
+                selectedTime = slot.dataset.time;
+            });
+        });
+    }
+
+    // --- Сохранение записи ---
+    function saveAppointment() {
+        const currentUser = getCurrentUser();
+        if (!currentUser) {
+            alert('Пожалуйста, войдите в аккаунт, чтобы записаться.');
+            window.location.href = 'login.html';
+            return false;
+        }
+
+        const date = document.getElementById('appointmentDate').value;
+        if (!selectedService) { showAlert('Выберите услугу', 'error'); return false; }
+        if (!date) { showAlert('Выберите дату', 'error'); return false; }
+        if (!selectedTime) { showAlert('Выберите время', 'error'); return false; }
+
+        const appointment = {
+            id: Date.now(),
+            service: selectedService.name,
+            price: selectedService.price,
+            doctor: selectedDoctor ? selectedDoctor.name : 'Любой специалист',
+            date: date,
+            time: selectedTime,
+            createdAt: new Date().toISOString()
+        };
+
+        const storageKey = `appointments_${currentUser.id}`;
+        const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
+        existing.push(appointment);
+        localStorage.setItem(storageKey, JSON.stringify(existing));
+
+        showAlert('✅ Вы успешно записаны! Перенаправление в личный кабинет...', 'success');
+        setTimeout(() => {
+            window.location.href = 'dashboard.html';
+        }, 1500);
+        return true;
+    }
+
+    function showAlert(msg, type) {
+        const alertDiv = document.getElementById('alertMessage');
+        alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> ${msg}`;
+        alertDiv.className = `alert show ${type}`;
+        setTimeout(() => alertDiv.classList.remove('show'), 3000);
+    }
+
+    function setMinDate() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').min = today;
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+        renderServices();
+        renderDoctors();
+        renderTimeSlots();
+        setMinDate();
+        document.getElementById('submitBookingBtn').addEventListener('click', saveAppointment);
+    });
+</script>
+</body>
+</html>
