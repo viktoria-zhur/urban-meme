@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
     <title>Личный кабинет | BlueClinik</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
@@ -22,64 +22,91 @@
             --accent-light: #F1E6E6;
             --text-dark: #1A2C3A;
             --text-medium: #5D6F7F;
+            --text-light: #919EAB;
+            --success: #4CAF50;
+            --warning: #FFA726;
+            --danger: #EF5350;
             --shadow: 0 8px 28px -6px rgba(0, 0, 0, 0.06);
             --shadow-hover: 0 20px 32px -12px rgba(0, 0, 0, 0.12);
+            --transition: all 0.3s ease;
         }
 
         body {
             font-family: 'Inter', sans-serif;
             background-color: var(--bg-page);
             color: var(--text-dark);
+            line-height: 1.5;
         }
 
+        /* Анимации */
+        @keyframes bellRing {
+            0%, 100% { transform: rotate(0); }
+            15% { transform: rotate(15deg); }
+            30% { transform: rotate(-15deg); }
+            45% { transform: rotate(10deg); }
+            60% { transform: rotate(-10deg); }
+            75% { transform: rotate(5deg); }
+            90% { transform: rotate(-5deg); }
+        }
+        @keyframes pulse {
+            0%, 100% { box-shadow: 0 0 0 0 rgba(200, 159, 159, 0.4); }
+            50% { box-shadow: 0 0 0 12px rgba(200, 159, 159, 0); }
+        }
+        @keyframes slideIn {
+            from { transform: translateX(100px); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Header */
         .dashboard-header {
             background: var(--card-bg);
-            box-shadow: var(--shadow);
+            box-shadow: 0 2px 12px rgba(0,0,0,0.03);
             padding: 16px 0;
             position: sticky;
             top: 0;
             z-index: 100;
         }
-
         .container {
             max-width: 1280px;
             margin: 0 auto;
             padding: 0 40px;
         }
-
         .dashboard-nav {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
         }
-
         .logo {
             font-size: 28px;
             font-weight: 700;
             text-decoration: none;
             color: var(--primary-dark);
+            letter-spacing: -0.02em;
         }
-
         .logo span {
             color: var(--accent);
+            font-weight: 400;
         }
-
         .dashboard-user {
             display: flex;
             align-items: center;
-            gap: 20px;
+            gap: 16px;
         }
-
         .user-welcome {
             display: flex;
             align-items: center;
             gap: 8px;
             font-weight: 500;
         }
-
         .user-welcome i {
             color: var(--accent);
-            font-size: 18px;
+            font-size: 20px;
         }
 
         .btn {
@@ -90,43 +117,71 @@
             padding: 10px 24px;
             font-weight: 500;
             border-radius: 60px;
-            transition: all 0.3s ease;
+            transition: var(--transition);
             cursor: pointer;
             border: none;
             font-size: 14px;
             text-decoration: none;
+            font-family: inherit;
         }
-
         .btn-primary {
             background: var(--primary-dark);
             color: white;
+            box-shadow: var(--shadow);
         }
-
         .btn-primary:hover {
             background: var(--primary-medium);
+            transform: translateY(-2px);
         }
-
         .btn-outline {
             background: transparent;
             border: 1.5px solid var(--primary-dark);
             color: var(--primary-dark);
         }
-
         .btn-outline:hover {
             background: var(--primary-dark);
             color: white;
         }
+        .btn-sm {
+            padding: 8px 18px;
+            font-size: 13px;
+            border-radius: 60px;
+            cursor: pointer;
+            font-family: inherit;
+            font-weight: 500;
+            transition: var(--transition);
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .btn-accent {
+            background: var(--accent);
+            color: white;
+            border: none;
+        }
+        .btn-accent:hover {
+            background: #B88888;
+        }
+        .btn-danger {
+            background: #FFEBEE;
+            color: var(--danger);
+            border: none;
+        }
+        .btn-danger:hover {
+            background: #FFCDD2;
+        }
 
+        /* Main */
         .dashboard-main {
             padding: 48px 0;
         }
-
         .dashboard-grid {
             display: grid;
             grid-template-columns: 300px 1fr;
             gap: 32px;
         }
 
+        /* Sidebar */
         .dashboard-sidebar {
             background: var(--card-bg);
             border-radius: 32px;
@@ -134,8 +189,9 @@
             text-align: center;
             box-shadow: var(--shadow);
             height: fit-content;
+            position: sticky;
+            top: 100px;
         }
-
         .user-avatar {
             width: 100px;
             height: 100px;
@@ -149,38 +205,69 @@
             color: var(--accent);
             margin: 0 auto 20px;
         }
-
         .dashboard-sidebar h3 {
             margin-bottom: 8px;
+            font-size: 20px;
         }
-
         .dashboard-sidebar p {
             color: var(--text-medium);
-            margin: 4px 0;
+            margin: 6px 0;
             display: flex;
             align-items: center;
             justify-content: center;
             gap: 8px;
+            font-size: 14px;
         }
-
         .dashboard-sidebar p i {
             width: 20px;
             color: var(--accent);
+            text-align: center;
         }
 
+        .stats-mini {
+            display: flex;
+            gap: 10px;
+            margin-top: 24px;
+        }
+        .stat-mini {
+            flex: 1;
+            text-align: center;
+            padding: 14px 8px;
+            background: var(--bg-page);
+            border-radius: 16px;
+            transition: var(--transition);
+        }
+        .stat-mini:hover {
+            background: var(--accent-light);
+        }
+        .stat-mini .number {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-dark);
+            display: block;
+        }
+        .stat-mini .label {
+            font-size: 11px;
+            color: var(--text-medium);
+            margin-top: 2px;
+        }
+
+        /* Content Cards */
         .dashboard-content {
             display: flex;
             flex-direction: column;
             gap: 24px;
         }
-
         .dashboard-card {
             background: var(--card-bg);
             border-radius: 28px;
             padding: 28px;
             box-shadow: var(--shadow);
+            transition: var(--transition);
         }
-
+        .dashboard-card:hover {
+            box-shadow: var(--shadow-hover);
+        }
         .dashboard-card h3 {
             margin-bottom: 16px;
             font-size: 20px;
@@ -188,78 +275,174 @@
             align-items: center;
             gap: 10px;
         }
-
         .dashboard-card h3 i {
             color: var(--accent);
             font-size: 24px;
         }
-
-        .dashboard-card p {
+        .dashboard-card > p {
             color: var(--text-medium);
             margin-bottom: 20px;
             line-height: 1.6;
         }
 
+        /* Reminder Card */
+        .reminder-card {
+            animation: pulse 2s infinite;
+        }
+        .reminder-card.urgent {
+            animation: none;
+            box-shadow: 0 0 20px rgba(239, 83, 80, 0.3);
+        }
+        .reminder-icon {
+            background: var(--accent-light);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+        .reminder-icon i {
+            color: var(--accent);
+            font-size: 24px;
+        }
+        .reminder-icon.bell i {
+            animation: bellRing 2s infinite;
+        }
+        .reminder-body h3 {
+            margin-bottom: 4px;
+        }
+        .reminder-service {
+            font-size: 18px;
+            font-weight: 600;
+            color: var(--primary-dark);
+            margin-bottom: 4px;
+        }
+        .reminder-meta {
+            color: var(--text-medium);
+            margin-bottom: 12px;
+            font-size: 14px;
+        }
+        .countdown-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: white;
+            padding: 6px 14px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 13px;
+            margin-left: 8px;
+        }
+        .countdown-badge i {
+            color: var(--accent);
+        }
+        .countdown-badge.urgent {
+            color: var(--danger);
+            animation: blink 1s infinite;
+        }
+
+        /* Promo */
         .promo-code {
             background: var(--accent-light);
-            padding: 12px 20px;
-            border-radius: 12px;
+            padding: 14px 22px;
+            border-radius: 14px;
             font-weight: 700;
             color: var(--accent);
             letter-spacing: 1px;
-            display: inline-block;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
             font-family: monospace;
             font-size: 16px;
+            cursor: pointer;
+            transition: var(--transition);
+            border: 1.5px dashed var(--accent);
+            user-select: all;
+        }
+        .promo-code:hover {
+            background: var(--accent);
+            color: white;
+            border-color: var(--accent);
         }
 
-        .promo-code i {
-            margin-right: 8px;
-        }
-
+        /* Appointments */
         .appointments-list {
-            margin-top: 16px;
-            margin-bottom: 20px;
+            margin: 16px 0 20px;
         }
-
         .appointment-item {
             padding: 16px;
             border-bottom: 1px solid #E8E3DC;
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 12px;
+            transition: var(--transition);
+            border-radius: 12px;
         }
-
+        .appointment-item:hover {
+            background: var(--bg-page);
+        }
         .appointment-item:last-child {
             border-bottom: none;
         }
-
         .appointment-info {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
-        .appointment-info i {
-            color: var(--accent);
+        .appointment-info > i {
             font-size: 20px;
+            width: 24px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+        .appointment-details strong {
+            display: block;
+            margin-bottom: 2px;
+        }
+        .appointment-details small {
+            color: var(--text-medium);
+            font-size: 13px;
         }
 
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--text-medium);
+        }
+        .empty-state i {
+            font-size: 40px;
+            display: block;
+            margin-bottom: 12px;
+            color: var(--accent-light);
+        }
+
+        /* Contacts */
         .contact-info {
             display: flex;
             flex-direction: column;
             gap: 12px;
         }
-
         .contact-item {
             display: flex;
             align-items: center;
             gap: 12px;
         }
-
         .contact-item i {
             width: 24px;
             color: var(--accent);
             font-size: 18px;
+            text-align: center;
+        }
+        .contact-item a {
+            color: var(--text-dark);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        .contact-item a:hover {
+            color: var(--accent);
         }
 
         @media (max-width: 768px) {
@@ -268,6 +451,21 @@
             }
             .container {
                 padding: 0 20px;
+            }
+            .dashboard-nav {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .dashboard-user {
+                width: 100%;
+                justify-content: space-between;
+                flex-wrap: wrap;
+            }
+            .dashboard-sidebar {
+                position: static;
+            }
+            .stats-mini {
+                flex-direction: column;
             }
         }
     </style>
@@ -278,11 +476,16 @@
             <div class="dashboard-nav">
                 <a href="index.html" class="logo">Blue<span>Clinik</span></a>
                 <div class="dashboard-user">
-                    <span class="user-welcome"><i class="fas fa-user-circle"></i> <span id="userNameDisplay"></span></span>
-                    <a href="admin.html" id="adminLinkBtn" class="btn btn-primary" style="display: none; background: var(--accent);">
-                        <i class="fas fa-shield-alt"></i> Админ-панель
+                    <span class="user-welcome">
+                        <i class="fas fa-user-circle"></i> 
+                        <span id="userNameDisplay"></span>
+                    </span>
+                    <a href="index.html" class="btn btn-outline" style="padding: 8px 16px;">
+                        <i class="fas fa-home"></i> На сайт
                     </a>
-                    <button onclick="logout()" class="btn btn-outline"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+                    <button onclick="logout()" class="btn btn-outline" style="padding: 8px 16px;">
+                        <i class="fas fa-sign-out-alt"></i> Выйти
+                    </button>
                 </div>
             </div>
         </div>
@@ -291,33 +494,104 @@
     <main class="dashboard-main">
         <div class="container">
             <div class="dashboard-grid">
-                <div class="dashboard-sidebar" id="userInfo">
+                <!-- Sidebar -->
+                <div class="dashboard-sidebar">
                     <div class="user-avatar" id="userAvatar"></div>
                     <h3 id="userFullname"></h3>
                     <p><i class="fas fa-envelope"></i> <span id="userEmail"></span></p>
                     <p><i class="fas fa-phone"></i> <span id="userPhone"></span></p>
-                    <p><i class="fas fa-calendar-alt"></i> Дата регистрации: <span id="userDate"></span></p>
+                    <p><i class="fas fa-calendar-alt"></i> Клиент с <span id="userDate"></span></p>
+                    
+                    <div class="stats-mini">
+                        <div class="stat-mini">
+                            <span class="number" id="totalAppointments">0</span>
+                            <span class="label">Всего записей</span>
+                        </div>
+                        <div class="stat-mini">
+                            <span class="number" id="upcomingCount">0</span>
+                            <span class="label">Предстоит</span>
+                        </div>
+                    </div>
                 </div>
+                
+                <!-- Content -->
                 <div class="dashboard-content">
+                    <!-- Напоминание -->
+                    <div class="dashboard-card reminder-card" id="reminderCard" style="display: none; background: linear-gradient(135deg, #FFF9F0 0%, #FFF5F5 100%); border-left: 4px solid var(--accent);">
+                        <div style="display: flex; align-items: flex-start; gap: 16px;">
+                            <div class="reminder-icon bell">
+                                <i class="fas fa-bell"></i>
+                            </div>
+                            <div style="flex: 1;">
+                                <h3 style="margin-bottom: 4px;">
+                                    ⏰ Не забудьте о записи!
+                                    <span style="font-size: 14px; font-weight: 400; color: var(--text-medium);" id="reminderTimeLabel"></span>
+                                </h3>
+                                <div class="reminder-service" id="reminderService"></div>
+                                <div class="reminder-meta">
+                                    <i class="far fa-calendar-alt"></i> <span id="reminderDate"></span> в <span id="reminderTimeFull"></span>
+                                    &nbsp;|&nbsp;
+                                    <i class="fas fa-user-md"></i> <span id="reminderSpecialist"></span>
+                                </div>
+                                <div style="display: flex; gap: 8px; flex-wrap: wrap;">
+                                    <button class="btn btn-sm btn-accent" onclick="addToCalendar()">
+                                        <i class="far fa-calendar-plus"></i> В календарь
+                                    </button>
+                                    <a href="tel:+73832990023" class="btn btn-sm btn-outline">
+                                        <i class="fas fa-phone"></i> Позвонить
+                                    </a>
+                                    <button class="btn btn-sm btn-outline" onclick="window.location.href='booking.html'">
+                                        <i class="fas fa-exchange-alt"></i> Перенести
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Записи -->
                     <div class="dashboard-card">
                         <h3><i class="fas fa-calendar-check"></i> Мои записи</h3>
                         <div id="appointmentsList" class="appointments-list">
-                            <p style="text-align: center; padding: 20px;"><i class="fas fa-inbox"></i> У вас пока нет записей.</p>
+                            <div class="empty-state">
+                                <i class="fas fa-inbox"></i>
+                                <p>У вас пока нет записей</p>
+                            </div>
                         </div>
-                        <button class="btn btn-primary" onclick="window.location.href='index.html#services'"><i class="fas fa-plus-circle"></i> Записаться на процедуру</button>
+                        <a href="booking.html" class="btn btn-primary">
+                            <i class="fas fa-plus-circle"></i> Записаться на процедуру
+                        </a>
                     </div>
+                    
+                    <!-- Промокод -->
                     <div class="dashboard-card">
                         <h3><i class="fas fa-gift"></i> Персональные предложения</h3>
-                        <p>Специальная скидка 10% на первую процедуру для новых клиентов!</p>
-                        <div class="promo-code"><i class="fas fa-tag"></i> BLUE10</div>
+                        <p>Специальная скидка <strong>10%</strong> на первую процедуру для новых клиентов! Покажите промокод администратору или назовите при записи.</p>
+                        <div class="promo-code" onclick="copyPromoCode('BLUE10')" title="Нажмите, чтобы скопировать">
+                            <i class="fas fa-tag"></i> BLUE10
+                        </div>
+                        <small style="display: block; margin-top: 8px; color: var(--text-light);">👆 Нажмите на код, чтобы скопировать</small>
                     </div>
+                    
+                    <!-- Контакты -->
                     <div class="dashboard-card">
                         <h3><i class="fas fa-phone-alt"></i> Связаться с клиникой</h3>
                         <div class="contact-info">
-                            <div class="contact-item"><i class="fas fa-phone"></i> <span>8 383 299-00-23</span></div>
-                            <div class="contact-item"><i class="fas fa-envelope"></i> <span>info@blueclinik.ru</span></div>
-                            <div class="contact-item"><i class="fas fa-map-marker-alt"></i> <span>Новосибирск, ул. Немировича-Данченко 158</span></div>
-                            <div class="contact-item"><i class="far fa-clock"></i> <span>пн–вс 09:00–21:00</span></div>
+                            <div class="contact-item">
+                                <i class="fas fa-phone"></i> 
+                                <a href="tel:+73832990023">8 383 299-00-23</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-envelope"></i> 
+                                <a href="mailto:info@blueclinik.ru">info@blueclinik.ru</a>
+                            </div>
+                            <div class="contact-item">
+                                <i class="fas fa-map-marker-alt"></i> 
+                                <span>Новосибирск, ул. Немировича-Данченко 158</span>
+                            </div>
+                            <div class="contact-item">
+                                <i class="far fa-clock"></i> 
+                                <span>пн–вс 09:00–21:00</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -327,69 +601,269 @@
 
     <script src="auth.js"></script>
     <script>
+        // Проверка авторизации
         const currentUser = getCurrentUser();
         if (!currentUser) {
             window.location.href = 'login.html';
         }
         
+        // Заполнение профиля
         document.getElementById('userAvatar').textContent = currentUser.fullname.charAt(0).toUpperCase();
         document.getElementById('userFullname').textContent = currentUser.fullname;
         document.getElementById('userEmail').textContent = currentUser.email;
-        document.getElementById('userPhone').textContent = currentUser.phone;
+        document.getElementById('userPhone').textContent = currentUser.phone || 'Не указан';
         document.getElementById('userNameDisplay').textContent = currentUser.fullname;
         
+        // Дата регистрации
         if (currentUser.createdAt) {
             const date = new Date(currentUser.createdAt);
-            document.getElementById('userDate').textContent = date.toLocaleDateString('ru-RU');
+            document.getElementById('userDate').textContent = date.toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric'
+            });
         } else {
             document.getElementById('userDate').textContent = 'сегодня';
         }
         
+        // Форматирование даты
+        function formatDate(dateStr) {
+            const months = ['января', 'февраля', 'марта', 'апреля', 'мая', 'июня', 
+                           'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря'];
+            const [year, month, day] = dateStr.split('-');
+            return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
+        }
+        
+        // Загрузка записей + напоминание
         function loadAppointments() {
             const appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
             const container = document.getElementById('appointmentsList');
             
+            document.getElementById('totalAppointments').textContent = appointments.length;
+            
+            const now = new Date();
+            
+            // Предстоящие записи
+            let upcomingAppointments = appointments.filter(apt => {
+                const aptDate = new Date(apt.date + 'T' + apt.time);
+                return aptDate > now;
+            });
+            
+            upcomingAppointments.sort((a, b) => {
+                return new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time);
+            });
+            
+            const nextAppointment = upcomingAppointments[0];
+            document.getElementById('upcomingCount').textContent = upcomingAppointments.length;
+            
+            // Показываем/обновляем напоминание
+            const reminderCard = document.getElementById('reminderCard');
+            if (nextAppointment) {
+                const aptDate = new Date(nextAppointment.date + 'T' + nextAppointment.time);
+                const diffMs = aptDate - now;
+                const daysUntil = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                const hoursUntil = Math.ceil(diffMs / (1000 * 60 * 60));
+                
+                document.getElementById('reminderService').textContent = nextAppointment.service;
+                document.getElementById('reminderDate').textContent = formatDate(nextAppointment.date);
+                document.getElementById('reminderTimeFull').textContent = nextAppointment.time;
+                document.getElementById('reminderSpecialist').textContent = nextAppointment.specialist || 'Специалист клиники';
+                
+                // Сохраняем данные для добавления в календарь
+                reminderCard.dataset.service = nextAppointment.service;
+                reminderCard.dataset.date = nextAppointment.date;
+                reminderCard.dataset.time = nextAppointment.time;
+                
+                let timeMessage = '';
+                let countdownHTML = '';
+                
+                if (hoursUntil <= 2 && daysUntil === 0) {
+                    timeMessage = '🔥 Уже совсем скоро!';
+                    countdownHTML = `<span class="countdown-badge urgent"><i class="fas fa-hourglass-half"></i> Через ${hoursUntil} ч.</span>`;
+                    reminderCard.style.borderLeftColor = 'var(--danger)';
+                    reminderCard.classList.add('urgent');
+                    document.querySelector('.reminder-icon').classList.remove('bell');
+                    document.querySelector('.reminder-icon i').style.animation = 'none';
+                } else if (daysUntil === 0) {
+                    timeMessage = '📅 Сегодня!';
+                    countdownHTML = `<span class="countdown-badge"><i class="fas fa-clock"></i> Через ${hoursUntil} ч.</span>`;
+                    reminderCard.style.borderLeftColor = 'var(--accent)';
+                    reminderCard.classList.remove('urgent');
+                } else if (daysUntil === 1) {
+                    timeMessage = '📅 Завтра!';
+                    countdownHTML = `<span class="countdown-badge"><i class="fas fa-moon"></i> Завтра</span>`;
+                    reminderCard.style.borderLeftColor = '#FFA726';
+                    reminderCard.classList.remove('urgent');
+                } else if (daysUntil <= 3) {
+                    timeMessage = `Через ${daysUntil} дня`;
+                    countdownHTML = `<span class="countdown-badge"><i class="fas fa-calendar-day"></i> ${daysUntil} дн.</span>`;
+                    reminderCard.style.borderLeftColor = 'var(--accent)';
+                    reminderCard.classList.remove('urgent');
+                } else {
+                    timeMessage = `Через ${daysUntil} дней`;
+                    countdownHTML = '';
+                    reminderCard.style.borderLeftColor = 'var(--accent)';
+                    reminderCard.classList.remove('urgent');
+                }
+                
+                document.getElementById('reminderTimeLabel').innerHTML = timeMessage + countdownHTML;
+                reminderCard.style.display = 'block';
+            } else {
+                reminderCard.style.display = 'none';
+            }
+            
+            // Список всех записей
             if (appointments.length === 0) {
-                container.innerHTML = '<p style="text-align: center; padding: 20px;"><i class="fas fa-inbox"></i> У вас пока нет записей.</p>';
+                container.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-inbox"></i>
+                        <p>У вас пока нет записей</p>
+                    </div>`;
                 return;
             }
             
-            container.innerHTML = appointments.map(apt => `
-                <div class="appointment-item">
-                    <div class="appointment-info">
-                        <i class="fas fa-spa"></i>
-                        <div>
-                            <strong>${apt.service}</strong><br>
-                            <small><i class="far fa-calendar-alt"></i> ${apt.date} в ${apt.time}</small>
+            appointments.sort((a, b) => {
+                return new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + b.time);
+            });
+            
+            container.innerHTML = appointments.map(apt => {
+                const aptDate = new Date(apt.date + 'T' + apt.time);
+                const isUpcoming = aptDate > now;
+                const isNext = apt === nextAppointment;
+                const icon = isUpcoming ? 'fa-calendar-alt' : 'fa-check-circle';
+                const iconColor = isUpcoming ? 'var(--accent)' : 'var(--success)';
+                const diffMs = aptDate - now;
+                const daysUntil = Math.ceil(diffMs / (1000 * 60 * 60 * 24));
+                
+                let timeLabel = '';
+                if (isUpcoming) {
+                    if (daysUntil === 0) timeLabel = ' (сегодня)';
+                    else if (daysUntil === 1) timeLabel = ' (завтра)';
+                    else timeLabel = ` (через ${daysUntil} дн.)`;
+                } else {
+                    timeLabel = ' (завершена)';
+                }
+                
+                return `
+                    <div class="appointment-item" style="${isNext ? 'background: #FFF9F5;' : ''}">
+                        <div class="appointment-info">
+                            <i class="fas ${icon}" style="color: ${iconColor};"></i>
+                            <div class="appointment-details">
+                                <strong>
+                                    ${isNext ? '⭐ ' : ''}${apt.service}
+                                </strong>
+                                <small>
+                                    <i class="far fa-calendar-alt"></i> 
+                                    ${formatDate(apt.date)} в ${apt.time}${timeLabel}
+                                    ${apt.specialist ? ` | 👩‍⚕️ ${apt.specialist}` : ''}
+                                </small>
+                            </div>
                         </div>
+                        ${isUpcoming ? `
+                            <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
+                                <i class="fas fa-times"></i> Отменить
+                            </button>
+                        ` : ''}
                     </div>
-                    <button class="btn btn-outline" style="padding: 6px 16px; font-size: 12px;" onclick="cancelAppointment(${apt.id})">
-                        <i class="fas fa-times"></i> Отменить
-                    </button>
-                </div>
-            `).join('');
+                `;
+            }).join('');
         }
         
+        // Отмена записи
         function cancelAppointment(id) {
+            if (!confirm('Вы уверены, что хотите отменить запись?')) return;
+            
             let appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
             appointments = appointments.filter(apt => apt.id !== id);
             localStorage.setItem(`appointments_${currentUser.id}`, JSON.stringify(appointments));
             loadAppointments();
+            showNotification('Запись успешно отменена');
         }
         
-        loadAppointments();
-
-        function showAdminButtonIfNeeded() {
-            const admins = JSON.parse(localStorage.getItem('blueclinik_admins') || '[]');
-            const currentUser = getCurrentUser();
-            const adminBtn = document.getElementById('adminLinkBtn');
+        // Добавление в календарь
+        function addToCalendar() {
+            const card = document.getElementById('reminderCard');
+            const service = card.dataset.service;
+            const date = card.dataset.date;
+            const time = card.dataset.time;
             
-            if (currentUser && admins.includes(currentUser.id) && adminBtn) {
-                adminBtn.style.display = 'inline-flex';
+            const startTime = new Date(date + 'T' + time);
+            const endTime = new Date(startTime.getTime() + 60 * 60 * 1000); // +1 час
+            
+            const formatForICS = (d) => {
+                return d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+            };
+            
+            const icsContent = [
+                'BEGIN:VCALENDAR',
+                'VERSION:2.0',
+                'BEGIN:VEVENT',
+                `DTSTART:${formatForICS(startTime)}`,
+                `DTEND:${formatForICS(endTime)}`,
+                `SUMMARY:${service} | BlueClinik`,
+                `DESCRIPTION:Процедура в BlueClinik\\nАдрес: Новосибирск, ул. Немировича-Данченко 158\\nТелефон: +7 383 299-00-23`,
+                `LOCATION:BlueClinik, ул. Немировича-Данченко 158, Новосибирск`,
+                'END:VEVENT',
+                'END:VCALENDAR'
+            ].join('\r\n');
+            
+            const blob = new Blob([icsContent], { type: 'text/calendar;charset=utf-8' });
+            const link = document.createElement('a');
+            link.href = URL.createObjectURL(blob);
+            link.download = `blueclinik-${date}.ics`;
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            
+            showNotification('📅 Запись добавлена в календарь!');
+        }
+        
+        // Копирование промокода
+        function copyPromoCode(code) {
+            navigator.clipboard.writeText(code).then(() => {
+                showNotification('✅ Промокод скопирован: ' + code);
+            }).catch(() => {
+                prompt('Скопируйте промокод:', code);
+            });
+        }
+        
+        // Уведомления
+        function showNotification(message) {
+            const notification = document.createElement('div');
+            notification.style.cssText = `
+                position: fixed;
+                bottom: 30px;
+                right: 30px;
+                background: var(--primary-dark);
+                color: white;
+                padding: 16px 24px;
+                border-radius: 16px;
+                font-weight: 500;
+                z-index: 9999;
+                animation: slideIn 0.3s ease;
+                box-shadow: var(--shadow-hover);
+                max-width: 400px;
+            `;
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transition = 'opacity 0.3s';
+                setTimeout(() => notification.remove(), 300);
+            }, 2500);
+        }
+        
+        // Выход
+        function logout() {
+            if (confirm('Вы уверены, что хотите выйти?')) {
+                localStorage.removeItem('currentUser');
+                window.location.href = 'index.html';
             }
         }
-    
-        showAdminButtonIfNeeded();
+        
+        // Инициализация
+        loadAppointments();
     </script>
 </body>
 </html>
