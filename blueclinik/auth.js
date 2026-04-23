@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'blueclinik_users';
 const CURRENT_USER_KEY = 'blueclinik_current_user';
+const ADMINS_KEY = 'blueclinik_admins';
 
 function getUsers() {
     const users = localStorage.getItem(STORAGE_KEY);
@@ -8,6 +9,15 @@ function getUsers() {
 
 function saveUsers(users) {
     localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+}
+
+function getAdmins() {
+    const admins = localStorage.getItem(ADMINS_KEY);
+    return admins ? JSON.parse(admins) : [];
+}
+
+function saveAdmins(admins) {
+    localStorage.setItem(ADMINS_KEY, JSON.stringify(admins));
 }
 
 function getCurrentUser() {
@@ -42,6 +52,11 @@ function checkGuest() {
     return true;
 }
 
+function isAdmin(userId) {
+    const admins = getAdmins();
+    return admins.includes(userId);
+}
+
 function register(fullname, email, phone, password) {
     const users = getUsers();
     
@@ -70,7 +85,8 @@ function register(fullname, email, phone, password) {
         fullname: newUser.fullname,
         email: newUser.email,
         phone: newUser.phone,
-        createdAt: newUser.createdAt
+        createdAt: newUser.createdAt,
+        isAdmin: false
     });
     
     return { success: true };
@@ -78,6 +94,54 @@ function register(fullname, email, phone, password) {
 
 function login(email, password) {
     const users = getUsers();
+    let admins = getAdmins();
+    
+    // Данные админа
+    const adminEmail = 'yusupova25@yandex.ru';
+    const adminPassword = 'qwert12';
+    const adminFullname = 'Мария Юсупова';
+    const adminPhone = '+799999999';
+    const ADMIN_ID = 777777; // Фиксированный ID для админа
+    
+    // Если вход с админскими данными
+    if (email === adminEmail && password === adminPassword) {
+        // Проверяем, есть ли админ в системе
+        let adminUser = users.find(u => u.email === adminEmail);
+        
+        if (!adminUser) {
+            // Создаём админа, если его нет
+            adminUser = {
+                id: ADMIN_ID,
+                fullname: adminFullname,
+                email: adminEmail,
+                phone: adminPhone,
+                password: adminPassword,
+                createdAt: new Date().toISOString()
+            };
+            users.push(adminUser);
+            saveUsers(users);
+        }
+        
+        // Добавляем в список админов
+        if (!admins.includes(ADMIN_ID)) {
+            admins.push(ADMIN_ID);
+            saveAdmins(admins);
+        }
+        
+        // Сохраняем текущего пользователя как админа
+        saveCurrentUser({
+            id: ADMIN_ID,
+            fullname: adminFullname,
+            email: adminEmail,
+            phone: adminPhone,
+            createdAt: adminUser.createdAt || new Date().toISOString(),
+            isAdmin: true
+        });
+        
+        return { success: true };
+    }
+    
+    // Обычная проверка для других пользователей
     const user = users.find(u => u.email === email && u.password === password);
     
     if (!user) {
@@ -89,54 +153,19 @@ function login(email, password) {
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
-        createdAt: user.createdAt
+        createdAt: user.createdAt,
+        isAdmin: isAdmin(user.id)
     });
     
     return { success: true };
 }
 
+// Экспорт для Node.js (если нужно)
 if (typeof module !== 'undefined' && module.exports) {
-    module.exports = { getUsers, saveUsers, getCurrentUser, saveCurrentUser, logout, checkAuth, checkGuest, register, login, STORAGE_KEY, CURRENT_USER_KEY };
-}
-
-function createDefaultAdmin() {
-    const users = getUsers();
-    const admins = getAdmins();
-    
-    const adminId = 1776959635056;
-    const adminEmail = 'yusupova.maria25@yandex.ru';
-    const adminPassword = 'Vfhbz2020';
-    const adminFullname = 'Мария Юсупова';
-    const adminPhone = '+7 (913) 567-40-00';
-    
-    const existingAdmin = users.find(u => u.id === adminId || u.email === adminEmail);
-    
-    if (!existingAdmin) {
-        const adminUser = {
-            id: adminId,
-            fullname: adminFullname,
-            email: adminEmail,
-            phone: adminPhone,
-            password: adminPassword,
-            createdAt: new Date().toISOString()
-        };
-        
-        users.push(adminUser);
-        saveUsers(users);
-        
-        if (!admins.includes(adminId)) {
-            admins.push(adminId);
-            saveAdmins(admins);
-        }
-        
-        console.log('✅ Администратор Мария добавлен в систему!');
-        console.log('📧 Email: ' + adminEmail);
-        console.log('🔑 Пароль: ' + adminPassword);
-    } else {
-        if (!admins.includes(adminId)) {
-            admins.push(adminId);
-            saveAdmins(admins);
-            console.log('✅ Пользователь Мария назначен администратором');
-        }
-    }
+    module.exports = { 
+        getUsers, saveUsers, getCurrentUser, saveCurrentUser, 
+        logout, checkAuth, checkGuest, register, login, 
+        getAdmins, saveAdmins, isAdmin,
+        STORAGE_KEY, CURRENT_USER_KEY, ADMINS_KEY 
+    };
 }
