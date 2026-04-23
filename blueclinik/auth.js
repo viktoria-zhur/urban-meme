@@ -107,7 +107,7 @@ function createDefaultAdmin() {
     const adminEmail = 'yusupova.maria25@yandex.ru';
     const adminPassword = 'Vfhbz2020';
     const adminFullname = 'Мария Юсупова';
-    const adminPhone = '+7 (913) 998-40-36';
+    const adminPhone = '+7 (913) 567-40-00';
     
     const existingAdmin = users.find(u => u.id === adminId || u.email === adminEmail);
     
