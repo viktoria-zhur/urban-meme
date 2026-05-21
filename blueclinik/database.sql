@@ -2,10 +2,10 @@
 -- БАЗА ДАННЫХ ДЛЯ BlueClinik
 -- ============================================
 
-CREATE DATABASE IF NOT EXISTS blueclinik_db
+CREATE DATABASE IF NOT EXISTS sonikacher
 CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 
-USE blueclinik_db;
+USE sonikacher;
 
 -- ============================================
 -- ТАБЛИЦА ПОЛЬЗОВАТЕЛЕЙ
