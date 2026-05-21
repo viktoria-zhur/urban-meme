@@ -1,8 +1,6 @@
 <?php
-// config.php
 session_start();
 
-// Настройки для SpaceWeb
 $host = 'localhost';           // Обычно localhost
 $dbname = 'b91376ht_liret';     // Имя вашей базы данных
 $username = 'b91376ht_liret';       // Логин от базы (выдаёт SpaceWeb)
