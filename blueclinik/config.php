@@ -6,7 +6,7 @@ session_start();
 $host = 'localhost';           // Обычно localhost
 $dbname = 'sonikacher';     // Имя вашей базы данных
 $username = 'sonikacher';       // Логин от базы (выдаёт SpaceWeb)
-$password = 'B!3FD4Br$Nmn9nM';      // Пароль от базы
+$password = 'MX42c46VZ9GDM*UU';      // Пароль от базы
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
