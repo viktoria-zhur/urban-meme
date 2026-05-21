@@ -4,9 +4,9 @@ session_start();
 
 // Настройки для SpaceWeb
 $host = 'localhost';           // Обычно localhost
-$dbname = 'sonikacher';     // Имя вашей базы данных
-$username = 'sonikacher';       // Логин от базы (выдаёт SpaceWeb)
-$password = 'MX42c46VZ9GDM*UU';      // Пароль от базы
+$dbname = 'b91376ht_liret';     // Имя вашей базы данных
+$username = 'b91376ht_liret';       // Логин от базы (выдаёт SpaceWeb)
+$password = 'Z0jiZnBwti%t';      // Пароль от базы
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
