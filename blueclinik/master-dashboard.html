@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Кабинет косметолога | BlueClinik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --bg: #F5F2EF;
+            --card: #FFFFFF;
+            --dark: #0A1C2F;
+            --dark-light: #1F3E5C;
+            --accent: #C89F9F;
+            --accent-light: #F1E6E6;
+            --text: #1A2C3A;
+            --text-light: #5D6F7F;
+            --success: #4CAF50;
+            --warning: #FF9800;
+            --danger: #EF5350;
+            --info: #2196F3;
+            --shadow: 0 10px 40px -12px rgba(0,0,0,0.08);
+            --shadow-hover: 0 20px 40px -16px rgba(0,0,0,0.12);
+            --radius: 24px;
+            --radius-sm: 16px;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.5;
+        }
+        
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 32px; }
+        
+        /* Header */
+        .header {
+            background: var(--card);
+            padding: 16px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-inner {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        
+        .logo {
+            font-size: 28px;
+            font-weight: 800;
+            text-decoration: none;
+            color: var(--dark);
+            letter-spacing: -0.5px;
+        }
+        .logo span { color: var(--accent); font-weight: 500; }
+        
+        .badge {
+            background: var(--accent-light);
+            padding: 6px 16px;
+            border-radius: 60px;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--accent);
+        }
+        
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 10px 24px;
+            border-radius: 60px;
+            font-weight: 500;
+            font-size: 14px;
+            cursor: pointer;
+            border: none;
+            transition: all 0.2s ease;
+            text-decoration: none;
+        }
+        .btn-primary { background: var(--dark); color: white; }
+        .btn-primary:hover { background: var(--dark-light); transform: translateY(-2px); }
+        .btn-outline { background: transparent; border: 1.5px solid var(--dark); color: var(--dark); }
+        .btn-outline:hover { background: var(--dark); color: white; }
+        .btn-success { background: var(--success); color: white; }
+        .btn-warning { background: var(--warning); color: white; }
+        .btn-danger { background: var(--danger); color: white; }
+        .btn-sm { padding: 6px 14px; font-size: 12px; }
+        
+        /* Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 24px;
+            margin: 32px 0;
+        }
+        
+        .stat-card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            box-shadow: var(--shadow);
+            transition: all 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        
+        .stat-icon {
+            width: 56px;
+            height: 56px;
+            background: var(--accent-light);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 26px;
+            color: var(--accent);
+        }
+        
+        .stat-number { font-size: 32px; font-weight: 800; color: var(--dark); }
+        .stat-label { font-size: 13px; color: var(--text-light); margin-top: 4px; }
+        
+        /* Tabs */
+        .tabs {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 28px;
+            flex-wrap: wrap;
+            border-bottom: 2px solid #E8E3DC;
+            padding-bottom: 8px;
+        }
+        
+        .tab-btn {
+            background: none;
+            border: none;
+            padding: 10px 28px;
+            border-radius: 60px;
+            font-weight: 600;
+            font-size: 15px;
+            cursor: pointer;
+            transition: all 0.2s;
+            color: var(--text-light);
+        }
+        .tab-btn.active {
+            background: var(--dark);
+            color: white;
+        }
+        
+        /* Panes */
+        .tab-pane { display: none; }
+        .tab-pane.active { display: block; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        
+        /* Cards */
+        .card {
+            background: var(--card);
+            border-radius: var(--radius);
+            padding: 28px;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Table */
+        .table-wrapper {
+            background: var(--card);
+            border-radius: var(--radius);
+            overflow-x: auto;
+            box-shadow: var(--shadow);
+        }
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 16px 20px; text-align: left; border-bottom: 1px solid #E8E3DC; }
+        th { background: #F8F6F3; font-weight: 600; color: var(--dark); }
+        tr:hover { background: var(--accent-light); }
+        
+        /* Status badges */
+        .status {
+            padding: 4px 12px;
+            border-radius: 60px;
+            font-size: 12px;
+            font-weight: 600;
+            display: inline-block;
+        }
+        .status-pending { background: #FFF3E0; color: var(--warning); }
+        .status-confirmed { background: #E8F5E9; color: var(--success); }
+        .status-completed { background: #E3F2FD; color: var(--info); }
+        .status-cancelled { background: #FFEBEE; color: var(--danger); }
+        
+        /* Schedule Grid */
+        .schedule-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .schedule-day {
+            background: var(--bg);
+            padding: 16px 12px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+            cursor: pointer;
+            border: 2px solid transparent;
+            transition: all 0.2s;
+        }
+        .schedule-day.active {
+            background: var(--accent-light);
+            border-color: var(--accent);
+        }
+        .schedule-day input {
+            margin-top: 10px;
+            width: 100%;
+            padding: 6px;
+            font-size: 11px;
+            border: 1px solid #ddd;
+            border-radius: 20px;
+            text-align: center;
+            font-family: inherit;
+        }
+        
+        /* Services Grid */
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 24px;
+        }
+        .service-card {
+            background: var(--card);
+            border-radius: var(--radius-sm);
+            padding: 20px;
+            box-shadow: var(--shadow);
+            border: 1px solid #E8E3DC;
+            transition: all 0.2s;
+        }
+        .service-card:hover { transform: translateY(-4px); box-shadow: var(--shadow-hover); }
+        .service-name { font-size: 18px; font-weight: 700; margin-bottom: 4px; }
+        .service-price { font-size: 24px; font-weight: 800; color: var(--accent); margin: 12px 0; }
+        .service-duration { color: var(--text-light); font-size: 13px; margin-bottom: 16px; }
+        
+        /* Welcome Banner */
+        .welcome-banner {
+            background: linear-gradient(135deg, var(--dark) 0%, var(--dark-light) 100%);
+            color: white;
+            padding: 32px 36px;
+            border-radius: var(--radius);
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 20px;
+        }
+        .welcome-banner h1 { font-size: 28px; margin-bottom: 6px; }
+        .welcome-banner p { opacity: 0.85; }
+        .today-date {
+            background: rgba(255,255,255,0.15);
+            padding: 10px 20px;
+            border-radius: 60px;
+            font-size: 14px;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        .modal.show { display: flex; }
+        .modal-content {
+            background: white;
+            border-radius: var(--radius);
+            padding: 32px;
+            max-width: 450px;
+            width: 90%;
+        }
+        .modal-content input {
+            width: 100%;
+            padding: 14px 18px;
+            border: 1px solid #E8E3DC;
+            border-radius: 60px;
+            margin-bottom: 16px;
+            font-family: inherit;
+            font-size: 14px;
+        }
+        .modal-content h3 { margin-bottom: 24px; font-size: 22px; }
+        
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--text-light);
+        }
+        .empty-state i { font-size: 56px; margin-bottom: 16px; opacity: 0.5; }
+        
+        /* Client Card */
+        .client-name { font-weight: 700; }
+        .client-phone { font-size: 12px; color: var(--text-light); margin-top: 2px; }
+        
+        @media (max-width: 992px) {
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .schedule-grid { grid-template-columns: repeat(4, 1fr); }
+        }
+        @media (max-width: 768px) {
+            .container { padding: 0 20px; }
+            .stats-grid { grid-template-columns: 1fr; }
+            .schedule-grid { grid-template-columns: repeat(2, 1fr); }
+            .welcome-banner { flex-direction: column; text-align: center; }
+        }
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="header-inner">
+            <a href="index.html" class="logo">Blue<span>Clinik</span></a>
+            <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap;">
+                <span class="badge"><i class="fas fa-stethoscope"></i> Косметолог</span>
+                <span id="masterName" style="font-weight: 500;"></span>
+                <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-home"></i> На сайт</a>
+                <button onclick="logout()" class="btn btn-outline btn-sm"><i class="fas fa-sign-out-alt"></i> Выйти</button>
+            </div>
+        </div>
+    </div>
+</header>
+
+<main style="padding: 32px 0 48px;">
+    <div class="container">
+        <!-- Welcome Banner -->
+        <div class="welcome-banner">
+            <div>
+                <h1><i class="fas fa-spa"></i> Добро пожаловать, <span id="welcomeName"></span>!</h1>
+                <p>Управляйте записями, расписанием и услугами в одном месте</p>
+            </div>
+            <div class="today-date">
+                <i class="fas fa-calendar-day"></i> <span id="todayDate"></span>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-day"></i></div>
+                <div><div class="stat-number" id="todayCount">0</div><div class="stat-label">записей на сегодня</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-calendar-week"></i></div>
+                <div><div class="stat-number" id="weekCount">0</div><div class="stat-label">записей на неделе</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div><div class="stat-number" id="clientsCount">0</div><div class="stat-label">уникальных клиентов</div></div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-ruble-sign"></i></div>
+                <div><div class="stat-number" id="revenueTotal">0</div><div class="stat-label">выручка (₽)</div></div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs">
+            <button class="tab-btn active" data-tab="appointments"><i class="fas fa-calendar-check"></i> Записи</button>
+            <button class="tab-btn" data-tab="schedule"><i class="fas fa-clock"></i> Расписание</button>
+            <button class="tab-btn" data-tab="services"><i class="fas fa-syringe"></i> Услуги</button>
+            <button class="tab-btn" data-tab="clients"><i class="fas fa-users"></i> Клиенты</button>
+        </div>
+
+        <!-- Appointments Tab -->
+        <div class="tab-pane active" id="appointmentsTab">
+            <div class="table-wrapper">
+                <div id="appointmentsList"></div>
+            </div>
+        </div>
+
+        <!-- Schedule Tab -->
+        <div class="tab-pane" id="scheduleTab">
+            <div class="card">
+                <h3 style="margin-bottom: 20px;"><i class="fas fa-calendar-alt"></i> Настройка графика работы</h3>
+                <p style="color: var(--text-light); margin-bottom: 20px;">Нажмите на день, чтобы включить/отключить, и укажите часы работы через запятую</p>
+                <div id="scheduleGrid" class="schedule-grid"></div>
+                <button class="btn btn-primary" style="margin-top: 28px;" onclick="saveSchedule()">
+                    <i class="fas fa-save"></i> Сохранить расписание
+                </button>
+            </div>
+        </div>
+
+        <!-- Services Tab -->
+        <div class="tab-pane" id="servicesTab">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 24px; flex-wrap: wrap; gap: 16px;">
+                <h2 style="font-size: 22px;"><i class="fas fa-syringe"></i> Мои услуги</h2>
+                <button class="btn btn-primary" onclick="openServiceModal()">
+                    <i class="fas fa-plus"></i> Добавить услугу
+                </button>
+            </div>
+            <div id="servicesList" class="services-grid"></div>
+        </div>
+
+        <!-- Clients Tab -->
+        <div class="tab-pane" id="clientsTab">
+            <div class="table-wrapper">
+                <div id="clientsList"></div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<!-- Add Service Modal -->
+<div id="serviceModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-plus-circle"></i> Новая услуга</h3>
+        <input type="text" id="serviceName" placeholder="Название услуги">
+        <input type="number" id="servicePrice" placeholder="Стоимость (₽)">
+        <input type="number" id="serviceDuration" placeholder="Длительность (минут)">
+        <div style="display: flex; gap: 12px; margin-top: 20px;">
+            <button class="btn btn-primary" onclick="addService()">Добавить</button>
+            <button class="btn btn-outline" onclick="closeServiceModal()">Отмена</button>
+        </div>
+    </div>
+</div>
+
+<script src="auth.js"></script>
+<script>
+    let currentMaster = null;
+    let allAppointments = [];
+    let masterSchedule = {};
+    let masterServices = [];
+
+    // ========== ИНИЦИАЛИЗАЦИЯ ==========
+    function init() {
+        currentMaster = getCurrentUser();
+        
+        if (!currentMaster || (currentMaster.role !== 'master' && currentMaster.role !== 'admin')) {
+            alert('Доступ только для косметологов');
+            window.location.href = 'login.html';
+            return;
+        }
+        
+        // Отображение информации
+        document.getElementById('masterName').innerHTML = `<i class="fas fa-user-circle"></i> ${currentMaster.fullname}`;
+        document.getElementById('welcomeName').textContent = currentMaster.fullname;
+        document.getElementById('todayDate').textContent = new Date().toLocaleDateString('ru-RU', { day: 'numeric', month: 'long', year: 'numeric' });
+        
+        loadData();
+        setupTabs();
+    }
+    
+    // ========== ЗАГРУЗКА ДАННЫХ ==========
+    function loadData() {
+        loadAppointments();
+        loadSchedule();
+        loadServices();
+        updateStats();
+        renderAppointments();
+        renderSchedule();
+        renderServices();
+        renderClients();
+    }
+    
+    function loadAppointments() {
+        allAppointments = [];
+        const allUsers = getUsers();
+        
+        allUsers.forEach(user => {
+            if (user.role === 'admin' || user.role === 'master') return;
+            const userBookings = JSON.parse(localStorage.getItem(`appointments_${user.id}`) || '[]');
+            userBookings.forEach(booking => {
+                if (booking.masterId === currentMaster.id || booking.doctor === currentMaster.fullname) {
+                    allAppointments.push({
+                        ...booking,
+                        clientName: user.fullname,
+                        clientPhone: user.phone,
+                        clientEmail: user.email,
+                        userId: user.id
+                    });
+                }
+            });
+        });
+        
+        allAppointments.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+    }
+    
+    function loadSchedule() {
+        const defaultSchedule = {
+            monday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+            tuesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+            wednesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+            thursday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+            friday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+            saturday: { enabled: false, hours: [] },
+            sunday: { enabled: false, hours: [] }
+        };
+        const saved = localStorage.getItem(`schedule_${currentMaster.id}`);
+        masterSchedule = saved ? JSON.parse(saved) : defaultSchedule;
+    }
+    
+    function loadServices() {
+        const defaultServices = [
+            { name: 'SMAS-лифтинг Ultraformer', price: 50990, duration: 60 },
+            { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
+            { name: 'RF-лифтинг лица', price: 6900, duration: 30 },
+            { name: 'Лазерная шлифовка', price: 14900, duration: 40 }
+        ];
+        const saved = localStorage.getItem(`services_${currentMaster.id}`);
+        masterServices = saved ? JSON.parse(saved) : defaultServices;
+    }
+    
+    // ========== СТАТИСТИКА ==========
+    function updateStats() {
+        const today = new Date().toISOString().split('T')[0];
+        const todayBookings = allAppointments.filter(b => b.date === today && b.status !== 'cancelled');
+        document.getElementById('todayCount').textContent = todayBookings.length;
+        
+        const weekFromNow = new Date();
+        weekFromNow.setDate(weekFromNow.getDate() + 7);
+        const weekBookings = allAppointments.filter(b => new Date(b.date) <= weekFromNow && b.status !== 'cancelled');
+        document.getElementById('weekCount').textContent = weekBookings.length;
+        
+        const uniqueClients = new Set(allAppointments.map(b => b.userId)).size;
+        document.getElementById('clientsCount').textContent = uniqueClients;
+        
+        const revenue = allAppointments.reduce((sum, b) => sum + (b.status === 'completed' ? (b.price || 0) : 0), 0);
+        document.getElementById('revenueTotal').textContent = revenue.toLocaleString();
+    }
+    
+    // ========== ФОРМАТИРОВАНИЕ ==========
+    function formatDate(dateStr) {
+        const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
+        const [year, month, day] = dateStr.split('-');
+        return `${parseInt(day)} ${months[parseInt(month) - 1]}`;
+    }
+    
+    function getStatusText(status) {
+        const statuses = { pending: 'Ожидает', confirmed: 'Подтверждена', completed: 'Выполнена', cancelled: 'Отменена' };
+        return statuses[status] || 'Ожидает';
+    }
+    
+    function getStatusClass(status) {
+        const classes = { pending: 'status-pending', confirmed: 'status-confirmed', completed: 'status-completed', cancelled: 'status-cancelled' };
+        return classes[status] || 'status-pending';
+    }
+    
+    // ========== ЗАПИСИ ==========
+    function renderAppointments() {
+        const container = document.getElementById('appointmentsList');
+        
+        if (allAppointments.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-check"></i><p>У вас пока нет записей</p><small>Когда клиенты запишутся, они появятся здесь</small></div>`;
+            return;
+        }
+        
+        let html = `<table><thead><tr><th>Дата</th><th>Время</th><th>Клиент</th><th>Услуга</th><th>Стоимость</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
+        
+        allAppointments.forEach(apt => {
+            const isUpcoming = new Date(apt.date + 'T' + apt.time) > new Date();
+            
+            html += `<tr>
+                <td><strong>${formatDate(apt.date)}</strong></td>
+                <td>${apt.time}</td>
+                <td>
+                    <div class="client-name">${apt.clientName || apt.clientEmail}</div>
+                    <div class="client-phone">${apt.clientPhone || ''}</div>
+                </td>
+                <td>${apt.service}</td>
+                <td>${(apt.price || 0).toLocaleString()} ₽</td>
+                <td><span class="status ${getStatusClass(apt.status)}">${getStatusText(apt.status)}</span></td>
+                <td class="action-btns">
+                    ${apt.status !== 'confirmed' && apt.status !== 'cancelled' && isUpcoming ? 
+                        `<button class="btn btn-success btn-sm" onclick="updateStatus(${apt.id}, 'confirmed')" title="Подтвердить"><i class="fas fa-check"></i></button>` : ''}
+                    ${apt.status !== 'completed' && apt.status !== 'cancelled' ? 
+                        `<button class="btn btn-primary btn-sm" onclick="updateStatus(${apt.id}, 'completed')" title="Выполнено"><i class="fas fa-check-double"></i></button>` : ''}
+                    ${apt.status !== 'cancelled' ? 
+                        `<button class="btn btn-danger btn-sm" onclick="updateStatus(${apt.id}, 'cancelled')" title="Отменить"><i class="fas fa-times"></i></button>` : ''}
+                </td>
+            </tr>`;
+        });
+        
+        container.innerHTML = html + '</tbody></table>';
+    }
+    
+    function updateStatus(appointmentId, newStatus) {
+        const appointment = allAppointments.find(apt => apt.id === appointmentId);
+        if (!appointment) return;
+        
+        // Обновляем в localStorage
+        const userBookings = JSON.parse(localStorage.getItem(`appointments_${appointment.userId}`) || '[]');
+        const bookingIndex = userBookings.findIndex(b => b.id === appointmentId);
+        if (bookingIndex !== -1) {
+            userBookings[bookingIndex].status = newStatus;
+            localStorage.setItem(`appointments_${appointment.userId}`, JSON.stringify(userBookings));
+        }
+        
+        // Обновляем локально
+        appointment.status = newStatus;
+        
+        const messages = { confirmed: 'Запись подтверждена', completed: 'Запись отмечена как выполненная', cancelled: 'Запись отменена' };
+        alert(messages[newStatus]);
+        
+        updateStats();
+        renderAppointments();
+        renderClients();
+    }
+    
+    // ========== РАСПИСАНИЕ ==========
+    function renderSchedule() {
+        const days = { monday: 'Пн', tuesday: 'Вт', wednesday: 'Ср', thursday: 'Чт', friday: 'Пт', saturday: 'Сб', sunday: 'Вс' };
+        let html = '';
+        
+        for (const [key, label] of Object.entries(days)) {
+            const day = masterSchedule[key];
+            html += `<div class="schedule-day ${day.enabled ? 'active' : ''}" onclick="toggleDay('${key}')">
+                <strong>${label}</strong>
+                <div style="font-size: 11px; margin-top: 5px;">${day.enabled ? day.hours.length + ' ч.' : 'Выходной'}</div>
+                <input type="text" id="hours_${key}" value="${day.hours.join(', ')}" 
+                    placeholder="09:00, 10:00, 11:00" style="display: ${day.enabled ? 'block' : 'none'}" 
+                    onclick="event.stopPropagation()">
+            </div>`;
+        }
+        document.getElementById('scheduleGrid').innerHTML = html;
+    }
+    
+    function toggleDay(day) {
+        masterSchedule[day].enabled = !masterSchedule[day].enabled;
+        if (!masterSchedule[day].enabled) masterSchedule[day].hours = [];
+        renderSchedule();
+    }
+    
+    function saveSchedule() {
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        days.forEach(day => {
+            if (masterSchedule[day].enabled) {
+                const input = document.getElementById(`hours_${day}`);
+                if (input && input.value) {
+                    masterSchedule[day].hours = input.value.split(',').map(h => h.trim()).filter(h => h);
+                }
+            }
+        });
+        
+        localStorage.setItem(`schedule_${currentMaster.id}`, JSON.stringify(masterSchedule));
+        alert('Расписание сохранено!');
+        renderSchedule();
+    }
+    
+    // ========== УСЛУГИ ==========
+    function renderServices() {
+        const container = document.getElementById('servicesList');
+        
+        if (masterServices.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-syringe"></i><p>Нет добавленных услуг</p><button class="btn btn-primary" onclick="openServiceModal()">Добавить первую услугу</button></div>`;
+            return;
+        }
+        
+        container.innerHTML = masterServices.map((service, index) => `
+            <div class="service-card">
+                <div class="service-name">${escapeHtml(service.name)}</div>
+                <div class="service-price">${service.price.toLocaleString()} ₽</div>
+                <div class="service-duration"><i class="far fa-clock"></i> ${service.duration} минут</div>
+                <button class="btn btn-danger btn-sm" onclick="removeService(${index})">
+                    <i class="fas fa-trash"></i> Удалить
+                </button>
+            </div>
+        `).join('');
+    }
+    
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
+    }
+    
+    function openServiceModal() {
+        document.getElementById('serviceModal').classList.add('show');
+    }
+    
+    function closeServiceModal() {
+        document.getElementById('serviceModal').classList.remove('show');
+        document.getElementById('serviceName').value = '';
+        document.getElementById('servicePrice').value = '';
+        document.getElementById('serviceDuration').value = '';
+    }
+    
+    function addService() {
+        const name = document.getElementById('serviceName').value.trim();
+        const price = parseInt(document.getElementById('servicePrice').value);
+        const duration = parseInt(document.getElementById('serviceDuration').value);
+        
+        if (!name || !price || !duration) {
+            alert('Заполните все поля');
+            return;
+        }
+        
+        if (price <= 0 || duration <= 0) {
+            alert('Цена и длительность должны быть больше 0');
+            return;
+        }
+        
+        masterServices.push({ name, price, duration });
+        localStorage.setItem(`services_${currentMaster.id}`, JSON.stringify(masterServices));
+        
+        renderServices();
+        closeServiceModal();
+        alert('Услуга добавлена');
+    }
+    
+    function removeService(index) {
+        if (confirm('Удалить эту услугу?')) {
+            masterServices.splice(index, 1);
+            localStorage.setItem(`services_${currentMaster.id}`, JSON.stringify(masterServices));
+            renderServices();
+            alert('Услуга удалена');
+        }
+    }
+    
+    // ========== КЛИЕНТЫ ==========
+    function renderClients() {
+        const clients = new Map();
+        
+        allAppointments.forEach(apt => {
+            if (!clients.has(apt.userId)) {
+                clients.set(apt.userId, {
+                    name: apt.clientName,
+                    phone: apt.clientPhone,
+                    visits: 0,
+                    spent: 0
+                });
+            }
+            const client = clients.get(apt.userId);
+            client.visits++;
+            if (apt.status === 'completed') {
+                client.spent += (apt.price || 0);
+            }
+        });
+        
+        const container = document.getElementById('clientsList');
+        const clientsArray = Array.from(clients.values()).sort((a, b) => b.spent - a.spent);
+        
+        if (clientsArray.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-users"></i><p>Пока нет клиентов</p></div>`;
+            return;
+        }
+        
+        let html = `<table><thead><tr><th>Клиент</th><th>Телефон</th><th>Визитов</th><th>Потрачено (₽)</th></tr></thead><tbody>`;
+        
+        clientsArray.forEach(client => {
+            html += `<tr>
+                <td><strong>${client.name || '—'}</strong></td>
+                <td>${client.phone || '—'}</td>
+                <td>${client.visits}</td>
+                <td>${client.spent.toLocaleString()} ₽</td>
+            </tr>`;
+        });
+        
+        container.innerHTML = html + '</tbody></table>';
+    }
+    
+    // ========== ВКЛАДКИ ==========
+    function setupTabs() {
+        document.querySelectorAll('.tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                
+                document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
+                document.getElementById(btn.dataset.tab + 'Tab').classList.add('active');
+            });
+        });
+    }
+    
+    // Закрытие модалки по ESC
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') closeServiceModal();
+    });
+    
+    // Закрытие по клику вне модалки
+    window.onclick = function(event) {
+        const modal = document.getElementById('serviceModal');
+        if (event.target === modal) closeServiceModal();
+    };
+    
+    // Запуск
+    init();
+</script>
+</body>
+</html>

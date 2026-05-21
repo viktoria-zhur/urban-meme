@@ -155,44 +155,32 @@
         .error-message.show {
             display: block;
         }
-        .form-group {
-            position: relative;
-        }
-        .form-group i {
-            position: absolute;
-            left: 20px;
-            top: 42px;
-            color: var(--text-light);
-        }
-        .form-group input {
-            padding-left: 45px;
-        }
     </style>
 </head>
 <body>
     <div class="auth-container">
         <div class="auth-card">
             <a href="index.html" class="auth-logo">Blue<span>Clinik</span></a>
-            <h2><i class="fas fa-key"></i> Добро пожаловать</h2>
+            <h2>Добро пожаловать</h2>
             <p class="auth-subtitle">Войдите в личный кабинет</p>
             
             <div id="errorMessage" class="error-message"></div>
             
             <form id="loginForm" class="auth-form">
                 <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Email</label>
+                    <label>Email</label>
                     <input type="email" id="email" placeholder="ivan@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Пароль</label>
+                    <label>Пароль</label>
                     <input type="password" id="password" placeholder="••••••" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">
-                    <i class="fas fa-sign-in-alt"></i> Войти
+                    Войти
                 </button>
             </form>
             <p class="auth-footer">
-                <i class="fas fa-user-plus"></i> Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
+                Нет аккаунта? <a href="register.html">Зарегистрироваться</a>
             </p>
         </div>
     </div>
@@ -208,7 +196,7 @@
             errorDiv.classList.remove('show');
             
             if (!email || !password) {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Пожалуйста, заполните все поля';
+                errorDiv.innerHTML = 'Пожалуйста, заполните все поля';
                 errorDiv.classList.add('show');
                 return;
             }
@@ -216,9 +204,18 @@
             const result = login(email, password);
             
             if (result.success) {
-                window.location.href = 'dashboard.html';
+                const user = getCurrentUser();
+                
+                // Перенаправление по роли
+                if (user.role === 'admin') {
+                    window.location.href = 'admin.html';
+                } else if (user.role === 'master') {
+                    window.location.href = 'master-dashboard.html';
+                } else {
+                    window.location.href = 'dashboard.html';
+                }
             } else {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + result.error;
+                errorDiv.innerHTML = result.error;
                 errorDiv.classList.add('show');
             }
         });

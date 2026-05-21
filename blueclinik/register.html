@@ -69,14 +69,21 @@
             margin-bottom: 12px;
         }
 
-        .auth-card h2 i {
-            color: var(--accent);
-            margin-right: 10px;
-        }
-
         .auth-subtitle {
             color: var(--text-medium);
             margin-bottom: 32px;
+        }
+
+        .info-badge {
+            background: var(--accent-light);
+            padding: 12px 16px;
+            border-radius: 16px;
+            margin-bottom: 24px;
+            font-size: 13px;
+            color: var(--text-medium);
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
 
         .auth-form .form-group {
@@ -89,16 +96,6 @@
             margin-bottom: 8px;
             font-weight: 500;
             font-size: 14px;
-        }
-
-        .auth-form label i {
-            color: var(--accent);
-            margin-right: 6px;
-            width: 18px;
-        }
-
-        .auth-form label span {
-            color: var(--accent);
         }
 
         .auth-form input {
@@ -120,7 +117,7 @@
             display: inline-flex;
             align-items: center;
             justify-content: center;
-            gap: 10px;
+            gap: 8px;
             padding: 14px 28px;
             font-weight: 500;
             border-radius: 60px;
@@ -157,32 +154,26 @@
             font-weight: 500;
         }
 
-        .error-message {
+        .error-message, .success-message {
             margin-bottom: 24px;
-            background: #FEF3F2;
             border-radius: 16px;
             padding: 12px;
-            color: #D32F2F;
             font-size: 14px;
             display: none;
+        }
+
+        .error-message {
+            background: #FEF3F2;
+            color: #D32F2F;
+        }
+
+        .success-message {
+            background: #E8F5E9;
+            color: #2E7D32;
         }
 
         .error-message.show, .success-message.show {
             display: block;
-        }
-
-        .error-message i, .success-message i {
-            margin-right: 8px;
-        }
-
-        .success-message {
-            margin-bottom: 24px;
-            background: #E8F5E9;
-            border-radius: 16px;
-            padding: 12px;
-            color: #2E7D32;
-            font-size: 14px;
-            display: none;
         }
     </style>
 </head>
@@ -190,39 +181,46 @@
     <div class="auth-container">
         <div class="auth-card">
             <a href="index.html" class="auth-logo">Blue<span>Clinik</span></a>
-            <h2><i class="fas fa-user-plus"></i> Создать аккаунт</h2>
-            <p class="auth-subtitle"><i class="fas fa-calendar-check"></i> Записывайтесь на процедуры и получайте персональные скидки</p>
+            <h2>Создать аккаунт</h2>
+            <p class="auth-subtitle">Записывайтесь на процедуры и получайте скидки</p>
+            
+            <div class="info-badge">
+                Регистрация доступна только для клиентов. Сотрудники регистрируются через администратора.
+            </div>
             
             <div id="errorMessage" class="error-message"></div>
             <div id="successMessage" class="success-message"></div>
             
             <form id="registerForm" class="auth-form">
                 <div class="form-group">
-                    <label><i class="fas fa-user"></i> Ваше имя <span>*</span></label>
+                    <label>Ваше имя</label>
                     <input type="text" id="fullname" placeholder="Иван Иванов" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-envelope"></i> Email <span>*</span></label>
+                    <label>Email</label>
                     <input type="email" id="email" placeholder="ivan@example.com" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-phone"></i> Телефон <span>*</span></label>
+                    <label>Телефон</label>
                     <input type="tel" id="phone" placeholder="+7 (999) 123-45-67" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-lock"></i> Пароль <span>*</span></label>
+                    <label>Пароль</label>
                     <input type="password" id="password" placeholder="Не менее 6 символов" required>
                 </div>
                 <div class="form-group">
-                    <label><i class="fas fa-check-circle"></i> Подтвердите пароль <span>*</span></label>
+                    <label>Подтвердите пароль</label>
                     <input type="password" id="confirmPassword" placeholder="Повторите пароль" required>
                 </div>
                 <button type="submit" class="btn btn-primary btn-full">
-                    <i class="fas fa-user-check"></i> Зарегистрироваться
+                    Зарегистрироваться как клиент
                 </button>
             </form>
             <p class="auth-footer">
-                <i class="fas fa-sign-in-alt"></i> Уже есть аккаунт? <a href="login.html">Войти</a>
+                Уже есть аккаунт? <a href="login.html">Войти</a>
+            </p>
+            <p class="auth-footer" style="margin-top: 12px; font-size: 12px;">
+                Вы косметолог? <a href="#" onclick="alert('Для регистрации как сотрудник обратитесь к администратору')">Свяжитесь с администратором</a>
             </p>
         </div>
     </div>
@@ -245,33 +243,34 @@
             successDiv.classList.remove('show');
             
             if (!fullname || !email || !phone || !password) {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Пожалуйста, заполните все поля';
+                errorDiv.innerHTML = 'Пожалуйста, заполните все поля';
                 errorDiv.classList.add('show');
                 return;
             }
             
             if (password !== confirmPassword) {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Пароли не совпадают';
+                errorDiv.innerHTML = 'Пароли не совпадают';
                 errorDiv.classList.add('show');
                 return;
             }
             
             if (password.length < 6) {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Пароль должен быть не менее 6 символов';
+                errorDiv.innerHTML = 'Пароль должен быть не менее 6 символов';
                 errorDiv.classList.add('show');
                 return;
             }
             
-            const result = register(fullname, email, phone, password);
+            const result = register(fullname, email, phone, password, 'client');
             
             if (result.success) {
-                successDiv.innerHTML = '<i class="fas fa-check-circle"></i> Регистрация успешна! Перенаправление...';
+                successDiv.innerHTML = 'Регистрация успешна! Перенаправление...';
                 successDiv.classList.add('show');
+                
                 setTimeout(() => {
                     window.location.href = 'dashboard.html';
                 }, 1500);
             } else {
-                errorDiv.innerHTML = '<i class="fas fa-exclamation-triangle"></i> ' + result.error;
+                errorDiv.innerHTML = result.error;
                 errorDiv.classList.add('show');
             }
         });

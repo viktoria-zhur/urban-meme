@@ -45,8 +45,15 @@ function checkAuth() {
 
 function checkGuest() {
     const user = getCurrentUser();
+    
     if (user) {
-        window.location.href = 'dashboard.html';
+        if (user.role === 'admin') {
+            window.location.href = 'admin.html';
+        } else if (user.role === 'master') {
+            window.location.href = 'master-dashboard.html';
+        } else {
+            window.location.href = 'dashboard.html';
+        }
         return false;
     }
     return true;
@@ -57,7 +64,12 @@ function isAdmin(userId) {
     return admins.includes(userId);
 }
 
-function register(fullname, email, phone, password) {
+function isMaster(user) {
+    return user && user.role === 'master';
+}
+
+// Регистрация ТОЛЬКО для клиентов
+function register(fullname, email, phone, password, role = 'client') {
     const users = getUsers();
     
     if (users.find(u => u.email === email)) {
@@ -70,10 +82,11 @@ function register(fullname, email, phone, password) {
     
     const newUser = {
         id: Date.now(),
-        fullname,
-        email,
-        phone,
-        password,
+        fullname: fullname,
+        email: email,
+        phone: phone,
+        password: password,
+        role: 'client',
         createdAt: new Date().toISOString()
     };
     
@@ -85,6 +98,7 @@ function register(fullname, email, phone, password) {
         fullname: newUser.fullname,
         email: newUser.email,
         phone: newUser.phone,
+        role: 'client',
         createdAt: newUser.createdAt,
         isAdmin: false
     });
@@ -92,80 +106,166 @@ function register(fullname, email, phone, password) {
     return { success: true };
 }
 
+// Создание мастера (только для админа)
+function createMasterByAdmin(fullname, email, phone, password, specialization = '') {
+    const currentUser = getCurrentUser();
+    const isAdminUser = currentUser && (currentUser.email === 'yusupova25@yandex.ru' || currentUser.isAdmin === true);
+    
+    if (!isAdminUser) {
+        return { success: false, error: 'Доступ запрещен. Только для администратора' };
+    }
+    
+    const users = getUsers();
+    
+    if (users.find(u => u.email === email)) {
+        return { success: false, error: 'Пользователь с таким email уже существует' };
+    }
+    
+    if (password.length < 6) {
+        return { success: false, error: 'Пароль должен быть не менее 6 символов' };
+    }
+    
+    const newMaster = {
+        id: Date.now(),
+        fullname: fullname,
+        email: email,
+        phone: phone,
+        password: password,
+        role: 'master',
+        specialization: specialization,
+        createdAt: new Date().toISOString()
+    };
+    
+    users.push(newMaster);
+    saveUsers(users);
+    
+    // Дефолтные услуги
+    const defaultServices = [
+        { name: 'SMAS-лифтинг', price: 50990, duration: 60 },
+        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
+        { name: 'RF-лифтинг лица', price: 6900, duration: 30 }
+    ];
+    localStorage.setItem(`services_${newMaster.id}`, JSON.stringify(defaultServices));
+    
+    // Дефолтное расписание
+    const defaultSchedule = {
+        monday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+        tuesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+        wednesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+        thursday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+        friday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
+        saturday: { enabled: false, hours: [] },
+        sunday: { enabled: false, hours: [] }
+    };
+    localStorage.setItem(`schedule_${newMaster.id}`, JSON.stringify(defaultSchedule));
+    
+    return { success: true, master: newMaster };
+}
+
+// Получить всех мастеров
+function getAllMasters() {
+    const users = getUsers();
+    return users.filter(u => u.role === 'master');
+}
+
+// Удалить мастера
+function deleteMaster(masterId) {
+    const currentUser = getCurrentUser();
+    const isAdminUser = currentUser && (currentUser.email === 'yusupova25@yandex.ru' || currentUser.isAdmin === true);
+    
+    if (!isAdminUser) {
+        return { success: false, error: 'Доступ запрещен' };
+    }
+    
+    let users = getUsers();
+    const master = users.find(u => u.id === masterId && u.role === 'master');
+    
+    if (!master) {
+        return { success: false, error: 'Мастер не найден' };
+    }
+    
+    users = users.filter(u => u.id !== masterId);
+    saveUsers(users);
+    
+    localStorage.removeItem(`services_${masterId}`);
+    localStorage.removeItem(`schedule_${masterId}`);
+    
+    return { success: true };
+}
+
+// Вход в систему
 function login(email, password) {
     const users = getUsers();
     let admins = getAdmins();
     
-    // Данные админа
+    // Администратор
     const adminEmail = 'yusupova25@yandex.ru';
     const adminPassword = 'qwert12';
-    const adminFullname = 'Мария Юсупова';
-    const adminPhone = '+799999999';
-    const ADMIN_ID = 777777; // Фиксированный ID для админа
+    const ADMIN_ID = 777777;
     
-    // Если вход с админскими данными
     if (email === adminEmail && password === adminPassword) {
-        // Проверяем, есть ли админ в системе
         let adminUser = users.find(u => u.email === adminEmail);
         
         if (!adminUser) {
-            // Создаём админа, если его нет
             adminUser = {
                 id: ADMIN_ID,
-                fullname: adminFullname,
+                fullname: 'Мария Юсупова',
                 email: adminEmail,
-                phone: adminPhone,
+                phone: '+799999999',
                 password: adminPassword,
+                role: 'admin',
                 createdAt: new Date().toISOString()
             };
             users.push(adminUser);
             saveUsers(users);
         }
         
-        // Добавляем в список админов
         if (!admins.includes(ADMIN_ID)) {
             admins.push(ADMIN_ID);
             saveAdmins(admins);
         }
         
-        // Сохраняем текущего пользователя как админа
         saveCurrentUser({
             id: ADMIN_ID,
-            fullname: adminFullname,
+            fullname: adminUser.fullname,
             email: adminEmail,
-            phone: adminPhone,
-            createdAt: adminUser.createdAt || new Date().toISOString(),
+            phone: adminUser.phone,
+            role: 'admin',
+            createdAt: adminUser.createdAt,
             isAdmin: true
         });
         
         return { success: true };
     }
     
-    // Обычная проверка для других пользователей
+    // Обычный пользователь или косметолог
     const user = users.find(u => u.email === email && u.password === password);
     
     if (!user) {
         return { success: false, error: 'Неверный email или пароль' };
     }
     
+    // Сохраняем пользователя с его ролью
     saveCurrentUser({
         id: user.id,
         fullname: user.fullname,
         email: user.email,
         phone: user.phone,
+        role: user.role || 'client',
+        specialization: user.specialization || '',
         createdAt: user.createdAt,
-        isAdmin: isAdmin(user.id)
+        isAdmin: user.role === 'admin'
     });
     
     return { success: true };
 }
 
-// Экспорт для Node.js (если нужно)
+// Экспорт
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { 
         getUsers, saveUsers, getCurrentUser, saveCurrentUser, 
         logout, checkAuth, checkGuest, register, login, 
-        getAdmins, saveAdmins, isAdmin,
-        STORAGE_KEY, CURRENT_USER_KEY, ADMINS_KEY 
+        getAdmins, saveAdmins, isAdmin, isMaster, getAllMasters, 
+        createMasterByAdmin, deleteMaster
     };
 }

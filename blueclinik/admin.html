@@ -37,7 +37,6 @@
             color: var(--text-dark);
         }
 
-        /* Header */
         .admin-header {
             background: var(--card-bg);
             box-shadow: var(--shadow);
@@ -130,7 +129,6 @@
             font-size: 12px;
         }
 
-        /* Main content */
         .admin-main {
             padding: 40px 0;
         }
@@ -180,7 +178,6 @@
             font-size: 14px;
         }
 
-        /* Tabs */
         .tabs {
             display: flex;
             gap: 12px;
@@ -220,7 +217,6 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Tables */
         .data-table {
             background: var(--card-bg);
             border-radius: 24px;
@@ -298,7 +294,6 @@
             background: #FFF3E0;
         }
 
-        /* Modal */
         .modal {
             display: none;
             position: fixed;
@@ -358,7 +353,6 @@
             color: var(--accent-light);
         }
 
-        /* Search */
         .search-bar {
             margin-bottom: 20px;
             display: flex;
@@ -406,7 +400,6 @@
 
 <main class="admin-main">
     <div class="container">
-        <!-- Статистика -->
         <div class="stats-grid">
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-users"></i></div>
@@ -416,17 +409,17 @@
                 </div>
             </div>
             <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-md"></i></div>
+                <div class="stat-info">
+                    <h3 id="totalMasters">0</h3>
+                    <p>Косметологов</p>
+                </div>
+            </div>
+            <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-calendar-check"></i></div>
                 <div class="stat-info">
                     <h3 id="totalAppointments">0</h3>
                     <p>Всего записей</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-hourglass-half"></i></div>
-                <div class="stat-info">
-                    <h3 id="upcomingAppointments">0</h3>
-                    <p>Предстоящих</p>
                 </div>
             </div>
             <div class="stat-card">
@@ -438,13 +431,12 @@
             </div>
         </div>
 
-        <!-- Вкладки -->
         <div class="tabs">
             <button class="tab-btn active" data-tab="appointments">📅 Записи</button>
             <button class="tab-btn" data-tab="users">👥 Пользователи</button>
+            <button class="tab-btn" data-tab="masters">👩‍⚕️ Косметологи</button>
         </div>
 
-        <!-- Вкладка: Записи -->
         <div class="tab-pane active" id="appointmentsTab">
             <div class="search-bar">
                 <input type="text" id="appointmentSearch" placeholder="Поиск по клиенту, услуге или врачу...">
@@ -454,7 +446,6 @@
             </div>
         </div>
 
-        <!-- Вкладка: Пользователи -->
         <div class="tab-pane" id="usersTab">
             <div class="search-bar">
                 <input type="text" id="userSearch" placeholder="Поиск по имени или email...">
@@ -463,10 +454,20 @@
                 <div id="usersTableContainer"></div>
             </div>
         </div>
+
+        <div class="tab-pane" id="mastersTab">
+            <div style="margin-bottom: 20px;">
+                <button class="btn btn-primary" onclick="openAddMasterModal()">
+                    <i class="fas fa-plus-circle"></i> Добавить косметолога
+                </button>
+            </div>
+            <div class="data-table">
+                <div id="mastersList"></div>
+            </div>
+        </div>
     </div>
 </main>
 
-<!-- Модальное окно редактирования записи -->
 <div id="editModal" class="modal">
     <div class="modal-content">
         <h3><i class="fas fa-edit"></i> Редактирование записи</h3>
@@ -483,9 +484,23 @@
     </div>
 </div>
 
+<div id="addMasterModal" class="modal">
+    <div class="modal-content">
+        <h3><i class="fas fa-user-md"></i> Добавить косметолога</h3>
+        <input type="text" id="masterFullname" placeholder="ФИО">
+        <input type="email" id="masterEmail" placeholder="Email">
+        <input type="tel" id="masterPhone" placeholder="Телефон">
+        <input type="password" id="masterPassword" placeholder="Пароль (мин. 6 символов)">
+        <input type="text" id="masterSpecialization" placeholder="Специализация">
+        <div class="modal-buttons">
+            <button class="btn btn-primary" onclick="addMaster()">Добавить</button>
+            <button class="btn btn-outline" onclick="closeAddMasterModal()">Отмена</button>
+        </div>
+    </div>
+</div>
+
 <script src="auth.js"></script>
 <script>
-    // === ПРОВЕРКА ПРАВ АДМИНИСТРАТОРА ===
     const currentUser = getCurrentUser();
     
     function checkAdminAccess() {
@@ -494,7 +509,6 @@
             return false;
         }
         
-        // Проверка: является ли пользователь админом
         const isAdminEmail = currentUser.email === 'yusupova25@yandex.ru';
         const hasAdminFlag = currentUser.isAdmin === true;
         
@@ -509,11 +523,9 @@
     }
     
     if (!checkAdminAccess()) {
-        // Останавливаем выполнение, если не админ
         throw new Error('Access denied');
     }
     
-    // === ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ ===
     function getAllUsers() {
         return JSON.parse(localStorage.getItem('blueclinik_users') || '[]');
     }
@@ -522,7 +534,11 @@
         localStorage.setItem('blueclinik_users', JSON.stringify(users));
     }
     
-    // Получить все записи всех пользователей
+    function getAllMasters() {
+        const users = getAllUsers();
+        return users.filter(u => u.role === 'master');
+    }
+    
     function getAllAppointments() {
         const users = getAllUsers();
         const allAppointments = [];
@@ -543,36 +559,29 @@
         return allAppointments.sort((a, b) => new Date(b.date + 'T' + b.time) - new Date(a.date + 'T' + a.time));
     }
     
-    // Сохранить записи конкретного пользователя
     function saveUserAppointments(userId, appointments) {
         localStorage.setItem(`appointments_${userId}`, JSON.stringify(appointments));
     }
     
-    // Обновить статистику
     function updateStats() {
         const users = getAllUsers();
+        const masters = getAllMasters();
         const appointments = getAllAppointments();
-        const now = new Date();
         
-        const upcoming = appointments.filter(apt => new Date(apt.date + 'T' + apt.time) > now);
-        
-        // Подсчёт выручки (только завершённые или все? считаем все)
         const revenue = appointments.reduce((sum, apt) => sum + (apt.price || 0), 0);
         
-        document.getElementById('totalUsers').textContent = users.length;
+        document.getElementById('totalUsers').textContent = users.filter(u => u.role === 'client').length;
+        document.getElementById('totalMasters').textContent = masters.length;
         document.getElementById('totalAppointments').textContent = appointments.length;
-        document.getElementById('upcomingAppointments').textContent = upcoming.length;
         document.getElementById('totalRevenue').textContent = revenue.toLocaleString();
     }
     
-    // Форматирование даты
     function formatDate(dateStr) {
         const months = ['янв', 'фев', 'мар', 'апр', 'мая', 'июн', 'июл', 'авг', 'сен', 'окт', 'ноя', 'дек'];
         const [year, month, day] = dateStr.split('-');
         return `${parseInt(day)} ${months[parseInt(month) - 1]} ${year}`;
     }
     
-    // === ОТРИСОВКА ТАБЛИЦЫ ЗАПИСЕЙ ===
     function renderAppointmentsTable(searchTerm = '') {
         let appointments = getAllAppointments();
         
@@ -590,22 +599,11 @@
         const now = new Date();
         
         if (appointments.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-calendar-times"></i>
-                    <p>Записей не найдено</p>
-                </div>
-            `;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-calendar-times"></i><p>Записей не найдено</p></div>`;
             return;
         }
         
-        let html = `
-            <table>
-                <thead>
-                    <tr><th>Клиент</th><th>Услуга</th><th>Врач</th><th>Дата</th><th>Время</th><th>Стоимость</th><th>Статус</th><th>Действия</th></tr>
-                </thead>
-                <tbody>
-        `;
+        let html = `<table><thead><tr><th>Клиент</th><th>Услуга</th><th>Врач</th><th>Дата</th><th>Время</th><th>Стоимость</th><th>Статус</th><th>Действия</th></tr></thead><tbody>`;
         
         appointments.forEach(apt => {
             const aptDateTime = new Date(apt.date + 'T' + apt.time);
@@ -613,34 +611,27 @@
             const statusClass = isUpcoming ? 'status-upcoming' : 'status-completed';
             const statusText = isUpcoming ? 'Предстоит' : 'Завершена';
             
-            html += `
-                <tr>
-                    <td><strong>${apt.userFullname || '—'}</strong><br><small style="color:var(--text-light)">${apt.userEmail || ''}</small></td>
-                    <td>${apt.service || '—'}</td>
-                    <td>${apt.doctor || '—'}</td>
-                    <td>${formatDate(apt.date)}</td>
-                    <td>${apt.time}</td>
-                    <td>${(apt.price || 0).toLocaleString()} ₽</td>
-                    <td><span class="status ${statusClass}">${statusText}</span></td>
-                    <td class="action-btns">
-                        <button class="icon-btn edit" onclick="openEditModal(${apt.id}, ${apt.userId})" title="Редактировать">
-                            <i class="fas fa-pen"></i>
-                        </button>
-                        <button class="icon-btn delete" onclick="deleteAppointment(${apt.id}, ${apt.userId})" title="Удалить">
-                            <i class="fas fa-trash"></i>
-                        </button>
-                    </td>
-                </tr>
-            `;
+            html += `<tr>
+                <td><strong>${apt.userFullname || '—'}</strong><br><small>${apt.userEmail || ''}</small></td>
+                <td>${apt.service || '—'}</td>
+                <td>${apt.doctor || '—'}</td>
+                <td>${formatDate(apt.date)}</td>
+                <td>${apt.time}</td>
+                <td>${(apt.price || 0).toLocaleString()} ₽</td>
+                <td><span class="status ${statusClass}">${statusText}</span></td>
+                <td class="action-btns">
+                    <button class="icon-btn edit" onclick="openEditModal(${apt.id}, ${apt.userId})"><i class="fas fa-pen"></i></button>
+                    <button class="icon-btn delete" onclick="deleteAppointment(${apt.id}, ${apt.userId})"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`;
         });
         
         html += `</tbody></table>`;
         container.innerHTML = html;
     }
     
-    // === ОТРИСОВКА ТАБЛИЦЫ ПОЛЬЗОВАТЕЛЕЙ ===
     function renderUsersTable(searchTerm = '') {
-        let users = getAllUsers();
+        let users = getAllUsers().filter(u => u.role === 'client');
         
         if (searchTerm) {
             const term = searchTerm.toLowerCase();
@@ -654,52 +645,117 @@
         const container = document.getElementById('usersTableContainer');
         
         if (users.length === 0) {
-            container.innerHTML = `
-                <div class="empty-state">
-                    <i class="fas fa-users-slash"></i>
-                    <p>Пользователей не найдено</p>
-                </div>
-            `;
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-users-slash"></i><p>Пользователей не найдено</p></div>`;
             return;
         }
         
-        let html = `
-            <table>
-                <thead>
-                    <tr><th>ID</th><th>ФИО</th><th>Email</th><th>Телефон</th><th>Дата регистрации</th><th>Записей</th><th>Действия</th></tr>
-                </thead>
-                <tbody>
-        `;
+        let html = `<table><thead><tr><th>ID</th><th>ФИО</th><th>Email</th><th>Телефон</th><th>Дата регистрации</th><th>Записей</th><th>Действия</th></tr></thead><tbody>`;
         
         users.forEach(user => {
             const userAppointments = JSON.parse(localStorage.getItem(`appointments_${user.id}`) || '[]');
             const appointmentsCount = userAppointments.length;
-            const isAdmin = (user.email === 'yusupova25@yandex.ru');
             
-            html += `
-                <tr>
-                    <td>${user.id}</td>
-                    <td><strong>${user.fullname || '—'}</strong></td>
-                    <td>${user.email || '—'}</td>
-                    <td>${user.phone || '—'}</td>
-                    <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU') : '—'}</td>
-                    <td>${appointmentsCount}</td>
-                    <td class="action-btns">
-                        ${!isAdmin ? `
-                            <button class="icon-btn delete" onclick="deleteUser(${user.id})" title="Удалить пользователя">
-                                <i class="fas fa-user-minus"></i>
-                            </button>
-                        ` : '<span style="color:var(--accent)">Админ</span>'}
-                    </td>
-                </tr>
-            `;
+            html += `<tr>
+                <td>${user.id}</td>
+                <td><strong>${user.fullname || '—'}</strong></td>
+                <td>${user.email || '—'}</td>
+                <td>${user.phone || '—'}</td>
+                <td>${user.createdAt ? new Date(user.createdAt).toLocaleDateString('ru-RU') : '—'}</td>
+                <td>${appointmentsCount}</td>
+                <td class="action-btns">
+                    <button class="icon-btn delete" onclick="deleteUser(${user.id})"><i class="fas fa-user-minus"></i></button>
+                </td>
+            </tr>`;
         });
         
         html += `</tbody></table>`;
         container.innerHTML = html;
     }
     
-    // === РЕДАКТИРОВАНИЕ ЗАПИСИ ===
+    function renderMastersTable() {
+        const masters = getAllMasters();
+        const container = document.getElementById('mastersList');
+        
+        if (masters.length === 0) {
+            container.innerHTML = `<div class="empty-state"><i class="fas fa-user-md"></i><p>Косметологи не добавлены</p><button class="btn btn-primary" onclick="openAddMasterModal()">Добавить первого косметолога</button></div>`;
+            return;
+        }
+        
+        let html = `<table><thead><tr><th>ID</th><th>ФИО</th><th>Email</th><th>Телефон</th><th>Специализация</th><th>Дата добавления</th><th>Действия</th></tr></thead><tbody>`;
+        
+        masters.forEach(master => {
+            html += `<tr>
+                <td>${master.id}</td>
+                <td><strong>${master.fullname}</strong></td>
+                <td>${master.email}</td>
+                <td>${master.phone || '—'}</td>
+                <td>${master.specialization || '—'}</td>
+                <td>${master.createdAt ? new Date(master.createdAt).toLocaleDateString('ru-RU') : '—'}</td>
+                <td class="action-btns">
+                    <button class="icon-btn delete" onclick="deleteMaster(${master.id})"><i class="fas fa-trash"></i></button>
+                </td>
+            </tr>`;
+        });
+        
+        html += `</tbody></table>`;
+        container.innerHTML = html;
+    }
+    
+    function openAddMasterModal() {
+        document.getElementById('addMasterModal').classList.add('active');
+    }
+    
+    function closeAddMasterModal() {
+        document.getElementById('addMasterModal').classList.remove('active');
+        document.getElementById('masterFullname').value = '';
+        document.getElementById('masterEmail').value = '';
+        document.getElementById('masterPhone').value = '';
+        document.getElementById('masterPassword').value = '';
+        document.getElementById('masterSpecialization').value = '';
+    }
+    
+    function addMaster() {
+        const fullname = document.getElementById('masterFullname').value.trim();
+        const email = document.getElementById('masterEmail').value.trim();
+        const phone = document.getElementById('masterPhone').value.trim();
+        const password = document.getElementById('masterPassword').value;
+        const specialization = document.getElementById('masterSpecialization').value.trim();
+        
+        if (!fullname || !email || !phone || !password) {
+            alert('Заполните все обязательные поля');
+            return;
+        }
+        
+        if (password.length < 6) {
+            alert('Пароль должен быть не менее 6 символов');
+            return;
+        }
+        
+        const result = createMasterByAdmin(fullname, email, phone, password, specialization);
+        
+        if (result.success) {
+            alert(`Косметолог ${fullname} успешно добавлен!`);
+            closeAddMasterModal();
+            renderMastersTable();
+            updateStats();
+        } else {
+            alert('Ошибка: ' + result.error);
+        }
+    }
+    
+    function deleteMaster(masterId) {
+        if (confirm('Вы уверены, что хотите удалить этого косметолога? Все его данные и расписание будут удалены.')) {
+            const result = deleteMaster(masterId);
+            if (result.success) {
+                alert('Косметолог удален');
+                renderMastersTable();
+                updateStats();
+            } else {
+                alert('Ошибка: ' + result.error);
+            }
+        }
+    }
+    
     function openEditModal(appointmentId, userId) {
         const appointments = getAllAppointments();
         const appointment = appointments.find(apt => apt.id === appointmentId && apt.userId === userId);
@@ -738,11 +794,10 @@
             closeModal();
             renderAppointmentsTable(document.getElementById('appointmentSearch').value);
             updateStats();
-            showNotification('Запись обновлена');
+            alert('Запись обновлена');
         }
     }
     
-    // === УДАЛЕНИЕ ЗАПИСИ ===
     function deleteAppointment(appointmentId, userId) {
         if (confirm('Удалить эту запись?')) {
             let userAppointments = JSON.parse(localStorage.getItem(`appointments_${userId}`) || '[]');
@@ -750,27 +805,24 @@
             saveUserAppointments(userId, userAppointments);
             renderAppointmentsTable(document.getElementById('appointmentSearch').value);
             updateStats();
-            showNotification('Запись удалена');
+            alert('Запись удалена');
         }
     }
     
-    // === УДАЛЕНИЕ ПОЛЬЗОВАТЕЛЯ ===
     function deleteUser(userId) {
         const user = getAllUsers().find(u => u.id === userId);
         if (!user) return;
         
         if (confirm(`Удалить пользователя "${user.fullname}"? Все его записи также будут удалены.`)) {
-            // Удаляем записи пользователя
             localStorage.removeItem(`appointments_${userId}`);
             
-            // Удаляем пользователя из списка
             let users = getAllUsers();
             users = users.filter(u => u.id !== userId);
             saveAllUsers(users);
             
             renderUsersTable(document.getElementById('userSearch').value);
             updateStats();
-            showNotification('Пользователь удалён');
+            alert('Пользователь удалён');
         }
     }
     
@@ -778,27 +830,6 @@
         document.getElementById('editModal').classList.remove('active');
     }
     
-    function showNotification(message) {
-        const notification = document.createElement('div');
-        notification.style.cssText = `
-            position: fixed;
-            bottom: 30px;
-            right: 30px;
-            background: var(--primary-dark);
-            color: white;
-            padding: 14px 24px;
-            border-radius: 60px;
-            font-weight: 500;
-            z-index: 9999;
-            animation: fadeIn 0.3s ease;
-            box-shadow: var(--shadow-hover);
-        `;
-        notification.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
-        document.body.appendChild(notification);
-        setTimeout(() => notification.remove(), 2500);
-    }
-    
-    // === ПЕРЕКЛЮЧЕНИЕ ВКЛАДОК ===
     function initTabs() {
         document.querySelectorAll('.tab-btn').forEach(btn => {
             btn.addEventListener('click', () => {
@@ -808,9 +839,10 @@
                 document.querySelectorAll('.tab-pane').forEach(pane => pane.classList.remove('active'));
                 document.getElementById(`${btn.dataset.tab}Tab`).classList.add('active');
                 
-                // Обновляем данные при переключении
                 if (btn.dataset.tab === 'users') {
                     renderUsersTable(document.getElementById('userSearch').value);
+                } else if (btn.dataset.tab === 'masters') {
+                    renderMastersTable();
                 } else {
                     renderAppointmentsTable(document.getElementById('appointmentSearch').value);
                 }
@@ -818,7 +850,6 @@
         });
     }
     
-    // === ПОИСК ===
     function initSearch() {
         const appointmentSearch = document.getElementById('appointmentSearch');
         const userSearch = document.getElementById('userSearch');
@@ -832,18 +863,17 @@
         });
     }
     
-    // === ЗАКРЫТИЕ МОДАЛКИ ПО ESC ===
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
     
-    // === ИНИЦИАЛИЗАЦИЯ ===
     function init() {
         initTabs();
         initSearch();
         updateStats();
         renderAppointmentsTable('');
         renderUsersTable('');
+        renderMastersTable();
     }
     
     init();
