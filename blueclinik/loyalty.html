@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Программа лояльности | BlueClinik</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+        :root{--bg:#F4F2EF;--white:#FFF;--dark:#0A1C2F;--mid:#1F3E5C;--accent:#C89F9F;--accent-light:#F1E6E6;--text:#1A2C3A;--muted:#5D6F7F;--shadow-sm:0 4px 16px rgba(0,0,0,.06);--shadow-md:0 8px 28px rgba(0,0,0,.10);--shadow-lg:0 20px 48px rgba(0,0,0,.14);--r-sm:16px;--r-md:24px;--r-lg:32px;--r-pill:60px;--transition:all 0.3s cubic-bezier(.4,0,.2,1)}
+        html{scroll-behavior:smooth}
+        body{font-family:'Inter',sans-serif;background:var(--bg);color:var(--text);line-height:1.6;overflow-x:hidden}
+        .container{max-width:1200px;margin:0 auto;padding:0 clamp(16px,4vw,48px)}
+        .header{background:var(--white);box-shadow:0 1px 0 rgba(0,0,0,.07);padding:15px 0;position:sticky;top:0;z-index:100}
+        .header-row{display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+        .logo{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3vw,28px);font-weight:600;color:var(--dark);text-decoration:none}
+        .logo em{color:var(--accent);font-style:italic}
+        .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:10px 22px;border-radius:var(--r-pill);font-weight:500;font-size:14px;cursor:pointer;border:none;text-decoration:none;transition:var(--transition);white-space:nowrap;font-family:'Inter',sans-serif}
+        .btn-primary{background:var(--dark);color:#fff;box-shadow:var(--shadow-sm)}
+        .btn-primary:hover{background:var(--mid);transform:translateY(-2px)}
+        .btn-outline{background:transparent;border:1.5px solid var(--dark);color:var(--dark)}
+        .btn-outline:hover{background:var(--dark);color:#fff}
+        .btn-accent{background:var(--accent);color:var(--dark)}
+        .btn-accent:hover{background:#B88888;transform:translateY(-2px)}
+        .btn-sm{padding:7px 16px;font-size:13px}
+        .section-tag{display:inline-block;background:var(--accent-light);color:var(--accent);font-size:11px;font-weight:600;letter-spacing:.1em;text-transform:uppercase;padding:5px 14px;border-radius:var(--r-pill);margin-bottom:12px}
+        .section-title{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,48px);font-weight:400;color:var(--dark);line-height:1.2}
+        .section-title em{color:var(--accent);font-style:italic}
+        .section-sub{margin-top:12px;color:var(--muted);font-size:15px;max-width:560px;margin-inline:auto}
+        .section-header{text-align:center;margin-bottom:clamp(32px,5vw,56px)}
+        .lhero{background:linear-gradient(135deg,#0d0820 0%,#1a0a2e 40%,#2d1b4e 70%,#0d0820 100%);padding:clamp(60px,10vw,120px) 0;text-align:center;position:relative;overflow:hidden}
+        .lhero::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse at 30% 50%,rgba(200,159,159,.15) 0%,transparent 60%),radial-gradient(ellipse at 70% 30%,rgba(212,160,23,.08) 0%,transparent 50%)}
+        .lhero-inner{position:relative;z-index:1}
+        .htag{display:inline-flex;align-items:center;gap:8px;background:rgba(200,159,159,.15);border:1px solid rgba(200,159,159,.3);color:#F1E6E6;padding:6px 18px;border-radius:var(--r-pill);font-size:12px;letter-spacing:.1em;text-transform:uppercase;margin-bottom:24px}
+        .htitle{font-family:'Cormorant Garamond',serif;font-size:clamp(38px,7vw,80px);font-weight:400;color:#fff;line-height:1.1;margin-bottom:20px}
+        .htitle em{color:var(--accent);font-style:italic}
+        .hsub{font-size:clamp(14px,1.8vw,18px);color:rgba(255,255,255,.65);max-width:600px;margin:0 auto 40px;line-height:1.7}
+        .hcta{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        .levels-sec{padding:clamp(48px,8vw,100px) 0}
+        .lg{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(280px,100%),1fr));gap:24px;margin-top:clamp(32px,5vw,56px)}
+        .lc{border-radius:var(--r-lg);padding:clamp(28px,4vw,44px);position:relative;overflow:hidden;transition:var(--transition)}
+        .lc:hover{transform:translateY(-8px)}
+        .lc-s{background:linear-gradient(135deg,#1a1a1a,#2a2a2a);border:1px solid rgba(168,168,168,.3)}
+        .lc-g{background:linear-gradient(135deg,#1a1200,#2d2000);border:1px solid rgba(212,160,23,.4)}
+        .lc-p{background:linear-gradient(135deg,#1a0a2e,#2d1b4e);border:1px solid rgba(200,159,159,.4)}
+        .lglow{position:absolute;top:-60px;right:-60px;width:200px;height:200px;border-radius:50%;filter:blur(60px);opacity:.3}
+        .gs{background:radial-gradient(circle,#A8A8A8,transparent)}
+        .gg{background:radial-gradient(circle,#D4A017,transparent)}
+        .gp{background:radial-gradient(circle,#C89F9F,transparent)}
+        .licon{font-size:clamp(36px,5vw,52px);margin-bottom:20px;display:block}
+        .lname{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,4vw,40px);font-weight:400;margin-bottom:6px}
+        .lname-s{color:#D0D0D0}.lname-g{color:#FFD54F}.lname-p{color:#F1E6E6}
+        .lthresh{font-size:12px;color:rgba(255,255,255,.4);margin-bottom:18px;letter-spacing:.05em}
+        .ldisc{font-size:clamp(48px,7vw,72px);font-weight:700;line-height:1;margin-bottom:4px}
+        .ld-s{color:#C0C0C0}.ld-g{color:#FFD54F}.ld-p{color:var(--accent)}
+        .llabel{font-size:13px;color:rgba(255,255,255,.45);margin-bottom:24px}
+        .lperks{list-style:none;display:flex;flex-direction:column;gap:10px;margin-bottom:24px}
+        .lperks li{display:flex;align-items:center;gap:10px;color:rgba(255,255,255,.75);font-size:14px}
+        .lperks li i{font-size:13px;flex-shrink:0}
+        .pi-s i{color:#A8A8A8}.pi-g i{color:#D4A017}.pi-p i{color:var(--accent)}
+        .lbtn{width:100%}
+        .lb-s{background:rgba(168,168,168,.15);color:#D0D0D0;border:1px solid rgba(168,168,168,.3)}
+        .lb-s:hover{background:rgba(168,168,168,.3)}
+        .lb-g{background:rgba(212,160,23,.15);color:#FFD54F;border:1px solid rgba(212,160,23,.3)}
+        .lb-g:hover{background:rgba(212,160,23,.3)}
+        .lb-p{background:rgba(200,159,159,.15);color:#F1E6E6;border:1px solid rgba(200,159,159,.3)}
+        .lb-p:hover{background:rgba(200,159,159,.3)}
+        .popular-tag{position:absolute;top:16px;right:16px;padding:4px 12px;border-radius:var(--r-pill);font-size:11px;font-weight:600;letter-spacing:.06em}
+        .pt-g{background:rgba(212,160,23,.2);border:1px solid rgba(212,160,23,.4);color:#FFD54F}
+        .pt-p{background:rgba(200,159,159,.15);border:1px solid rgba(200,159,159,.35);color:#F1E6E6}
+        .how-sec{background:var(--dark);padding:clamp(48px,8vw,100px) 0}
+        .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(200px,100%),1fr));gap:clamp(20px,3vw,32px);margin-top:clamp(32px,5vw,56px)}
+        .step{text-align:center;padding:clamp(20px,3vw,36px) clamp(12px,2vw,24px)}
+        .snum{width:52px;height:52px;border-radius:50%;background:rgba(200,159,159,.15);border:1px solid rgba(200,159,159,.3);color:var(--accent);font-size:18px;font-weight:700;display:flex;align-items:center;justify-content:center;margin:0 auto 16px}
+        .sicon{font-size:30px;margin-bottom:12px;display:block}
+        .stitle{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.5vw,24px);font-weight:400;color:#fff;margin-bottom:8px}
+        .stext{font-size:13px;color:rgba(255,255,255,.5);line-height:1.7}
+        .points-sec{padding:clamp(48px,8vw,100px) 0}
+        .pt-wrap{background:var(--white);border-radius:var(--r-lg);overflow:hidden;box-shadow:var(--shadow-sm)}
+        .pt-head{background:var(--dark);padding:22px 28px;display:flex;gap:14px;align-items:center}
+        .pt-head h3{font-family:'Cormorant Garamond',serif;font-size:clamp(18px,2.5vw,26px);font-weight:400;color:#fff}
+        .ptab{width:100%;border-collapse:collapse}
+        .ptab th{background:#F8F6F3;padding:13px 20px;text-align:left;font-size:13px;font-weight:600;color:var(--dark);border-bottom:1px solid #ECEAE7}
+        .ptab td{padding:13px 20px;border-bottom:1px solid #F0ECE8;font-size:14px}
+        .ptab tr:last-child td{border-bottom:none}
+        .ptab tr:hover td{background:#FBF9F7}
+        .pb{display:inline-flex;align-items:center;gap:4px;padding:3px 10px;border-radius:var(--r-pill);font-size:12px;font-weight:600}
+        .pb-s{background:#F0F0F0;color:#666}.pb-g{background:#FFF8E1;color:#B8860B}.pb-p{background:var(--accent-light);color:var(--accent)}
+        .ov{overflow-x:auto}
+        .calc-sec{background:var(--mid);padding:clamp(48px,8vw,100px) 0}
+        .calc-card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:var(--r-lg);padding:clamp(28px,5vw,56px);max-width:600px;margin-inline:auto;text-align:center}
+        .calc-card h3{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3.5vw,36px);font-weight:400;color:#fff;margin-bottom:8px}
+        .calc-card>p{color:rgba(255,255,255,.6);margin-bottom:28px;font-size:15px}
+        .cfield{width:100%;padding:14px 20px;border:1.5px solid rgba(255,255,255,.15);border-radius:var(--r-pill);background:rgba(255,255,255,.08);color:#fff;font-family:'Inter',sans-serif;font-size:15px;text-align:center;margin-bottom:8px;transition:var(--transition)}
+        .cfield:focus{outline:none;border-color:var(--accent);background:rgba(255,255,255,.12)}
+        .cfield::placeholder{color:rgba(255,255,255,.35)}
+        .cresult{background:rgba(200,159,159,.1);border:1px solid rgba(200,159,159,.25);border-radius:var(--r-md);padding:24px;margin-top:20px}
+        .clname{font-family:'Cormorant Garamond',serif;font-size:clamp(22px,3.5vw,36px);color:#fff;margin-bottom:4px}
+        .csave{font-size:clamp(16px,2.5vw,22px);font-weight:700;color:var(--accent);margin-bottom:8px}
+        .cdesc{font-size:13px;color:rgba(255,255,255,.5);line-height:1.6}
+        .prog-wrap{margin-top:14px}
+        .prog-label{display:flex;justify-content:space-between;font-size:11px;color:rgba(255,255,255,.45);margin-bottom:6px}
+        .prog-bar{height:5px;background:rgba(255,255,255,.1);border-radius:3px;overflow:hidden}
+        .prog-fill{height:100%;border-radius:3px;transition:width .6s ease}
+        .pf-s{background:linear-gradient(90deg,#A8A8A8,#D0D0D0)}
+        .pf-g{background:linear-gradient(90deg,#D4A017,#FFD54F)}
+        .pf-p{background:linear-gradient(90deg,var(--accent),#F1E6E6)}
+        .faq-sec{padding:clamp(48px,8vw,100px) 0}
+        .faq-item{background:var(--white);border-radius:var(--r-md);margin-bottom:12px;box-shadow:var(--shadow-sm);overflow:hidden}
+        .faq-q{display:flex;justify-content:space-between;align-items:center;padding:18px 24px;cursor:pointer;font-weight:500;gap:12px}
+        .faq-q i{color:var(--accent);transition:transform .3s;flex-shrink:0}
+        .faq-item.open .faq-q i{transform:rotate(45deg)}
+        .faq-a{max-height:0;overflow:hidden;transition:max-height .35s ease,padding .3s;color:var(--muted);font-size:14px;line-height:1.7;padding:0 24px}
+        .faq-item.open .faq-a{max-height:200px;padding:0 24px 18px}
+        .cta-sec{background:var(--accent-light);padding:clamp(48px,8vw,96px) 0;text-align:center}
+        .cta-sec h2{font-family:'Cormorant Garamond',serif;font-size:clamp(28px,5vw,56px);font-weight:400;color:var(--dark);margin-bottom:16px}
+        .cta-sec p{color:var(--muted);font-size:16px;margin-bottom:32px;max-width:480px;margin-inline:auto}
+        .cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        @media(max-width:768px){.hcta{flex-direction:column;align-items:center}.lg{grid-template-columns:1fr}}
+    </style>
+</head>
+<body>
+
+<header class="header">
+    <div class="container">
+        <div class="header-row">
+            <a href="index.html" class="logo">Blue<em>Clinik</em></a>
+            <nav style="display:flex;gap:10px;flex-wrap:wrap">
+                <a href="index.html" class="btn btn-outline btn-sm"><i class="fas fa-arrow-left"></i> На главную</a>
+                <a href="booking.html" class="btn btn-primary btn-sm"><i class="fas fa-calendar-check"></i> Записаться</a>
+                <a href="dashboard.html" class="btn btn-outline btn-sm" id="cabinetBtn" style="display:none"><i class="fas fa-user"></i> Кабинет</a>
+            </nav>
+        </div>
+    </div>
+</header>
+
+<section class="lhero">
+    <div class="lhero-inner">
+        <div class="container">
+            <div class="htag"><i class="fas fa-crown"></i> Программа лояльности</div>
+            <h1 class="htitle">Ваша красота<br>заслуживает <em>привилегий</em></h1>
+            <p class="hsub">Каждая процедура приближает вас к новому уровню. Три уровня привилегий — от Silver до Platinum.</p>
+            <div class="hcta">
+                <a href="booking.html" class="btn btn-accent" style="padding:13px 30px;font-size:15px"><i class="fas fa-star"></i> Начать накапливать баллы</a>
+                <a href="#levels" class="btn" style="background:rgba(255,255,255,.1);border:1.5px solid rgba(255,255,255,.25);color:#fff;padding:13px 30px;font-size:15px"><i class="fas fa-chevron-down"></i> Об уровнях</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="levels-sec" id="levels">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Три уровня привилегий</div>
+            <h2 class="section-title">Выберите свой <em>уровень</em></h2>
+            <p class="section-sub">Чем больше доверяете нам — тем щедрее наши привилегии</p>
+        </div>
+        <div class="lg">
+            <div class="lc lc-s">
+                <div class="lglow gs"></div>
+                <span class="licon">🥈</span>
+                <div class="lname lname-s">Silver</div>
+                <div class="lthresh">от 10 000 ₽ потраченных</div>
+                <div class="ldisc ld-s">5%</div>
+                <div class="llabel">скидка на все процедуры</div>
+                <ul class="lperks">
+                    <li class="pi-s"><i class="fas fa-check-circle"></i> Скидка 5% на все услуги</li>
+                    <li class="pi-s"><i class="fas fa-check-circle"></i> Приоритетная запись</li>
+                    <li class="pi-s"><i class="fas fa-check-circle"></i> Напоминание о процедурах</li>
+                    <li class="pi-s"><i class="fas fa-check-circle"></i> Поздравление в день рождения</li>
+                    <li class="pi-s"><i class="fas fa-gift"></i> Подарок при первом визите</li>
+                </ul>
+                <a href="booking.html" class="btn lbtn lb-s">Получить Silver</a>
+            </div>
+            <div class="lc lc-g" style="transform:scale(1.03)">
+                <div class="lglow gg"></div>
+                <div class="popular-tag pt-g">ПОПУЛЯРНЫЙ</div>
+                <span class="licon">🥇</span>
+                <div class="lname lname-g">Gold</div>
+                <div class="lthresh">от 50 000 ₽ потраченных</div>
+                <div class="ldisc ld-g">10%</div>
+                <div class="llabel">скидка на все процедуры</div>
+                <ul class="lperks">
+                    <li class="pi-g"><i class="fas fa-check-circle"></i> Скидка 10% на все услуги</li>
+                    <li class="pi-g"><i class="fas fa-check-circle"></i> Бесплатная консультация</li>
+                    <li class="pi-g"><i class="fas fa-check-circle"></i> Ранняя запись на акции</li>
+                    <li class="pi-g"><i class="fas fa-check-circle"></i> Персональный менеджер</li>
+                    <li class="pi-g"><i class="fas fa-gift"></i> Подарок 3 000 ₽ в день рождения</li>
+                    <li class="pi-g"><i class="fas fa-star"></i> Двойные баллы на всё</li>
+                </ul>
+                <a href="booking.html" class="btn lbtn lb-g">Получить Gold</a>
+            </div>
+            <div class="lc lc-p">
+                <div class="lglow gp"></div>
+                <div class="popular-tag pt-p">ПРЕМИУМ</div>
+                <span class="licon">💎</span>
+                <div class="lname lname-p">Platinum</div>
+                <div class="lthresh">от 150 000 ₽ потраченных</div>
+                <div class="ldisc ld-p">15%</div>
+                <div class="llabel">скидка на все процедуры</div>
+                <ul class="lperks">
+                    <li class="pi-p"><i class="fas fa-check-circle"></i> Скидка 15% на все услуги</li>
+                    <li class="pi-p"><i class="fas fa-check-circle"></i> VIP-приём без очереди</li>
+                    <li class="pi-p"><i class="fas fa-check-circle"></i> Закрытые мероприятия клиники</li>
+                    <li class="pi-p"><i class="fas fa-check-circle"></i> Комплиментарные процедуры</li>
+                    <li class="pi-p"><i class="fas fa-gift"></i> Подарок 10 000 ₽ в день рождения</li>
+                    <li class="pi-p"><i class="fas fa-crown"></i> Персональный beauty-план</li>
+                    <li class="pi-p"><i class="fas fa-star"></i> Тройные баллы на всё</li>
+                </ul>
+                <a href="booking.html" class="btn lbtn lb-p">Получить Platinum</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="how-sec" id="how">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag" style="background:rgba(200,159,159,.15);color:var(--accent)">Это просто</div>
+            <h2 class="section-title" style="color:#fff">Как <em>получить</em> привилегии</h2>
+            <p class="section-sub" style="color:rgba(255,255,255,.5)">Четыре шага до вашего уровня лояльности</p>
+        </div>
+        <div class="steps">
+            <div class="step"><div class="snum">1</div><span class="sicon">📝</span><div class="stitle">Зарегистрируйтесь</div><p class="stext">Создайте личный кабинет на сайте или попросите администратора при первом визите.</p></div>
+            <div class="step"><div class="snum">2</div><span class="sicon">💆</span><div class="stitle">Посещайте процедуры</div><p class="stext">За каждый потраченный рубль автоматически начисляются баллы. 1 рубль = 1 балл.</p></div>
+            <div class="step"><div class="snum">3</div><span class="sicon">🏆</span><div class="stitle">Получите уровень</div><p class="stext">При достижении порога вы автоматически переходите на следующий уровень.</p></div>
+            <div class="step"><div class="snum">4</div><span class="sicon">🎁</span><div class="stitle">Пользуйтесь скидками</div><p class="stext">Скидки применяются при каждом визите. Баллы можно тратить как рубли.</p></div>
+        </div>
+    </div>
+</section>
+
+<section class="points-sec" id="points">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Начисление баллов</div>
+            <h2 class="section-title">За что вы <em>получаете</em> баллы</h2>
+        </div>
+        <div class="pt-wrap">
+            <div class="pt-head"><i class="fas fa-star" style="color:var(--accent);font-size:18px"></i><h3>Таблица начисления баллов</h3></div>
+            <div class="ov">
+                <table class="ptab">
+                    <thead><tr><th>Действие</th><th>Silver</th><th>Gold</th><th>Platinum</th></tr></thead>
+                    <tbody>
+                        <tr><td>Каждые 100 ₽ на процедуру</td><td><span class="pb pb-s">100 баллов</span></td><td><span class="pb pb-g">200 баллов</span></td><td><span class="pb pb-p">300 баллов</span></td></tr>
+                        <tr><td>Первый визит</td><td><span class="pb pb-s">500</span></td><td><span class="pb pb-g">1 000</span></td><td><span class="pb pb-p">1 500</span></td></tr>
+                        <tr><td>Рекомендация другу</td><td><span class="pb pb-s">1 000</span></td><td><span class="pb pb-g">2 000</span></td><td><span class="pb pb-p">3 000</span></td></tr>
+                        <tr><td>День рождения (в месяц)</td><td><span class="pb pb-s">500</span></td><td><span class="pb pb-g">3 000</span></td><td><span class="pb pb-p">10 000</span></td></tr>
+                        <tr><td>Отзыв с фото</td><td><span class="pb pb-s">300</span></td><td><span class="pb pb-g">600</span></td><td><span class="pb pb-p">900</span></td></tr>
+                        <tr><td style="font-weight:600">1 балл =</td><td colspan="3" style="color:var(--muted)">1 ₽ скидки при следующем визите</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="calc-sec" id="calculator">
+    <div class="container">
+        <div class="calc-card">
+            <h3>Калькулятор уровня</h3>
+            <p>Введите сумму, которую вы уже потратили в клинике</p>
+            <input type="number" class="cfield" id="spendInput" placeholder="Например: 25 000 ₽" min="0" step="1000">
+            <div class="cresult" id="calcResult" style="display:none">
+                <div class="clname" id="resLevel"></div>
+                <div class="csave" id="resSavings"></div>
+                <div class="cdesc" id="resDesc"></div>
+                <div class="prog-wrap" id="progWrap">
+                    <div class="prog-label"><span id="progFrom"></span><span id="progTo"></span></div>
+                    <div class="prog-bar"><div class="prog-fill" id="progFill" style="width:0%"></div></div>
+                </div>
+            </div>
+            <p style="color:rgba(255,255,255,.3);font-size:12px;margin-top:14px">* расчёт приблизительный</p>
+        </div>
+    </div>
+</section>
+
+<section class="faq-sec">
+    <div class="container">
+        <div class="section-header">
+            <div class="section-tag">Вопросы</div>
+            <h2 class="section-title">Частые <em>вопросы</em></h2>
+        </div>
+        <div style="max-width:760px;margin-inline:auto">
+            <div class="faq-item"><div class="faq-q"><span>Как узнать свой текущий уровень?</span><i class="fas fa-plus"></i></div><div class="faq-a">Ваш уровень и количество баллов доступны в личном кабинете на сайте. Администратор клиники также может сообщить эту информацию при визите.</div></div>
+            <div class="faq-item"><div class="faq-q"><span>Сгорают ли баллы?</span><i class="fas fa-plus"></i></div><div class="faq-a">Баллы действительны 12 месяцев с момента начисления. Если вы не посещали клинику более года, неиспользованные баллы сгорают. Уровень сохраняется при регулярных визитах (раз в год).</div></div>
+            <div class="faq-item"><div class="faq-q"><span>Можно использовать баллы и скидку одновременно?</span><i class="fas fa-plus"></i></div><div class="faq-a">Да! Скидка уровня применяется автоматически, а баллы можно использовать дополнительно или продолжать накапливать.</div></div>
+            <div class="faq-item"><div class="faq-q"><span>Как перейти на следующий уровень быстрее?</span><i class="fas fa-plus"></i></div><div class="faq-a">Пишите отзывы, рекомендуйте нас друзьям и приходите на день рождения — за всё это начисляются дополнительные баллы, которые ускоряют переход.</div></div>
+        </div>
+    </div>
+</section>
+
+<section class="cta-sec">
+    <div class="container">
+        <h2>Начните копить <em>привилегии</em> уже сегодня</h2>
+        <p>Запишитесь на первую процедуру — ваш Silver-уровень начнётся с первого визита</p>
+        <div class="cta-btns">
+            <a href="booking.html" class="btn btn-primary" style="padding:13px 30px;font-size:15px"><i class="fas fa-calendar-plus"></i> Записаться онлайн</a>
+            <a href="register.html" class="btn btn-outline" style="padding:13px 30px;font-size:15px"><i class="fas fa-user-plus"></i> Создать аккаунт</a>
+        </div>
+    </div>
+</section>
+
+<script src="auth.js"></script>
+<script>
+(function(){if(typeof getCurrentUser==='function'){const u=getCurrentUser();const b=document.getElementById('cabinetBtn');if(u&&b)b.style.display='inline-flex';}})();
+document.querySelectorAll('.faq-item').forEach(item=>{item.querySelector('.faq-q').addEventListener('click',()=>{const was=item.classList.contains('open');document.querySelectorAll('.faq-item').forEach(i=>i.classList.remove('open'));if(!was)item.classList.add('open');});});
+document.querySelectorAll('a[href^="#"]').forEach(a=>{a.addEventListener('click',e=>{const t=document.querySelector(a.getAttribute('href'));if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth',block:'start'});}});});
+const LVLS=[{name:'🥈 Silver',from:0,to:50000,disc:5,next:'Gold',cls:'pf-s'},{name:'🥇 Gold',from:50000,to:150000,disc:10,next:'Platinum',cls:'pf-g'},{name:'💎 Platinum',from:150000,to:Infinity,disc:15,next:null,cls:'pf-p'}];
+document.getElementById('spendInput').addEventListener('input',function(){
+    const v=parseInt(this.value)||0;
+    const box=document.getElementById('calcResult');
+    if(v<=0){box.style.display='none';return;}
+    box.style.display='block';
+    const l=LVLS.find(x=>v<x.to)||LVLS[LVLS.length-1];
+    document.getElementById('resLevel').textContent=l.name;
+    document.getElementById('resSavings').textContent='Скидка '+l.disc+'% · экономия ~'+(Math.round(v*l.disc/100)).toLocaleString('ru-RU')+' ₽';
+    if(l.next){
+        document.getElementById('resDesc').textContent='До уровня '+l.next+' осталось '+(l.to-v).toLocaleString('ru-RU')+' ₽';
+        const pct=Math.min(100,((v-l.from)/(l.to-l.from))*100);
+        const f=document.getElementById('progFill');f.style.width=pct+'%';f.className='prog-fill '+l.cls;
+        document.getElementById('progFrom').textContent=l.name.split(' ')[1]||'';
+        document.getElementById('progTo').textContent=l.next;
+        document.getElementById('progWrap').style.display='block';
+    } else {
+        document.getElementById('resDesc').textContent='Вы достигли максимального уровня Platinum!';
+        document.getElementById('progWrap').style.display='none';
+    }
+});
+</script>
+</body>
+</html>
