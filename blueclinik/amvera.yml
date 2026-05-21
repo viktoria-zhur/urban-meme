@@ -1,0 +1,11 @@
+meta:
+  environment: php
+  toolchain:
+    name: composer
+    version: "8.2"
+build: {}
+run:
+  command: apache2-foreground
+  persistenceMount: /data
+  containerPort: "80"
+  servicePort: "80"

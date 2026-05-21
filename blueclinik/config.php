@@ -1,10 +1,10 @@
 <?php
 session_start();
 
-$host = 'localhost';           // Обычно localhost
-$dbname = 'b91376ht_liret';     // Имя вашей базы данных
-$username = 'b91376ht_liret';       // Логин от базы (выдаёт SpaceWeb)
-$password = 'Z0jiZnBwti%t';      // Пароль от базы
+$host = 'amvera-sonika-run-blueclinik'; // Например, mysql-project.amvera.io
+$dbname = 'blueclinik_db';                 // Имя базы данных (MYSQL_DATABASE)
+$username = 'blueclinik_user';             // Имя пользователя (MYSQL_USER)
+$password = 'Z0jiZnBwti%t';     // Пароль (MYSQL_PASSWORD)
 
 try {
     $pdo = new PDO("mysql:host=$host;dbname=$dbname;charset=utf8mb4", $username, $password);
