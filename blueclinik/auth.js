@@ -1,36 +1,38 @@
-const STORAGE_KEY = 'blueclinik_users';
-const CURRENT_USER_KEY = 'blueclinik_current_user';
-const ADMINS_KEY = 'blueclinik_admins';
+// auth.js — ПОЛНАЯ СЕРВЕРНАЯ ВЕРСИЯ
+// Полностью заменяет старый файл
 
-function getUsers() {
-    const users = localStorage.getItem(STORAGE_KEY);
-    return users ? JSON.parse(users) : [];
+async function apiRequest(endpoint, data) {
+    const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(data)
+    });
+    return await response.json();
 }
 
-function saveUsers(users) {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(users));
+async function register(fullname, email, phone, password, role = 'client') {
+    return await apiRequest('register.php', { fullname, email, phone, password, role });
 }
 
-function getAdmins() {
-    const admins = localStorage.getItem(ADMINS_KEY);
-    return admins ? JSON.parse(admins) : [];
-}
-
-function saveAdmins(admins) {
-    localStorage.setItem(ADMINS_KEY, JSON.stringify(admins));
+async function login(email, password) {
+    const result = await apiRequest('login.php', { email, password });
+    if (result.success && result.user) {
+        saveCurrentUser(result.user);
+    }
+    return result;
 }
 
 function getCurrentUser() {
-    const user = localStorage.getItem(CURRENT_USER_KEY);
+    const user = localStorage.getItem('blueclinik_current_user');
     return user ? JSON.parse(user) : null;
 }
 
 function saveCurrentUser(user) {
-    localStorage.setItem(CURRENT_USER_KEY, JSON.stringify(user));
+    localStorage.setItem('blueclinik_current_user', JSON.stringify(user));
 }
 
 function logout() {
-    localStorage.removeItem(CURRENT_USER_KEY);
+    localStorage.removeItem('blueclinik_current_user');
     window.location.href = 'index.html';
 }
 
@@ -45,227 +47,68 @@ function checkAuth() {
 
 function checkGuest() {
     const user = getCurrentUser();
-    
     if (user) {
-        if (user.role === 'admin') {
-            window.location.href = 'admin.html';
-        } else if (user.role === 'master') {
-            window.location.href = 'master-dashboard.html';
-        } else {
-            window.location.href = 'dashboard.html';
-        }
+        if (user.role === 'admin') window.location.href = 'admin.html';
+        else if (user.role === 'master') window.location.href = 'master-dashboard.html';
+        else window.location.href = 'dashboard.html';
         return false;
     }
     return true;
 }
 
-function isAdmin(userId) {
-    const admins = getAdmins();
-    return admins.includes(userId);
+function isAdmin(user) {
+    return user && (user.email === 'yusupova25@yandex.ru' || user.isAdmin === true);
 }
 
-function isMaster(user) {
-    return user && user.role === 'master';
+// API для работы с расписанием и услугами
+async function getMasters() {
+    return await apiRequest('api_get_masters.php', {});
 }
 
-// Регистрация ТОЛЬКО для клиентов
-function register(fullname, email, phone, password, role = 'client') {
-    const users = getUsers();
-    
-    if (users.find(u => u.email === email)) {
-        return { success: false, error: 'Пользователь с таким email уже существует' };
-    }
-    
-    if (password.length < 6) {
-        return { success: false, error: 'Пароль должен быть не менее 6 символов' };
-    }
-    
-    const newUser = {
-        id: Date.now(),
-        fullname: fullname,
-        email: email,
-        phone: phone,
-        password: password,
-        role: 'client',
-        createdAt: new Date().toISOString()
-    };
-    
-    users.push(newUser);
-    saveUsers(users);
-    
-    saveCurrentUser({
-        id: newUser.id,
-        fullname: newUser.fullname,
-        email: newUser.email,
-        phone: newUser.phone,
-        role: 'client',
-        createdAt: newUser.createdAt,
-        isAdmin: false
-    });
-    
-    return { success: true };
+async function getMasterServices(masterId) {
+    return await apiRequest('api_get_master_services.php', { masterId });
 }
 
-// Создание мастера (только для админа)
-function createMasterByAdmin(fullname, email, phone, password, specialization = '') {
-    const currentUser = getCurrentUser();
-    const isAdminUser = currentUser && (currentUser.email === 'yusupova25@yandex.ru' || currentUser.isAdmin === true);
-    
-    if (!isAdminUser) {
-        return { success: false, error: 'Доступ запрещен. Только для администратора' };
-    }
-    
-    const users = getUsers();
-    
-    if (users.find(u => u.email === email)) {
-        return { success: false, error: 'Пользователь с таким email уже существует' };
-    }
-    
-    if (password.length < 6) {
-        return { success: false, error: 'Пароль должен быть не менее 6 символов' };
-    }
-    
-    const newMaster = {
-        id: Date.now(),
-        fullname: fullname,
-        email: email,
-        phone: phone,
-        password: password,
-        role: 'master',
-        specialization: specialization,
-        createdAt: new Date().toISOString()
-    };
-    
-    users.push(newMaster);
-    saveUsers(users);
-    
-    // Дефолтные услуги
-    const defaultServices = [
-        { name: 'SMAS-лифтинг', price: 50990, duration: 60 },
-        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
-        { name: 'RF-лифтинг лица', price: 6900, duration: 30 }
-    ];
-    localStorage.setItem(`services_${newMaster.id}`, JSON.stringify(defaultServices));
-    
-    // Дефолтное расписание
-    const defaultSchedule = {
-        monday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
-        tuesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
-        wednesday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
-        thursday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
-        friday: { enabled: true, hours: ['09:00', '10:00', '11:00', '12:00', '13:00', '14:00', '15:00', '16:00', '17:00'] },
-        saturday: { enabled: false, hours: [] },
-        sunday: { enabled: false, hours: [] }
-    };
-    localStorage.setItem(`schedule_${newMaster.id}`, JSON.stringify(defaultSchedule));
-    
-    return { success: true, master: newMaster };
+async function getAvailableSlots(masterId, date) {
+    return await apiRequest('api_get_available_slots.php', { masterId, date });
 }
 
-// Получить всех мастеров
-function getAllMasters() {
-    const users = getUsers();
-    return users.filter(u => u.role === 'master');
+async function createAppointment(clientId, masterId, serviceName, servicePrice, date, time) {
+    return await apiRequest('api_create_appointment.php', { clientId, masterId, serviceName, servicePrice, date, time });
 }
 
-// Удалить мастера
-function deleteMaster(masterId) {
-    const currentUser = getCurrentUser();
-    const isAdminUser = currentUser && (currentUser.email === 'yusupova25@yandex.ru' || currentUser.isAdmin === true);
-    
-    if (!isAdminUser) {
-        return { success: false, error: 'Доступ запрещен' };
-    }
-    
-    let users = getUsers();
-    const master = users.find(u => u.id === masterId && u.role === 'master');
-    
-    if (!master) {
-        return { success: false, error: 'Мастер не найден' };
-    }
-    
-    users = users.filter(u => u.id !== masterId);
-    saveUsers(users);
-    
-    localStorage.removeItem(`services_${masterId}`);
-    localStorage.removeItem(`schedule_${masterId}`);
-    
-    return { success: true };
+// Для админ-панели
+async function createMasterByAdmin(fullname, email, phone, password, specialization) {
+    return await apiRequest('api_create_master.php', { fullname, email, phone, password, specialization });
 }
 
-// Вход в систему
-function login(email, password) {
-    const users = getUsers();
-    let admins = getAdmins();
-    
-    // Администратор
-    const adminEmail = 'yusupova25@yandex.ru';
-    const adminPassword = 'qwert12';
-    const ADMIN_ID = 777777;
-    
-    if (email === adminEmail && password === adminPassword) {
-        let adminUser = users.find(u => u.email === adminEmail);
-        
-        if (!adminUser) {
-            adminUser = {
-                id: ADMIN_ID,
-                fullname: 'Мария Юсупова',
-                email: adminEmail,
-                phone: '+799999999',
-                password: adminPassword,
-                role: 'admin',
-                createdAt: new Date().toISOString()
-            };
-            users.push(adminUser);
-            saveUsers(users);
-        }
-        
-        if (!admins.includes(ADMIN_ID)) {
-            admins.push(ADMIN_ID);
-            saveAdmins(admins);
-        }
-        
-        saveCurrentUser({
-            id: ADMIN_ID,
-            fullname: adminUser.fullname,
-            email: adminEmail,
-            phone: adminUser.phone,
-            role: 'admin',
-            createdAt: adminUser.createdAt,
-            isAdmin: true
-        });
-        
-        return { success: true };
-    }
-    
-    // Обычный пользователь или косметолог
-    const user = users.find(u => u.email === email && u.password === password);
-    
-    if (!user) {
-        return { success: false, error: 'Неверный email или пароль' };
-    }
-    
-    // Сохраняем пользователя с его ролью
-    saveCurrentUser({
-        id: user.id,
-        fullname: user.fullname,
-        email: user.email,
-        phone: user.phone,
-        role: user.role || 'client',
-        specialization: user.specialization || '',
-        createdAt: user.createdAt,
-        isAdmin: user.role === 'admin'
-    });
-    
-    return { success: true };
+async function deleteMaster(masterId) {
+    return await apiRequest('api_delete_master.php', { masterId });
 }
 
-// Экспорт
+async function getAllMasters() {
+    const response = await apiRequest('api_get_masters.php', {});
+    return response.masters || [];
+}
+
+// Функции для совместимости со старым кодом (если где-то используются)
+function getUsers() {
+    return [];
+}
+
+function saveUsers() {}
+
+function getAdmins() {
+    return [];
+}
+
+function saveAdmins() {}
+
+// Экспорт для Node.js (если нужно)
 if (typeof module !== 'undefined' && module.exports) {
     module.exports = { 
-        getUsers, saveUsers, getCurrentUser, saveCurrentUser, 
-        logout, checkAuth, checkGuest, register, login, 
-        getAdmins, saveAdmins, isAdmin, isMaster, getAllMasters, 
-        createMasterByAdmin, deleteMaster
+        register, login, getCurrentUser, saveCurrentUser, logout, 
+        checkAuth, checkGuest, isAdmin, getMasters, getMasterServices,
+        getAvailableSlots, createAppointment, createMasterByAdmin, deleteMaster, getAllMasters
     };
 }

@@ -13,6 +13,8 @@
             --primary-medium: #1F3E5C; --accent: #C89F9F; --accent-light: #F1E6E6;
             --text-dark: #1A2C3A; --text-medium: #5D6F7F; --shadow: 0 8px 28px -6px rgba(0,0,0,0.06);
             --shadow-hover: 0 20px 32px -12px rgba(0,0,0,0.12);
+            --danger: #EF5350;
+            --success: #4CAF50;
         }
         body {
             font-family: 'Inter', sans-serif;
@@ -55,6 +57,7 @@
             border: none;
             font-size: 14px;
             text-decoration: none;
+            font-family: inherit;
         }
         .btn-outline {
             background: transparent;
@@ -64,6 +67,14 @@
         .btn-outline:hover {
             background: var(--primary-dark);
             color: white;
+        }
+        .btn-primary {
+            background: var(--primary-dark);
+            color: white;
+        }
+        .btn-primary:hover {
+            background: var(--primary-medium);
+            transform: translateY(-2px);
         }
         .booking-card {
             background: var(--card-bg);
@@ -94,12 +105,51 @@
             color: var(--accent);
             margin-right: 12px;
         }
-        .services-grid, .doctors-grid {
+        .masters-grid, .services-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 24px;
         }
-        /* Стили для услуг (ТОЛЬКО ИКОНКИ, без фото) */
+        .master-card {
+            background: var(--bg-page);
+            border-radius: 28px;
+            cursor: pointer;
+            transition: all 0.25s ease;
+            border: 2px solid transparent;
+            overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        .master-card.selected {
+            border-color: var(--accent);
+            background: white;
+            box-shadow: var(--shadow-hover);
+        }
+        .master-img {
+            height: 200px;
+            overflow: hidden;
+        }
+        .master-img img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.3s;
+        }
+        .master-card:hover .master-img img {
+            transform: scale(1.03);
+        }
+        .master-info {
+            padding: 16px;
+            text-align: center;
+        }
+        .master-name {
+            font-weight: 700;
+            font-size: 18px;
+            margin-bottom: 6px;
+        }
+        .master-spec {
+            font-size: 13px;
+            color: var(--text-medium);
+        }
         .service-card {
             background: var(--bg-page);
             border-radius: 28px;
@@ -129,47 +179,6 @@
             color: var(--accent);
             font-weight: 600;
             font-size: 16px;
-        }
-        /* Стили для врачей (С ФОТО) */
-        .doctor-card {
-            background: var(--bg-page);
-            border-radius: 28px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border: 2px solid transparent;
-            overflow: hidden;
-            box-shadow: var(--shadow);
-        }
-        .doctor-card.selected {
-            border-color: var(--accent);
-            background: white;
-            box-shadow: var(--shadow-hover);
-        }
-        .doctor-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        .doctor-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        .doctor-card:hover .doctor-img img {
-            transform: scale(1.03);
-        }
-        .doctor-info {
-            padding: 16px;
-            text-align: center;
-        }
-        .doctor-name {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-        .doctor-spec {
-            font-size: 13px;
-            color: var(--text-medium);
         }
         .date-time-grid {
             display: flex;
@@ -203,6 +212,11 @@
             color: white;
             border-color: var(--primary-dark);
         }
+        .time-slot.disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            background: #E8E3DC;
+        }
         input[type="date"] {
             padding: 14px 20px;
             border-radius: 60px;
@@ -210,21 +224,14 @@
             font-family: inherit;
             width: 100%;
             font-size: 15px;
-        }
-        .btn-primary {
-            background: var(--primary-dark);
-            color: white;
-            padding: 14px 32px;
-            font-size: 16px;
-        }
-        .btn-primary:hover {
-            background: var(--primary-medium);
-            transform: translateY(-2px);
+            background: var(--bg-page);
         }
         .btn-large {
             width: 100%;
             justify-content: center;
             margin-top: 12px;
+            padding: 14px 32px;
+            font-size: 16px;
         }
         .alert {
             background: #E8F5E9;
@@ -238,9 +245,27 @@
         .alert.show {
             display: flex;
         }
+        .alert.error {
+            background: #FFEBEE;
+            color: var(--danger);
+        }
+        .alert.success {
+            background: #E8F5E9;
+            color: var(--success);
+        }
+        .loading {
+            text-align: center;
+            padding: 40px;
+            color: var(--text-medium);
+        }
+        .loading i {
+            font-size: 40px;
+            margin-bottom: 12px;
+            display: block;
+        }
         @media (max-width: 768px) {
             .booking-card { padding: 24px; }
-            .services-grid, .doctors-grid { grid-template-columns: 1fr; }
+            .masters-grid, .services-grid { grid-template-columns: 1fr; }
         }
     </style>
 </head>
@@ -260,20 +285,22 @@
 
         <div id="alertMessage" class="alert"></div>
 
-        <!-- Шаг 1: Услуги с ИКОНКАМИ (без фото) -->
+        <!-- Шаг 1: Выбор специалиста -->
         <div class="step">
-            <h3><i class="fas fa-spa"></i> 1. Выберите процедуру</h3>
-            <div class="services-grid" id="servicesList"></div>
+            <h3><i class="fas fa-user-md"></i> 1. Выберите специалиста</h3>
+            <div id="mastersList" class="masters-grid">
+                <div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка специалистов...</div>
+            </div>
         </div>
 
-        <!-- Шаг 2: Врачи с ФОТО -->
-        <div class="step">
-            <h3><i class="fas fa-user-md"></i> 2. Выберите специалиста</h3>
-            <div class="doctors-grid" id="doctorsList"></div>
+        <!-- Шаг 2: Выбор услуги -->
+        <div class="step" id="servicesStep" style="display: none;">
+            <h3><i class="fas fa-spa"></i> 2. Выберите процедуру</h3>
+            <div id="servicesList" class="services-grid"></div>
         </div>
 
         <!-- Шаг 3: Дата и время -->
-        <div class="step">
+        <div class="step" id="datetimeStep" style="display: none;">
             <h3><i class="far fa-clock"></i> 3. Удобные дата и время</h3>
             <div class="date-time-grid">
                 <div class="datepicker">
@@ -282,12 +309,12 @@
                 </div>
                 <div class="time-slots">
                     <label>⏰ Доступное время:</label>
-                    <div class="time-slots-grid" id="timeSlotsList"></div>
+                    <div id="timeSlotsList" class="time-slots-grid"></div>
                 </div>
             </div>
         </div>
 
-        <button class="btn btn-primary btn-large" id="submitBookingBtn">
+        <button class="btn btn-primary btn-large" id="submitBookingBtn" style="display: none;">
             <i class="fas fa-check-circle"></i> Подтвердить запись
         </button>
     </div>
@@ -295,81 +322,205 @@
 
 <script src="auth.js"></script>
 <script>
-    // ----- УСЛУГИ ТОЛЬКО С ИКОНКАМИ (БЕЗ ФОТО) -----
-    const SERVICES = [
-        { id: 1, name: "Консультация косметолога", price: 3990, icon: "fas fa-stethoscope" },
-        { id: 2, name: "Чистка лица", price: 4500, icon: "fas fa-face-smile" },
-        { id: 3, name: "SMAS-лифтинг", price: 50990, icon: "fas fa-arrow-up" },
-        { id: 4, name: "Биоревитализация REVI", price: 15990, icon: "fas fa-droplet" },
-        { id: 5, name: "RF-лифтинг лица", price: 6900, icon: "fas fa-bolt" },
-        { id: 6, name: "Лазерная шлифовка", price: 14900, icon: "fas fa-lightbulb" },
-        { id: 7, name: "Ботокс / Релатокс", price: 12500, icon: "fas fa-syringe" }
-    ];
-
-    // ----- ВРАЧИ С ФОТО (оставляем как есть — красиво и профессионально) -----
-    const DOCTORS = [
-        { id: 1, name: "Виктория Левченко", spec: "Дерматолог, топ-косметолог", img: "https://randomuser.me/api/portraits/women/68.jpg" },
-        { id: 2, name: "Яна Плотникова", spec: "Косметолог, лазеротерапевт", img: "https://randomuser.me/api/portraits/women/65.jpg" },
-        { id: 3, name: "Ксения Белоусова", spec: "Дерматолог, трихолог", img: "https://randomuser.me/api/portraits/women/44.jpg" },
-        { id: 4, name: "Маргарита Тихонова", spec: "Лазеротерапевт, косметолог", img: "https://randomuser.me/api/portraits/women/90.jpg" }
-    ];
-
-    const TIME_SLOTS = ["09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00"];
-
+    // Переменные состояния
+    let masters = [];
+    let selectedMaster = null;
     let selectedService = null;
-    let selectedDoctor = null;
     let selectedTime = null;
+    let currentUser = null;
 
-    // --- Отрисовка услуг с ИКОНКАМИ ---
-    function renderServices() {
-        const container = document.getElementById('servicesList');
-        container.innerHTML = SERVICES.map(service => `
-            <div class="service-card" data-id="${service.id}">
-                <div class="service-icon"><i class="${service.icon}"></i></div>
-                <div class="service-info">
-                    <div class="service-name">${service.name}</div>
-                    <div class="service-price">${service.price.toLocaleString()} ₽</div>
+    // Иконки для услуг
+    const SERVICE_ICONS = {
+        'Консультация': 'fas fa-stethoscope',
+        'Чистка': 'fas fa-face-smile',
+        'SMAS': 'fas fa-arrow-up',
+        'Биоревитализация': 'fas fa-droplet',
+        'RF-лифтинг': 'fas fa-bolt',
+        'Лазерная': 'fas fa-lightbulb',
+        'Ботокс': 'fas fa-syringe',
+        'default': 'fas fa-spa'
+    };
+
+    function getServiceIcon(serviceName) {
+        for (const [key, icon] of Object.entries(SERVICE_ICONS)) {
+            if (serviceName.includes(key)) return icon;
+        }
+        return SERVICE_ICONS.default;
+    }
+
+    // Показать уведомление
+    function showAlert(msg, type = 'success') {
+        const alertDiv = document.getElementById('alertMessage');
+        alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> ${msg}`;
+        alertDiv.className = `alert show ${type}`;
+        setTimeout(() => alertDiv.classList.remove('show'), 4000);
+    }
+
+    // Установка минимальной даты (сегодня)
+    function setMinDate() {
+        const today = new Date().toISOString().split('T')[0];
+        document.getElementById('appointmentDate').min = today;
+        document.getElementById('appointmentDate').value = today;
+    }
+
+    // Загрузка специалистов с сервера
+    async function loadMasters() {
+        const container = document.getElementById('mastersList');
+        try {
+            const response = await fetch('api_get_masters.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({})
+            });
+            const data = await response.json();
+            
+            if (data.success && data.masters && data.masters.length > 0) {
+                masters = data.masters;
+                renderMasters();
+            } else {
+                container.innerHTML = '<div class="loading"><i class="fas fa-user-md"></i><br>Нет доступных специалистов</div>';
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки мастеров:', error);
+            container.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки специалистов</div>';
+        }
+    }
+
+    // Отображение списка специалистов
+    function renderMasters() {
+        const container = document.getElementById('mastersList');
+        
+        // Для демонстрации используем фото из randomuser.me
+        const defaultImages = [
+            'https://randomuser.me/api/portraits/women/68.jpg',
+            'https://randomuser.me/api/portraits/women/65.jpg',
+            'https://randomuser.me/api/portraits/women/44.jpg',
+            'https://randomuser.me/api/portraits/women/90.jpg'
+        ];
+        
+        container.innerHTML = masters.map((master, index) => `
+            <div class="master-card" data-id="${master.id}">
+                <div class="master-img">
+                    <img src="${defaultImages[index % defaultImages.length]}" alt="${master.fullname}">
+                </div>
+                <div class="master-info">
+                    <div class="master-name">${escapeHtml(master.fullname)}</div>
+                    <div class="master-spec">${escapeHtml(master.specialization || 'Косметолог')}</div>
                 </div>
             </div>
         `).join('');
+        
+        // Добавляем обработчики клика
+        document.querySelectorAll('.master-card').forEach(card => {
+            card.addEventListener('click', () => {
+                document.querySelectorAll('.master-card').forEach(c => c.classList.remove('selected'));
+                card.classList.add('selected');
+                const id = parseInt(card.dataset.id);
+                selectedMaster = masters.find(m => m.id === id);
+                loadServices(selectedMaster.id);
+            });
+        });
+    }
+
+    // Загрузка услуг выбранного мастера
+    async function loadServices(masterId) {
+        const servicesContainer = document.getElementById('servicesList');
+        const servicesStep = document.getElementById('servicesStep');
+        
+        servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка услуг...</div>';
+        servicesStep.style.display = 'block';
+        
+        try {
+            const response = await fetch('api_get_master_services.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ masterId: masterId })
+            });
+            const data = await response.json();
+            
+            if (data.success && data.services && data.services.length > 0) {
+                renderServices(data.services);
+            } else {
+                servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-syringe"></i><br>Нет доступных услуг</div>';
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки услуг:', error);
+            servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки услуг</div>';
+        }
+    }
+
+    // Отображение списка услуг
+    function renderServices(services) {
+        const container = document.getElementById('servicesList');
+        
+        container.innerHTML = services.map(service => `
+            <div class="service-card" data-id="${service.id}" data-price="${service.price}" data-name="${escapeHtml(service.name)}">
+                <div class="service-icon"><i class="${getServiceIcon(service.name)}"></i></div>
+                <div class="service-name">${escapeHtml(service.name)}</div>
+                <div class="service-price">${service.price.toLocaleString()} ₽</div>
+            </div>
+        `).join('');
+        
         document.querySelectorAll('.service-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('.service-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
-                const id = parseInt(card.dataset.id);
-                selectedService = SERVICES.find(s => s.id === id);
+                selectedService = {
+                    id: parseInt(card.dataset.id),
+                    name: card.dataset.name,
+                    price: parseInt(card.dataset.price)
+                };
+                
+                // Показываем шаг с датой и временем
+                document.getElementById('datetimeStep').style.display = 'block';
+                document.getElementById('submitBookingBtn').style.display = 'flex';
+                
+                // Обновляем доступное время при смене услуги
+                const selectedDate = document.getElementById('appointmentDate').value;
+                if (selectedDate) {
+                    loadAvailableSlots(selectedDate);
+                }
             });
         });
     }
 
-    // --- Отрисовка врачей с ФОТО ---
-    function renderDoctors() {
-        const container = document.getElementById('doctorsList');
-        container.innerHTML = DOCTORS.map(doc => `
-            <div class="doctor-card" data-id="${doc.id}">
-                <div class="doctor-img"><img src="${doc.img}" alt="${doc.name}"></div>
-                <div class="doctor-info">
-                    <div class="doctor-name">${doc.name}</div>
-                    <div class="doctor-spec">${doc.spec}</div>
-                </div>
-            </div>
-        `).join('');
-        document.querySelectorAll('.doctor-card').forEach(card => {
-            card.addEventListener('click', () => {
-                document.querySelectorAll('.doctor-card').forEach(c => c.classList.remove('selected'));
-                card.classList.add('selected');
-                const id = parseInt(card.dataset.id);
-                selectedDoctor = DOCTORS.find(d => d.id === id);
-            });
-        });
-    }
-
-    // --- Время ---
-    function renderTimeSlots() {
+    // Загрузка доступных слотов
+    async function loadAvailableSlots(date) {
+        if (!selectedMaster) return;
+        
         const container = document.getElementById('timeSlotsList');
-        container.innerHTML = TIME_SLOTS.map(time => `
+        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка времени...</div>';
+        selectedTime = null;
+        
+        try {
+            const response = await fetch('api_get_available_slots.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ masterId: selectedMaster.id, date: date })
+            });
+            const data = await response.json();
+            
+            if (data.success && data.slots && data.slots.length > 0) {
+                renderTimeSlots(data.slots);
+            } else if (data.error) {
+                container.innerHTML = `<div class="loading"><i class="fas fa-ban"></i><br>${data.error}</div>`;
+            } else {
+                container.innerHTML = '<div class="loading"><i class="fas fa-calendar-times"></i><br>Нет доступного времени на выбранную дату</div>';
+            }
+        } catch (error) {
+            console.error('Ошибка загрузки слотов:', error);
+            container.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки времени</div>';
+        }
+    }
+
+    // Отображение доступных слотов
+    function renderTimeSlots(slots) {
+        const container = document.getElementById('timeSlotsList');
+        
+        container.innerHTML = slots.map(time => `
             <div class="time-slot" data-time="${time}">${time}</div>
         `).join('');
+        
         document.querySelectorAll('.time-slot').forEach(slot => {
             slot.addEventListener('click', () => {
                 document.querySelectorAll('.time-slot').forEach(s => s.classList.remove('selected'));
@@ -379,60 +530,121 @@
         });
     }
 
-    // --- Сохранение записи ---
-    function saveAppointment() {
+    // Создание записи
+    async function createAppointment() {
         const currentUser = getCurrentUser();
+        
         if (!currentUser) {
-            alert('Пожалуйста, войдите в аккаунт, чтобы записаться.');
-            window.location.href = 'login.html';
+            showAlert('Пожалуйста, войдите в аккаунт, чтобы записаться', 'error');
+            setTimeout(() => {
+                window.location.href = 'login.html';
+            }, 1500);
             return false;
         }
-
+        
         const date = document.getElementById('appointmentDate').value;
-        if (!selectedService) { showAlert('Выберите услугу', 'error'); return false; }
-        if (!date) { showAlert('Выберите дату', 'error'); return false; }
-        if (!selectedTime) { showAlert('Выберите время', 'error'); return false; }
-
-        const appointment = {
-            id: Date.now(),
-            service: selectedService.name,
-            price: selectedService.price,
-            doctor: selectedDoctor ? selectedDoctor.name : 'Любой специалист',
-            date: date,
-            time: selectedTime,
-            createdAt: new Date().toISOString()
-        };
-
-        const storageKey = `appointments_${currentUser.id}`;
-        const existing = JSON.parse(localStorage.getItem(storageKey) || '[]');
-        existing.push(appointment);
-        localStorage.setItem(storageKey, JSON.stringify(existing));
-
-        showAlert('✅ Вы успешно записаны! Перенаправление в личный кабинет...', 'success');
-        setTimeout(() => {
-            window.location.href = 'dashboard.html';
-        }, 1500);
+        
+        if (!selectedMaster) {
+            showAlert('Выберите специалиста', 'error');
+            return false;
+        }
+        if (!selectedService) {
+            showAlert('Выберите услугу', 'error');
+            return false;
+        }
+        if (!date) {
+            showAlert('Выберите дату', 'error');
+            return false;
+        }
+        if (!selectedTime) {
+            showAlert('Выберите время', 'error');
+            return false;
+        }
+        
+        // Проверка даты
+        const today = new Date().toISOString().split('T')[0];
+        if (date < today) {
+            showAlert('Нельзя записаться на прошедшую дату', 'error');
+            return false;
+        }
+        
+        showAlert('Создание записи...', 'success');
+        
+        try {
+            const response = await fetch('api_create_appointment.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    clientId: currentUser.id,
+                    masterId: selectedMaster.id,
+                    serviceName: selectedService.name,
+                    servicePrice: selectedService.price,
+                    date: date,
+                    time: selectedTime
+                })
+            });
+            const data = await response.json();
+            
+            if (data.success) {
+                showAlert('✅ Вы успешно записаны! Перенаправление в личный кабинет...', 'success');
+                setTimeout(() => {
+                    window.location.href = 'dashboard.html';
+                }, 2000);
+            } else {
+                showAlert(data.error || 'Ошибка при создании записи', 'error');
+            }
+        } catch (error) {
+            console.error('Ошибка:', error);
+            showAlert('Ошибка сервера. Попробуйте позже.', 'error');
+        }
         return true;
     }
 
-    function showAlert(msg, type) {
-        const alertDiv = document.getElementById('alertMessage');
-        alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> ${msg}`;
-        alertDiv.className = `alert show ${type}`;
-        setTimeout(() => alertDiv.classList.remove('show'), 3000);
+    function escapeHtml(str) {
+        if (!str) return '';
+        return str.replace(/[&<>]/g, function(m) {
+            if (m === '&') return '&amp;';
+            if (m === '<') return '&lt;';
+            if (m === '>') return '&gt;';
+            return m;
+        });
     }
 
-    function setMinDate() {
-        const today = new Date().toISOString().split('T')[0];
-        document.getElementById('appointmentDate').min = today;
+    // Обработчик изменения даты
+    function initDateListener() {
+        const dateInput = document.getElementById('appointmentDate');
+        dateInput.addEventListener('change', function() {
+            const selectedDate = this.value;
+            const today = new Date().toISOString().split('T')[0];
+            
+            if (selectedDate < today) {
+                showAlert('Нельзя записаться на прошедшую дату', 'error');
+                this.value = today;
+                loadAvailableSlots(today);
+            } else {
+                loadAvailableSlots(selectedDate);
+            }
+        });
     }
 
+    // Проверка авторизации при загрузке
+    function checkAuth() {
+        currentUser = getCurrentUser();
+        if (!currentUser) {
+            // Не авторизован, но всё равно показываем страницу
+            // При попытке записи будет перенаправление
+            console.log('Пользователь не авторизован');
+        }
+    }
+
+    // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
-        renderServices();
-        renderDoctors();
-        renderTimeSlots();
+        checkAuth();
+        loadMasters();
         setMinDate();
-        document.getElementById('submitBookingBtn').addEventListener('click', saveAppointment);
+        initDateListener();
+        
+        document.getElementById('submitBookingBtn').addEventListener('click', createAppointment);
     });
 </script>
 </body>
