@@ -431,7 +431,12 @@
             return;
         }
         
-        // ========== ДОБАВЬТЕ ЭТОТ БЛОК ==========
+        // Косметологи не могут записываться как клиенты
+        if (currentUser.role === 'master') {
+            showAlert('Косметологи не могут записываться на процедуры через эту форму. Обратитесь к администратору.', 'error');
+            return;
+        }
+
         // Проверка на перенос записи
         const rescheduleInfo = getRescheduleData();
         if (rescheduleInfo && rescheduleInfo.oldId) {

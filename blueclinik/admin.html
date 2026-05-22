@@ -547,6 +547,9 @@
         const allAppointments = [];
         
         users.forEach(user => {
+            // Пропускаем мастеров (они не должны быть клиентами)
+            if (user.role === 'master') return;
+            
             const userAppointments = JSON.parse(localStorage.getItem(`appointments_${user.id}`) || '[]');
             userAppointments.forEach(apt => {
                 allAppointments.push({
