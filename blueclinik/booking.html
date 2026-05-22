@@ -22,10 +22,7 @@
             color: var(--text-dark);
             padding: 40px 20px;
         }
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-        }
+        .container { max-width: 1280px; margin: 0 auto; }
         .header {
             background: var(--card-bg);
             border-radius: 32px;
@@ -38,12 +35,7 @@
             gap: 20px;
             box-shadow: var(--shadow);
         }
-        .logo {
-            font-size: 28px;
-            font-weight: 700;
-            text-decoration: none;
-            color: var(--primary-dark);
-        }
+        .logo { font-size: 28px; font-weight: 700; text-decoration: none; color: var(--primary-dark); }
         .logo span { color: var(--accent); }
         .btn {
             display: inline-flex;
@@ -59,58 +51,27 @@
             text-decoration: none;
             font-family: inherit;
         }
-        .btn-outline {
-            background: transparent;
-            border: 1.5px solid var(--primary-dark);
-            color: var(--primary-dark);
-        }
-        .btn-outline:hover {
-            background: var(--primary-dark);
-            color: white;
-        }
-        .btn-primary {
-            background: var(--primary-dark);
-            color: white;
-        }
-        .btn-primary:hover {
-            background: var(--primary-medium);
-            transform: translateY(-2px);
-        }
+        .btn-outline { background: transparent; border: 1.5px solid var(--primary-dark); color: var(--primary-dark); }
+        .btn-outline:hover { background: var(--primary-dark); color: white; }
+        .btn-primary { background: var(--primary-dark); color: white; }
+        .btn-primary:hover { background: var(--primary-medium); transform: translateY(-2px); }
         .booking-card {
             background: var(--card-bg);
             border-radius: 32px;
             padding: 40px;
             box-shadow: var(--shadow-hover);
         }
-        .booking-title {
-            font-size: 32px;
-            margin-bottom: 32px;
-            text-align: center;
-        }
-        .booking-title i {
-            color: var(--accent);
-            margin-right: 12px;
-        }
-        .step {
-            margin-bottom: 40px;
-            border-bottom: 1px solid #E8E3DC;
-            padding-bottom: 28px;
-        }
-        .step h3 {
-            font-size: 22px;
-            margin-bottom: 24px;
-            color: var(--primary-dark);
-        }
-        .step h3 i {
-            color: var(--accent);
-            margin-right: 12px;
-        }
+        .booking-title { font-size: 32px; margin-bottom: 32px; text-align: center; }
+        .booking-title i { color: var(--accent); margin-right: 12px; }
+        .step { margin-bottom: 40px; border-bottom: 1px solid #E8E3DC; padding-bottom: 28px; }
+        .step h3 { font-size: 22px; margin-bottom: 24px; color: var(--primary-dark); }
+        .step h3 i { color: var(--accent); margin-right: 12px; }
         .masters-grid, .services-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
             gap: 24px;
         }
-        .master-card {
+        .master-card, .service-card {
             background: var(--bg-page);
             border-radius: 28px;
             cursor: pointer;
@@ -119,85 +80,24 @@
             overflow: hidden;
             box-shadow: var(--shadow);
         }
-        .master-card.selected {
+        .master-card.selected, .service-card.selected {
             border-color: var(--accent);
             background: white;
             box-shadow: var(--shadow-hover);
         }
-        .master-img {
-            height: 200px;
-            overflow: hidden;
-        }
-        .master-img img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            transition: transform 0.3s;
-        }
-        .master-card:hover .master-img img {
-            transform: scale(1.03);
-        }
-        .master-info {
-            padding: 16px;
-            text-align: center;
-        }
-        .master-name {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 6px;
-        }
-        .master-spec {
-            font-size: 13px;
-            color: var(--text-medium);
-        }
-        .service-card {
-            background: var(--bg-page);
-            border-radius: 28px;
-            cursor: pointer;
-            transition: all 0.25s ease;
-            border: 2px solid transparent;
-            box-shadow: var(--shadow);
-            text-align: center;
-            padding: 28px 20px;
-        }
-        .service-card.selected {
-            border-color: var(--accent);
-            background: white;
-            box-shadow: var(--shadow-hover);
-        }
-        .service-icon {
-            font-size: 48px;
-            color: var(--accent);
-            margin-bottom: 16px;
-        }
-        .service-name {
-            font-weight: 700;
-            font-size: 18px;
-            margin-bottom: 8px;
-        }
-        .service-price {
-            color: var(--accent);
-            font-weight: 600;
-            font-size: 16px;
-        }
-        .date-time-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 30px;
-        }
-        .datepicker {
-            flex: 1;
-            min-width: 220px;
-        }
-        .time-slots {
-            flex: 2;
-        }
-        .time-slots-grid {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 12px;
-            margin-top: 12px;
-        }
+        .master-img { height: 200px; overflow: hidden; }
+        .master-img img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.3s; }
+        .master-card:hover .master-img img { transform: scale(1.03); }
+        .master-info, .service-info { padding: 16px; text-align: center; }
+        .master-name { font-weight: 700; font-size: 18px; margin-bottom: 6px; }
+        .master-spec { font-size: 13px; color: var(--text-medium); }
+        .service-icon { font-size: 48px; color: var(--accent); margin-bottom: 16px; }
+        .service-name { font-weight: 700; font-size: 18px; margin-bottom: 8px; }
+        .service-price { color: var(--accent); font-weight: 600; font-size: 16px; }
+        .date-time-grid { display: flex; flex-wrap: wrap; gap: 30px; }
+        .datepicker { flex: 1; min-width: 220px; }
+        .time-slots { flex: 2; }
+        .time-slots-grid { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 12px; }
         .time-slot {
             background: var(--bg-page);
             padding: 10px 24px;
@@ -207,16 +107,7 @@
             border: 1px solid #E0D8D0;
             font-weight: 500;
         }
-        .time-slot.selected {
-            background: var(--primary-dark);
-            color: white;
-            border-color: var(--primary-dark);
-        }
-        .time-slot.disabled {
-            opacity: 0.5;
-            cursor: not-allowed;
-            background: #E8E3DC;
-        }
+        .time-slot.selected { background: var(--primary-dark); color: white; border-color: var(--primary-dark); }
         input[type="date"] {
             padding: 14px 20px;
             border-radius: 60px;
@@ -226,15 +117,8 @@
             font-size: 15px;
             background: var(--bg-page);
         }
-        .btn-large {
-            width: 100%;
-            justify-content: center;
-            margin-top: 12px;
-            padding: 14px 32px;
-            font-size: 16px;
-        }
+        .btn-large { width: 100%; justify-content: center; margin-top: 12px; padding: 14px 32px; font-size: 16px; }
         .alert {
-            background: #E8F5E9;
             padding: 16px 20px;
             border-radius: 60px;
             margin-bottom: 28px;
@@ -242,27 +126,11 @@
             align-items: center;
             gap: 12px;
         }
-        .alert.show {
-            display: flex;
-        }
-        .alert.error {
-            background: #FFEBEE;
-            color: var(--danger);
-        }
-        .alert.success {
-            background: #E8F5E9;
-            color: var(--success);
-        }
-        .loading {
-            text-align: center;
-            padding: 40px;
-            color: var(--text-medium);
-        }
-        .loading i {
-            font-size: 40px;
-            margin-bottom: 12px;
-            display: block;
-        }
+        .alert.show { display: flex; }
+        .alert.error { background: #FFEBEE; color: var(--danger); }
+        .alert.success { background: #E8F5E9; color: var(--success); }
+        .loading { text-align: center; padding: 40px; color: var(--text-medium); }
+        .loading i { font-size: 40px; margin-bottom: 12px; display: block; }
         @media (max-width: 768px) {
             .booking-card { padding: 24px; }
             .masters-grid, .services-grid { grid-template-columns: 1fr; }
@@ -285,7 +153,6 @@
 
         <div id="alertMessage" class="alert"></div>
 
-        <!-- Шаг 1: Выбор специалиста -->
         <div class="step">
             <h3><i class="fas fa-user-md"></i> 1. Выберите специалиста</h3>
             <div id="mastersList" class="masters-grid">
@@ -293,13 +160,11 @@
             </div>
         </div>
 
-        <!-- Шаг 2: Выбор услуги -->
         <div class="step" id="servicesStep" style="display: none;">
             <h3><i class="fas fa-spa"></i> 2. Выберите процедуру</h3>
             <div id="servicesList" class="services-grid"></div>
         </div>
 
-        <!-- Шаг 3: Дата и время -->
         <div class="step" id="datetimeStep" style="display: none;">
             <h3><i class="far fa-clock"></i> 3. Удобные дата и время</h3>
             <div class="date-time-grid">
@@ -322,33 +187,37 @@
 
 <script src="auth.js"></script>
 <script>
-    // Переменные состояния
     let masters = [];
+    let services = {};
+    let schedules = {};
     let selectedMaster = null;
     let selectedService = null;
     let selectedTime = null;
     let currentUser = null;
 
-    // Иконки для услуг
-    const SERVICE_ICONS = {
-        'Консультация': 'fas fa-stethoscope',
-        'Чистка': 'fas fa-face-smile',
-        'SMAS': 'fas fa-arrow-up',
-        'Биоревитализация': 'fas fa-droplet',
-        'RF-лифтинг': 'fas fa-bolt',
-        'Лазерная': 'fas fa-lightbulb',
-        'Ботокс': 'fas fa-syringe',
-        'default': 'fas fa-spa'
+    const defaultImages = [
+        'https://randomuser.me/api/portraits/women/68.jpg',
+        'https://randomuser.me/api/portraits/women/65.jpg',
+        'https://randomuser.me/api/portraits/women/44.jpg',
+        'https://randomuser.me/api/portraits/women/90.jpg'
+    ];
+
+    const DEFAULT_SERVICES = [
+        { name: 'SMAS-лифтинг Ultraformer', price: 50990, duration: 60 },
+        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
+        { name: 'RF-лифтинг лица', price: 6900, duration: 30 }
+    ];
+
+    const DEFAULT_SCHEDULE = {
+        monday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        tuesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        wednesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        thursday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        friday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        saturday: { enabled: false, hours: [] },
+        sunday: { enabled: false, hours: [] }
     };
 
-    function getServiceIcon(serviceName) {
-        for (const [key, icon] of Object.entries(SERVICE_ICONS)) {
-            if (serviceName.includes(key)) return icon;
-        }
-        return SERVICE_ICONS.default;
-    }
-
-    // Показать уведомление
     function showAlert(msg, type = 'success') {
         const alertDiv = document.getElementById('alertMessage');
         alertDiv.innerHTML = `<i class="fas ${type === 'success' ? 'fa-check-circle' : 'fa-exclamation-triangle'}"></i> ${msg}`;
@@ -356,47 +225,47 @@
         setTimeout(() => alertDiv.classList.remove('show'), 4000);
     }
 
-    // Установка минимальной даты (сегодня)
     function setMinDate() {
         const today = new Date().toISOString().split('T')[0];
         document.getElementById('appointmentDate').min = today;
         document.getElementById('appointmentDate').value = today;
     }
 
-    // Загрузка специалистов с сервера
-    async function loadMasters() {
-        const container = document.getElementById('mastersList');
-        try {
-            const response = await fetch('api_get_masters.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({})
-            });
-            const data = await response.json();
-            
-            if (data.success && data.masters && data.masters.length > 0) {
-                masters = data.masters;
-                renderMasters();
-            } else {
-                container.innerHTML = '<div class="loading"><i class="fas fa-user-md"></i><br>Нет доступных специалистов</div>';
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки мастеров:', error);
-            container.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки специалистов</div>';
+    // Инициализация данных для мастера (если нет)
+    function initMasterData(masterId) {
+        if (!localStorage.getItem(`services_${masterId}`)) {
+            localStorage.setItem(`services_${masterId}`, JSON.stringify(DEFAULT_SERVICES));
+        }
+        if (!localStorage.getItem(`schedule_${masterId}`)) {
+            localStorage.setItem(`schedule_${masterId}`, JSON.stringify(DEFAULT_SCHEDULE));
         }
     }
 
-    // Отображение списка специалистов
+    function loadAllData() {
+        const allUsers = getUsers();
+        masters = allUsers.filter(u => u.role === 'master');
+        
+        masters.forEach(master => {
+            // Автоматически создаём услуги и расписание, если их нет
+            initMasterData(master.id);
+            
+            const masterServices = localStorage.getItem(`services_${master.id}`);
+            services[master.id] = masterServices ? JSON.parse(masterServices) : DEFAULT_SERVICES;
+            
+            const masterSchedule = localStorage.getItem(`schedule_${master.id}`);
+            schedules[master.id] = masterSchedule ? JSON.parse(masterSchedule) : DEFAULT_SCHEDULE;
+        });
+        
+        renderMasters();
+    }
+
     function renderMasters() {
         const container = document.getElementById('mastersList');
         
-        // Для демонстрации используем фото из randomuser.me
-        const defaultImages = [
-            'https://randomuser.me/api/portraits/women/68.jpg',
-            'https://randomuser.me/api/portraits/women/65.jpg',
-            'https://randomuser.me/api/portraits/women/44.jpg',
-            'https://randomuser.me/api/portraits/women/90.jpg'
-        ];
+        if (masters.length === 0) {
+            container.innerHTML = '<div class="loading"><i class="fas fa-user-md"></i><br>Нет доступных специалистов</div>';
+            return;
+        }
         
         container.innerHTML = masters.map((master, index) => `
             <div class="master-card" data-id="${master.id}">
@@ -410,54 +279,40 @@
             </div>
         `).join('');
         
-        // Добавляем обработчики клика
         document.querySelectorAll('.master-card').forEach(card => {
             card.addEventListener('click', () => {
                 document.querySelectorAll('.master-card').forEach(c => c.classList.remove('selected'));
                 card.classList.add('selected');
                 const id = parseInt(card.dataset.id);
                 selectedMaster = masters.find(m => m.id === id);
-                loadServices(selectedMaster.id);
+                renderServices();
             });
         });
     }
 
-    // Загрузка услуг выбранного мастера
-    async function loadServices(masterId) {
+    function renderServices() {
         const servicesContainer = document.getElementById('servicesList');
         const servicesStep = document.getElementById('servicesStep');
         
-        servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка услуг...</div>';
+        if (!selectedMaster) return;
+        
+        const masterServices = services[selectedMaster.id] || [];
+        
+        if (masterServices.length === 0) {
+            servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-syringe"></i><br>Нет доступных услуг</div>';
+            servicesStep.style.display = 'block';
+            return;
+        }
+        
         servicesStep.style.display = 'block';
         
-        try {
-            const response = await fetch('api_get_master_services.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ masterId: masterId })
-            });
-            const data = await response.json();
-            
-            if (data.success && data.services && data.services.length > 0) {
-                renderServices(data.services);
-            } else {
-                servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-syringe"></i><br>Нет доступных услуг</div>';
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки услуг:', error);
-            servicesContainer.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки услуг</div>';
-        }
-    }
-
-    // Отображение списка услуг
-    function renderServices(services) {
-        const container = document.getElementById('servicesList');
-        
-        container.innerHTML = services.map(service => `
-            <div class="service-card" data-id="${service.id}" data-price="${service.price}" data-name="${escapeHtml(service.name)}">
+        servicesContainer.innerHTML = masterServices.map(service => `
+            <div class="service-card" data-id="${service.id || Date.now()}" data-price="${service.price}" data-name="${escapeHtml(service.name)}">
                 <div class="service-icon"><i class="${getServiceIcon(service.name)}"></i></div>
-                <div class="service-name">${escapeHtml(service.name)}</div>
-                <div class="service-price">${service.price.toLocaleString()} ₽</div>
+                <div class="service-info">
+                    <div class="service-name">${escapeHtml(service.name)}</div>
+                    <div class="service-price">${service.price.toLocaleString()} ₽</div>
+                </div>
             </div>
         `).join('');
         
@@ -471,11 +326,9 @@
                     price: parseInt(card.dataset.price)
                 };
                 
-                // Показываем шаг с датой и временем
                 document.getElementById('datetimeStep').style.display = 'block';
                 document.getElementById('submitBookingBtn').style.display = 'flex';
                 
-                // Обновляем доступное время при смене услуги
                 const selectedDate = document.getElementById('appointmentDate').value;
                 if (selectedDate) {
                     loadAvailableSlots(selectedDate);
@@ -484,38 +337,63 @@
         });
     }
 
-    // Загрузка доступных слотов
-    async function loadAvailableSlots(date) {
+    function getServiceIcon(serviceName) {
+        if (serviceName.includes('SMAS')) return 'fas fa-arrow-up';
+        if (serviceName.includes('Биоревитализация')) return 'fas fa-droplet';
+        if (serviceName.includes('RF')) return 'fas fa-bolt';
+        if (serviceName.includes('Лазерная')) return 'fas fa-lightbulb';
+        if (serviceName.includes('Консультация')) return 'fas fa-stethoscope';
+        return 'fas fa-spa';
+    }
+
+    function loadAvailableSlots(date) {
         if (!selectedMaster) return;
         
         const container = document.getElementById('timeSlotsList');
-        container.innerHTML = '<div class="loading"><i class="fas fa-spinner fa-spin"></i> Загрузка времени...</div>';
-        selectedTime = null;
+        const schedule = schedules[selectedMaster.id] || DEFAULT_SCHEDULE;
         
-        try {
-            const response = await fetch('api_get_available_slots.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ masterId: selectedMaster.id, date: date })
-            });
-            const data = await response.json();
-            
-            if (data.success && data.slots && data.slots.length > 0) {
-                renderTimeSlots(data.slots);
-            } else if (data.error) {
-                container.innerHTML = `<div class="loading"><i class="fas fa-ban"></i><br>${data.error}</div>`;
-            } else {
-                container.innerHTML = '<div class="loading"><i class="fas fa-calendar-times"></i><br>Нет доступного времени на выбранную дату</div>';
-            }
-        } catch (error) {
-            console.error('Ошибка загрузки слотов:', error);
-            container.innerHTML = '<div class="loading"><i class="fas fa-exclamation-triangle"></i><br>Ошибка загрузки времени</div>';
+        const days = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+        const dayIndex = new Date(date).getDay();
+        const dayName = days[dayIndex === 0 ? 6 : dayIndex - 1];
+        const daySchedule = schedule[dayName];
+        
+        if (!daySchedule || !daySchedule.enabled || daySchedule.hours.length === 0) {
+            container.innerHTML = '<div class="loading"><i class="fas fa-calendar-times"></i><br>В этот день специалист не работает</div>';
+            return;
         }
+        
+        const appointmentsKey = `appointments_${selectedMaster.id}`;
+        const masterAppointments = JSON.parse(localStorage.getItem(appointmentsKey) || '[]');
+        const bookedTimes = masterAppointments.filter(apt => apt.date === date).map(apt => apt.time);
+        
+        const today = new Date().toISOString().split('T')[0];
+        const currentHour = new Date().getHours();
+        const currentMinute = new Date().getMinutes();
+        
+        let availableSlots = [...daySchedule.hours];
+        
+        if (date === today) {
+            availableSlots = availableSlots.filter(time => {
+                const [hour, minute] = time.split(':');
+                if (parseInt(hour) > currentHour) return true;
+                if (parseInt(hour) === currentHour && parseInt(minute) > currentMinute) return true;
+                return false;
+            });
+        }
+        
+        availableSlots = availableSlots.filter(time => !bookedTimes.includes(time));
+        
+        if (availableSlots.length === 0) {
+            container.innerHTML = '<div class="loading"><i class="fas fa-calendar-times"></i><br>Нет доступного времени</div>';
+            return;
+        }
+        
+        renderTimeSlots(availableSlots);
     }
 
-    // Отображение доступных слотов
     function renderTimeSlots(slots) {
         const container = document.getElementById('timeSlotsList');
+        selectedTime = null;
         
         container.innerHTML = slots.map(time => `
             <div class="time-slot" data-time="${time}">${time}</div>
@@ -530,74 +408,64 @@
         });
     }
 
-    // Создание записи
-    async function createAppointment() {
-        const currentUser = getCurrentUser();
+    function createAppointment() {
+        currentUser = getCurrentUser();
         
         if (!currentUser) {
             showAlert('Пожалуйста, войдите в аккаунт, чтобы записаться', 'error');
-            setTimeout(() => {
-                window.location.href = 'login.html';
-            }, 1500);
-            return false;
+            setTimeout(() => { window.location.href = 'login.html'; }, 1500);
+            return;
         }
         
         const date = document.getElementById('appointmentDate').value;
         
-        if (!selectedMaster) {
-            showAlert('Выберите специалиста', 'error');
-            return false;
-        }
-        if (!selectedService) {
-            showAlert('Выберите услугу', 'error');
-            return false;
-        }
-        if (!date) {
-            showAlert('Выберите дату', 'error');
-            return false;
-        }
-        if (!selectedTime) {
-            showAlert('Выберите время', 'error');
-            return false;
-        }
+        if (!selectedMaster) { showAlert('Выберите специалиста', 'error'); return; }
+        if (!selectedService) { showAlert('Выберите услугу', 'error'); return; }
+        if (!date) { showAlert('Выберите дату', 'error'); return; }
+        if (!selectedTime) { showAlert('Выберите время', 'error'); return; }
         
-        // Проверка даты
         const today = new Date().toISOString().split('T')[0];
-        if (date < today) {
-            showAlert('Нельзя записаться на прошедшую дату', 'error');
-            return false;
+        if (date < today) { showAlert('Нельзя записаться на прошедшую дату', 'error'); return; }
+        
+        const appointmentKey = `appointments_${currentUser.id}`;
+        const appointments = JSON.parse(localStorage.getItem(appointmentKey) || '[]');
+        
+        const isDuplicate = appointments.some(apt => 
+            apt.masterId === selectedMaster.id && apt.date === date && apt.time === selectedTime
+        );
+        
+        if (isDuplicate) {
+            showAlert('Вы уже записаны на это время', 'error');
+            return;
         }
         
-        showAlert('Создание записи...', 'success');
+        const newAppointment = {
+            id: Date.now(),
+            masterId: selectedMaster.id,
+            masterName: selectedMaster.fullname,
+            service: selectedService.name,
+            price: selectedService.price,
+            date: date,
+            time: selectedTime,
+            status: 'pending',
+            createdAt: new Date().toISOString()
+        };
         
-        try {
-            const response = await fetch('api_create_appointment.php', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({
-                    clientId: currentUser.id,
-                    masterId: selectedMaster.id,
-                    serviceName: selectedService.name,
-                    servicePrice: selectedService.price,
-                    date: date,
-                    time: selectedTime
-                })
-            });
-            const data = await response.json();
-            
-            if (data.success) {
-                showAlert('✅ Вы успешно записаны! Перенаправление в личный кабинет...', 'success');
-                setTimeout(() => {
-                    window.location.href = 'dashboard.html';
-                }, 2000);
-            } else {
-                showAlert(data.error || 'Ошибка при создании записи', 'error');
-            }
-        } catch (error) {
-            console.error('Ошибка:', error);
-            showAlert('Ошибка сервера. Попробуйте позже.', 'error');
-        }
-        return true;
+        appointments.push(newAppointment);
+        localStorage.setItem(appointmentKey, JSON.stringify(appointments));
+        
+        const masterAppointmentsKey = `appointments_${selectedMaster.id}`;
+        const masterAppointments = JSON.parse(localStorage.getItem(masterAppointmentsKey) || '[]');
+        masterAppointments.push({
+            ...newAppointment,
+            clientId: currentUser.id,
+            clientName: currentUser.fullname,
+            clientPhone: currentUser.phone
+        });
+        localStorage.setItem(masterAppointmentsKey, JSON.stringify(masterAppointments));
+        
+        showAlert('✅ Вы успешно записаны! Перенаправление в личный кабинет...', 'success');
+        setTimeout(() => { window.location.href = 'dashboard.html'; }, 2000);
     }
 
     function escapeHtml(str) {
@@ -610,7 +478,6 @@
         });
     }
 
-    // Обработчик изменения даты
     function initDateListener() {
         const dateInput = document.getElementById('appointmentDate');
         dateInput.addEventListener('change', function() {
@@ -627,24 +494,11 @@
         });
     }
 
-    // Проверка авторизации при загрузке
-    function checkAuth() {
-        currentUser = getCurrentUser();
-        if (!currentUser) {
-            // Не авторизован, но всё равно показываем страницу
-            // При попытке записи будет перенаправление
-            console.log('Пользователь не авторизован');
-        }
-    }
-
-    // Инициализация
     document.addEventListener('DOMContentLoaded', () => {
-        checkAuth();
-        loadMasters();
         setMinDate();
         initDateListener();
-        
         document.getElementById('submitBookingBtn').addEventListener('click', createAppointment);
+        loadAllData();
     });
 </script>
 </body>
