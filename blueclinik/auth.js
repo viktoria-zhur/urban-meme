@@ -1,121 +1,8 @@
 // auth.js — ПОЛНАЯ ЛОКАЛЬНАЯ ВЕРСИЯ
-// Все данные хранятся в localStorage
 
 const STORAGE_KEY = 'blueclinik_users';
 const CURRENT_USER_KEY = 'blueclinik_current_user';
 const ADMINS_KEY = 'blueclinik_admins';
-
-// ========== ИНИЦИАЛИЗАЦИЯ ДАННЫХ (при первом запуске) ==========
-function initLocalData() {
-    const users = getUsers();
-    
-    // Если данных нет — создаём
-    if (users.length === 0) {
-        console.log('Инициализация локальных данных...');
-        
-        // 1. Администратор
-        const admin = {
-            id: 777777,
-            fullname: 'Мария Юсупова',
-            email: 'yusupova25@yandex.ru',
-            phone: '+799999999',
-            password: 'qwert12',
-            role: 'admin',
-            createdAt: new Date().toISOString()
-        };
-        
-        // 2. Мастера (косметологи)
-        const masters = [
-            {
-                id: 777778,
-                fullname: 'Виктория Левченко',
-                email: 'victoria@blueclinik.ru',
-                phone: '+79131234567',
-                password: 'master123',
-                role: 'master',
-                specialization: 'Дерматолог, топ-косметолог',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 777779,
-                fullname: 'Яна Плотникова',
-                email: 'yana@blueclinik.ru',
-                phone: '+79139876543',
-                password: 'master123',
-                role: 'master',
-                specialization: 'Косметолог, лазеротерапевт',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 777780,
-                fullname: 'Ксения Белоусова',
-                email: 'ksenia@blueclinik.ru',
-                phone: '+79135551234',
-                password: 'master123',
-                role: 'master',
-                specialization: 'Дерматолог, трихолог',
-                createdAt: new Date().toISOString()
-            },
-            {
-                id: 777781,
-                fullname: 'Маргарита Тихонова',
-                email: 'margarita@blueclinik.ru',
-                phone: '+79137778899',
-                password: 'master123',
-                role: 'master',
-                specialization: 'Лазеротерапевт, косметолог',
-                createdAt: new Date().toISOString()
-            }
-        ];
-        
-        // Сохраняем всех пользователей
-        const allUsers = [admin, ...masters];
-        saveUsers(allUsers);
-        
-        // Добавляем админа в список админов
-        saveAdmins([777777]);
-        
-        // Создаём услуги и расписание для каждого мастера
-        masters.forEach(master => {
-            initMasterServices(master.id);
-            initMasterSchedule(master.id);
-        });
-        
-        console.log('Локальные данные инициализированы!');
-    }
-}
-
-// Инициализация услуг мастера
-function initMasterServices(masterId) {
-    const defaultServices = [
-        { name: 'SMAS-лифтинг Ultraformer', price: 50990, duration: 60 },
-        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
-        { name: 'RF-лифтинг лица', price: 6900, duration: 30 },
-        { name: 'Лазерная шлифовка', price: 14900, duration: 40 },
-        { name: 'Консультация косметолога', price: 3990, duration: 30 }
-    ];
-    
-    if (!localStorage.getItem(`services_${masterId}`)) {
-        localStorage.setItem(`services_${masterId}`, JSON.stringify(defaultServices));
-    }
-}
-
-// Инициализация расписания мастера
-function initMasterSchedule(masterId) {
-    const defaultSchedule = {
-        monday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        tuesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        wednesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        thursday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        friday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        saturday: { enabled: false, hours: [] },
-        sunday: { enabled: false, hours: [] }
-    };
-    
-    if (!localStorage.getItem(`schedule_${masterId}`)) {
-        localStorage.setItem(`schedule_${masterId}`, JSON.stringify(defaultSchedule));
-    }
-}
 
 // ========== ОСНОВНЫЕ ФУНКЦИИ ==========
 
@@ -147,7 +34,13 @@ function saveCurrentUser(user) {
 }
 
 function logout() {
+    // Очищаем данные текущего пользователя
     localStorage.removeItem(CURRENT_USER_KEY);
+    
+    // Очищаем сессию (если есть)
+    sessionStorage.clear();
+    
+    // Перенаправляем на главную страницу
     window.location.href = 'index.html';
 }
 
@@ -184,7 +77,114 @@ function isMaster(user) {
     return user && user.role === 'master';
 }
 
-// ========== РЕГИСТРАЦИЯ (только для клиентов) ==========
+// ========== ИНИЦИАЛИЗАЦИЯ УСЛУГ И РАСПИСАНИЯ ==========
+
+function initMasterServices(masterId) {
+    const defaultServices = [
+        { name: 'SMAS-лифтинг Ultraformer', price: 50990, duration: 60 },
+        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
+        { name: 'RF-лифтинг лица', price: 6900, duration: 30 },
+        { name: 'Лазерная шлифовка', price: 14900, duration: 40 },
+        { name: 'Консультация косметолога', price: 3990, duration: 30 }
+    ];
+    
+    if (!localStorage.getItem(`services_${masterId}`)) {
+        localStorage.setItem(`services_${masterId}`, JSON.stringify(defaultServices));
+    }
+}
+
+function initMasterSchedule(masterId) {
+    const defaultSchedule = {
+        monday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        tuesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        wednesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        thursday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        friday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
+        saturday: { enabled: false, hours: [] },
+        sunday: { enabled: false, hours: [] }
+    };
+    
+    if (!localStorage.getItem(`schedule_${masterId}`)) {
+        localStorage.setItem(`schedule_${masterId}`, JSON.stringify(defaultSchedule));
+    }
+}
+
+// ========== ИНИЦИАЛИЗАЦИЯ ДАННЫХ (АДМИН + МАСТЕРА) ==========
+
+function initLocalData() {
+    let users = getUsers();
+    let changed = false;
+    
+    // 1. Создаём администратора (если нет)
+    const adminExists = users.find(u => u.email === 'yusupova25@yandex.ru');
+    if (!adminExists) {
+        console.log('Создаём администратора...');
+        const admin = {
+            id: 777777,
+            fullname: 'Мария Юсупова',
+            email: 'yusupova25@yandex.ru',
+            phone: '+799999999',
+            password: 'qwert12',
+            role: 'admin',
+            createdAt: new Date().toISOString()
+        };
+        users.push(admin);
+        changed = true;
+        
+        // Добавляем в список админов
+        let admins = getAdmins();
+        if (!admins.includes(777777)) {
+            admins.push(777777);
+            saveAdmins(admins);
+        }
+    }
+    
+    // 2. Создаём мастеров (если нет)
+    const mastersList = [
+        { id: 777778, fullname: 'Виктория Левченко', email: 'victoria@blueclinik.ru', phone: '+79131234567', password: 'master123', specialization: 'Дерматолог, топ-косметолог' },
+        { id: 777779, fullname: 'Яна Плотникова', email: 'yana@blueclinik.ru', phone: '+79139876543', password: 'master123', specialization: 'Косметолог, лазеротерапевт' },
+        { id: 777780, fullname: 'Ксения Белоусова', email: 'ksenia@blueclinik.ru', phone: '+79135551234', password: 'master123', specialization: 'Дерматолог, трихолог' },
+        { id: 777781, fullname: 'Маргарита Тихонова', email: 'margarita@blueclinik.ru', phone: '+79137778899', password: 'master123', specialization: 'Лазеротерапевт, косметолог' }
+    ];
+    
+    for (const masterData of mastersList) {
+        const masterExists = users.find(u => u.email === masterData.email);
+        if (!masterExists) {
+            console.log(`Создаём мастера: ${masterData.fullname}...`);
+            const master = {
+                id: masterData.id,
+                fullname: masterData.fullname,
+                email: masterData.email,
+                phone: masterData.phone,
+                password: masterData.password,
+                role: 'master',
+                specialization: masterData.specialization,
+                createdAt: new Date().toISOString()
+            };
+            users.push(master);
+            changed = true;
+            
+            // Создаём услуги и расписание для мастера
+            initMasterServices(master.id);
+            initMasterSchedule(master.id);
+        } else {
+            // Проверяем, есть ли услуги и расписание у существующих мастеров
+            if (!localStorage.getItem(`services_${masterData.id}`)) {
+                initMasterServices(masterData.id);
+            }
+            if (!localStorage.getItem(`schedule_${masterData.id}`)) {
+                initMasterSchedule(masterData.id);
+            }
+        }
+    }
+    
+    if (changed) {
+        saveUsers(users);
+        console.log('Данные инициализированы: администратор и мастера созданы');
+    }
+}
+
+// ========== РЕГИСТРАЦИЯ ==========
 
 function register(fullname, email, phone, password, role = 'client') {
     const users = getUsers();
@@ -203,7 +203,7 @@ function register(fullname, email, phone, password, role = 'client') {
         email: email,
         phone: phone,
         password: password,
-        role: 'client',
+        role: role,
         createdAt: new Date().toISOString()
     };
     
@@ -215,7 +215,7 @@ function register(fullname, email, phone, password, role = 'client') {
         fullname: newUser.fullname,
         email: newUser.email,
         phone: newUser.phone,
-        role: 'client',
+        role: newUser.role,
         createdAt: newUser.createdAt,
         isAdmin: false
     });
@@ -229,7 +229,7 @@ function login(email, password) {
     const users = getUsers();
     let admins = getAdmins();
     
-    // Проверяем админа
+    // Администратор
     const adminEmail = 'yusupova25@yandex.ru';
     const adminPassword = 'qwert12';
     const ADMIN_ID = 777777;
@@ -269,7 +269,7 @@ function login(email, password) {
         return { success: true };
     }
     
-    // Проверяем обычного пользователя или мастера
+    // Обычный пользователь или косметолог
     const user = users.find(u => u.email === email && u.password === password);
     
     if (!user) {
@@ -363,25 +363,8 @@ function createMasterByAdmin(fullname, email, phone, password, specialization = 
     users.push(newMaster);
     saveUsers(users);
     
-    // Дефолтные услуги
-    const defaultServices = [
-        { name: 'SMAS-лифтинг', price: 50990, duration: 60 },
-        { name: 'Биоревитализация REVI', price: 15990, duration: 45 },
-        { name: 'RF-лифтинг лица', price: 6900, duration: 30 }
-    ];
-    localStorage.setItem(`services_${newMaster.id}`, JSON.stringify(defaultServices));
-    
-    // Дефолтное расписание
-    const defaultSchedule = {
-        monday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        tuesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        wednesday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        thursday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        friday: { enabled: true, hours: ['09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'] },
-        saturday: { enabled: false, hours: [] },
-        sunday: { enabled: false, hours: [] }
-    };
-    localStorage.setItem(`schedule_${newMaster.id}`, JSON.stringify(defaultSchedule));
+    initMasterServices(newMaster.id);
+    initMasterSchedule(newMaster.id);
     
     return { success: true, master: newMaster };
 }
@@ -453,7 +436,7 @@ function updateUserProfile(userId, fullname, email, phone) {
     return { success: true };
 }
 
-// ИНИЦИАЛИЗАЦИЯ ПРИ ЗАГРУЗКЕ
+// ========== ЗАПУСК ИНИЦИАЛИЗАЦИИ ==========
 initLocalData();
 
 // Экспорт для Node.js (если нужно)

@@ -169,11 +169,11 @@
             <h3><i class="far fa-clock"></i> 3. Удобные дата и время</h3>
             <div class="date-time-grid">
                 <div class="datepicker">
-                    <label>📅 Дата приема:</label>
+                    <label><i class="fas fa-calendar-alt" style="color: var(--accent); margin-right: 8px;"></i> Дата приема:</label>
                     <input type="date" id="appointmentDate" min="">
                 </div>
                 <div class="time-slots">
-                    <label>⏰ Доступное время:</label>
+                    <label><i class="fas fa-clock" style="color: var(--accent); margin-right: 8px;"></i> Доступное время:</label>
                     <div id="timeSlotsList" class="time-slots-grid"></div>
                 </div>
             </div>
@@ -408,6 +408,20 @@
         });
     }
 
+    // Обработка переноса записи
+    function getRescheduleData() {
+        const urlParams = new URLSearchParams(window.location.search);
+        if (urlParams.get('reschedule')) {
+            const rescheduleData = sessionStorage.getItem('rescheduleData');
+            if (rescheduleData) {
+                sessionStorage.removeItem('rescheduleData');
+                return JSON.parse(rescheduleData);
+            }
+        }
+        return null;
+    }
+
+
     function createAppointment() {
         currentUser = getCurrentUser();
         
@@ -417,6 +431,28 @@
             return;
         }
         
+        // ========== ДОБАВЬТЕ ЭТОТ БЛОК ==========
+        // Проверка на перенос записи
+        const rescheduleInfo = getRescheduleData();
+        if (rescheduleInfo && rescheduleInfo.oldId) {
+            // Удаляем старую запись у клиента
+            const oldAppointmentsKey = `appointments_${currentUser.id}`;
+            let oldAppointments = JSON.parse(localStorage.getItem(oldAppointmentsKey) || '[]');
+            oldAppointments = oldAppointments.filter(apt => apt.id !== rescheduleInfo.oldId);
+            localStorage.setItem(oldAppointmentsKey, JSON.stringify(oldAppointments));
+            
+            // Удаляем старую запись у мастера
+            if (rescheduleInfo.masterId) {
+                const masterAppointmentsKey = `appointments_${rescheduleInfo.masterId}`;
+                let masterAppointments = JSON.parse(localStorage.getItem(masterAppointmentsKey) || '[]');
+                masterAppointments = masterAppointments.filter(apt => apt.id !== rescheduleInfo.oldId);
+                localStorage.setItem(masterAppointmentsKey, JSON.stringify(masterAppointments));
+            }
+            
+            showAlert('Старая запись удалена. Создаётся новая...', 'success');
+        }
+        // ========================================
+
         const date = document.getElementById('appointmentDate').value;
         
         if (!selectedMaster) { showAlert('Выберите специалиста', 'error'); return; }

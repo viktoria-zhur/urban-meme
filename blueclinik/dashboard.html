@@ -527,7 +527,7 @@
                             </div>
                             <div style="flex: 1;">
                                 <h3 style="margin-bottom: 4px;">
-                                    ⏰ Не забудьте о записи!
+                                    <i class="fas fa-bell" style="color: var(--accent); margin-right: 8px;"></i> Не забудьте о записи!
                                     <span style="font-size: 14px; font-weight: 400; color: var(--text-medium);" id="reminderTimeLabel"></span>
                                 </h3>
                                 <div class="reminder-service" id="reminderService"></div>
@@ -543,7 +543,7 @@
                                     <a href="tel:+73832990023" class="btn btn-sm btn-outline">
                                         <i class="fas fa-phone"></i> Позвонить
                                     </a>
-                                    <button class="btn btn-sm btn-outline" onclick="window.location.href='booking.html'">
+                                    <button class="btn btn-sm btn-outline" onclick="rescheduleAppointment()">
                                         <i class="fas fa-exchange-alt"></i> Перенести
                                     </button>
                                 </div>
@@ -572,7 +572,7 @@
                         <div class="promo-code" onclick="copyPromoCode('BLUE10')" title="Нажмите, чтобы скопировать">
                             <i class="fas fa-tag"></i> BLUE10
                         </div>
-                        <small style="display: block; margin-top: 8px; color: var(--text-light);">👆 Нажмите на код, чтобы скопировать</small>
+                        <small style="display: block; margin-top: 8px; color: var(--text-light);"><i class="fas fa-hand-point-up" style="margin-right: 4px;"></i> Нажмите на код, чтобы скопировать</small>
                     </div>
                     
                     <!-- Контакты -->
@@ -670,7 +670,7 @@
                 document.getElementById('reminderService').textContent = nextAppointment.service;
                 document.getElementById('reminderDate').textContent = formatDate(nextAppointment.date);
                 document.getElementById('reminderTimeFull').textContent = nextAppointment.time;
-                document.getElementById('reminderSpecialist').textContent = nextAppointment.specialist || 'Специалист клиники';
+                document.getElementById('reminderSpecialist').textContent = nextAppointment.masterName || nextAppointment.doctor || 'Специалист клиники';
                 
                 // Сохраняем данные для добавления в календарь
                 reminderCard.dataset.service = nextAppointment.service;
@@ -681,19 +681,19 @@
                 let countdownHTML = '';
                 
                 if (hoursUntil <= 2 && daysUntil === 0) {
-                    timeMessage = '🔥 Уже совсем скоро!';
+                    timeMessage = '<i class="fas fa-fire" style="margin-right: 4px;"></i> Уже совсем скоро!';
                     countdownHTML = `<span class="countdown-badge urgent"><i class="fas fa-hourglass-half"></i> Через ${hoursUntil} ч.</span>`;
                     reminderCard.style.borderLeftColor = 'var(--danger)';
                     reminderCard.classList.add('urgent');
                     document.querySelector('.reminder-icon').classList.remove('bell');
                     document.querySelector('.reminder-icon i').style.animation = 'none';
                 } else if (daysUntil === 0) {
-                    timeMessage = '📅 Сегодня!';
+                    timeMessage = '<i class="fas fa-calendar-day" style="margin-right: 4px;"></i> Сегодня!';
                     countdownHTML = `<span class="countdown-badge"><i class="fas fa-clock"></i> Через ${hoursUntil} ч.</span>`;
                     reminderCard.style.borderLeftColor = 'var(--accent)';
                     reminderCard.classList.remove('urgent');
                 } else if (daysUntil === 1) {
-                    timeMessage = '📅 Завтра!';
+                    timeMessage = '<i class="fas fa-calendar-day" style="margin-right: 4px;"></i> Завтра!';
                     countdownHTML = `<span class="countdown-badge"><i class="fas fa-moon"></i> Завтра</span>`;
                     reminderCard.style.borderLeftColor = '#FFA726';
                     reminderCard.classList.remove('urgent');
@@ -753,25 +753,48 @@
                             <i class="fas ${icon}" style="color: ${iconColor};"></i>
                             <div class="appointment-details">
                                 <strong>
-                                    ${isNext ? '⭐ ' : ''}${apt.service}
+                                    ${isNext ? '<i class="fas fa-star" style="color: #FFD700; margin-right: 4px;"></i> ' : ''}${apt.service}
                                 </strong>
                                 <small>
                                     <i class="far fa-calendar-alt"></i> 
                                     ${formatDate(apt.date)} в ${apt.time}${timeLabel}
-                                    ${apt.specialist ? ` | 👩‍⚕️ ${apt.specialist}` : ''}
+                                    ${apt.specialist ? ` | <i class="fas fa-user-md" style="color: var(--accent); margin-right: 2px;"></i> ${apt.specialist}` : ''}
                                 </small>
                             </div>
                         </div>
                         ${isUpcoming ? `
-                            <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
-                                <i class="fas fa-times"></i> Отменить
-                            </button>
+                            <div style="display: flex; gap: 8px;">
+                                <button class="btn btn-sm btn-outline" onclick="setReschedule(${apt.id})">
+                                    <i class="fas fa-exchange-alt"></i> Перенести
+                                </button>
+                                <button class="btn btn-sm btn-danger" onclick="cancelAppointment(${apt.id})">
+                                    <i class="fas fa-times"></i> Отменить
+                                </button>
+                            </div>
                         ` : ''}
                     </div>
                 `;
             }).join('');
         }
         
+        function setReschedule(id) {
+            const appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
+            const appointment = appointments.find(apt => apt.id === id);
+            
+            if (appointment) {
+                sessionStorage.setItem('rescheduleData', JSON.stringify({
+                    oldId: id,
+                    oldDate: appointment.date,
+                    oldTime: appointment.time,
+                    masterId: appointment.masterId,
+                    service: appointment.service
+                }));
+                window.location.href = 'booking.html?reschedule=true';
+            }
+        }
+
+
+
         // Отмена записи
         function cancelAppointment(id) {
             if (!confirm('Вы уверены, что хотите отменить запись?')) return;
@@ -783,24 +806,47 @@
             showNotification('Запись успешно отменена');
         }
         
-function showAdminButtonIfNeeded() {
-    const currentUser = getCurrentUser();
-    const adminBtn = document.getElementById('adminPanelBtn');
-    
-    if (adminBtn) {
-        // Проверяем, является ли пользователь администратором
-        const isAdminEmail = currentUser && currentUser.email === 'yusupova25@yandex.ru';
-        const hasAdminFlag = currentUser && currentUser.isAdmin === true;
-        
-        if (isAdminEmail || hasAdminFlag) {
-            adminBtn.style.display = 'inline-flex';
-        } else {
-            adminBtn.style.display = 'none';
+        function showAdminButtonIfNeeded() {
+            const currentUser = getCurrentUser();
+            const adminBtn = document.getElementById('adminPanelBtn');
+            
+            if (adminBtn) {
+                const isAdminEmail = currentUser && currentUser.email === 'yusupova25@yandex.ru';
+                const hasAdminFlag = currentUser && currentUser.isAdmin === true;
+                
+                if (isAdminEmail || hasAdminFlag) {
+                    adminBtn.style.display = 'inline-flex';
+                } else {
+                    adminBtn.style.display = 'none';
+                }
+            }
         }
-    }
-}
 
-        
+        // Перенос ближайшей записи (для кнопки в напоминании)
+        function rescheduleAppointment() {
+            const appointments = JSON.parse(localStorage.getItem(`appointments_${currentUser.id}`) || '[]');
+            const now = new Date();
+            const upcomingAppointments = appointments.filter(apt => {
+                const aptDate = new Date(apt.date + 'T' + apt.time);
+                return aptDate > now;
+            });
+            upcomingAppointments.sort((a, b) => new Date(a.date + 'T' + a.time) - new Date(b.date + 'T' + b.time));
+            
+            const appointment = upcomingAppointments[0];
+            
+            if (appointment) {
+                sessionStorage.setItem('rescheduleData', JSON.stringify({
+                    oldId: appointment.id,
+                    oldDate: appointment.date,
+                    oldTime: appointment.time,
+                    masterId: appointment.masterId,
+                    service: appointment.service
+                }));
+                window.location.href = 'booking.html?reschedule=true';
+            } else {
+                showNotification('Нет предстоящих записей для переноса');
+            }
+        }
         
         // Добавление в календарь
         function addToCalendar() {
@@ -837,7 +883,7 @@ function showAdminButtonIfNeeded() {
             link.click();
             document.body.removeChild(link);
             
-            showNotification('📅 Запись добавлена в календарь!');
+            showNotification('<i class="fas fa-calendar-check" style="margin-right: 4px;"></i> Запись добавлена в календарь!');
         }
         
         // Копирование промокода
@@ -876,13 +922,7 @@ function showAdminButtonIfNeeded() {
             }, 2500);
         }
         
-        // Выход
-        function logout() {
-            if (confirm('Вы уверены, что хотите выйти?')) {
-                localStorage.removeItem('currentUser');
-                window.location.href = 'index.html';
-            }
-        }
+
         
         // Инициализация
         loadAppointments();
